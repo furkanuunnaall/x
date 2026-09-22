@@ -1,0 +1,22 @@
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+export type Routes = {
+  Name: undefined;
+  Home: undefined;
+  Onboarding: undefined;
+  Character: undefined;
+  Map: undefined;
+  Tasks: undefined;
+  Achievements: undefined;
+  Settings: undefined;
+  FinalIntro: undefined;
+  Milestone: { file: number };
+  Practice: { file: number };
+  Game: undefined;
+  Result: undefined;
+  Profile: undefined;
+  League: undefined;
+  Explore: { tab?: "collection" | "goals" } | undefined;
+  Daily: undefined;
+  DailyPlay: { day: string };
+};
+export type Props<K extends keyof Routes> = NativeStackScreenProps<Routes, K>;

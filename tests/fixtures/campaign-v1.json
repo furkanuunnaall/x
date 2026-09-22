@@ -1,0 +1,1724 @@
+[
+  {
+    "id": 1,
+    "kind": "normal",
+    "title": "İlk İz",
+    "questions": [
+      {
+        "id": "q1",
+        "term": "FERAGAT",
+        "clue": "Davacının, davada istediği sonuçtan tamamen ya da kısmen vazgeçmesi.",
+        "explanation": "Dava talebinden tek taraflı vazgeçmeyi anlatır.",
+        "difficulty": 1,
+        "category": "Usul"
+      },
+      {
+        "id": "q2",
+        "term": "ZİLYETLİK",
+        "clue": "Bir eşya üzerinde fiilen hâkimiyet kurmayı ifade eden kavram.",
+        "explanation": "Eşyayı fiilen elinde bulunduran kişi malik olmak zorunda değildir.",
+        "difficulty": 1,
+        "category": "Medeni"
+      },
+      {
+        "id": "q3",
+        "term": "İBRA",
+        "clue": "Alacaklı ile borçlunun anlaşarak borcu tamamen veya kısmen sona erdirmesi.",
+        "explanation": "Borç, yerine getirme olmadan da bu anlaşmayla sona erebilir.",
+        "difficulty": 1,
+        "category": "Borçlar"
+      },
+      {
+        "id": "q4",
+        "term": "İKRAR",
+        "clue": "Bir tarafın, aleyhine ileri sürülen bir vakıanın doğru olduğunu kabul etmesi.",
+        "explanation": "Mahkeme önündeki kabul, o vakıayı çekişmeli olmaktan çıkarabilir.",
+        "difficulty": 1,
+        "category": "Usul"
+      },
+      {
+        "id": "q5",
+        "term": "TEMERRÜT",
+        "clue": "İfası gereken borcun, gerekli şartlar oluşmasına rağmen zamanında yerine getirilmemesi.",
+        "explanation": "Sadece gecikme her durumda yeterli değildir; ihtar da gerekebilir.",
+        "difficulty": 2,
+        "category": "Borçlar"
+      },
+      {
+        "id": "q6",
+        "term": "TEMYİZ",
+        "clue": "Bir kararın üst mahkemede hukuka uygunluk yönünden incelenmesini isteyen kanun yolu.",
+        "explanation": "Hukuk yargısında bu incelemeyi Yargıtay yapar.",
+        "difficulty": 1,
+        "category": "Usul"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "kind": "normal",
+    "title": "Yeni Deliller",
+    "questions": [
+      {
+        "id": "q7",
+        "term": "İSTİNAF",
+        "clue": "İlk derece kararını hem olay hem hukuk yönünden üst mahkemeye taşıyan kanun yolu.",
+        "explanation": "Hukuk ve ceza yargısında bölge adliye mahkemesine başvurulur.",
+        "difficulty": 2,
+        "category": "Usul"
+      },
+      {
+        "id": "q8",
+        "term": "TEBLİGAT",
+        "clue": "Hukuki bir işlemin muhatabına kanuni usulle bildirilmesi.",
+        "explanation": "Sürelerin başlaması çoğu kez bu bildirime bağlıdır.",
+        "difficulty": 1,
+        "category": "Usul"
+      },
+      {
+        "id": "q9",
+        "term": "VEKALET",
+        "clue": "Bir kişinin, başkasının işini görmeyi veya işlemini yapmayı üstlendiği sözleşme.",
+        "explanation": "İşi üstlenen, verilen görevi sadakat ve özenle yürütür.",
+        "difficulty": 1,
+        "category": "Borçlar"
+      },
+      {
+        "id": "q10",
+        "term": "TAZMİNAT",
+        "clue": "Bir zararın giderilmesi için ödenen para veya sağlanan karşılık.",
+        "explanation": "Maddi ya da manevi zararın giderilmesine yönelik olabilir.",
+        "difficulty": 1,
+        "category": "Borçlar"
+      },
+      {
+        "id": "q11",
+        "term": "VASİYET",
+        "clue": "Bir kişinin ölümünden sonra sonuç doğurması için açıkladığı son arzusu.",
+        "explanation": "Geçerliliği, kanundaki şekil şartlarına bağlıdır.",
+        "difficulty": 1,
+        "category": "Miras"
+      },
+      {
+        "id": "q12",
+        "term": "TAHLİYE",
+        "clue": "Kiracının kiralanan yeri boşaltması için kullanılan hukuki terim.",
+        "explanation": "Kira ilişkisi sona erdiğinde taşınmazın geri verilmesi gündeme gelir.",
+        "difficulty": 1,
+        "category": "Borçlar"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "kind": "normal",
+    "title": "Derin İnceleme",
+    "questions": [
+      {
+        "id": "q13",
+        "term": "İÇTİHAT",
+        "clue": "Bir hukuki mesele hakkında mahkemenin yorumuyla oluşan yargısal görüş.",
+        "explanation": "Benzer uyuşmazlıkların çözümünde yol gösterir.",
+        "difficulty": 2,
+        "category": "Genel"
+      },
+      {
+        "id": "q14",
+        "term": "İNTİFA",
+        "clue": "Başkasına ait bir maldan yararlanma ve onu kullanma yetkisi veren sınırlı ayni hak.",
+        "explanation": "Mülkiyet başkasında kalırken malın getirilerinden yararlanılabilir.",
+        "difficulty": 2,
+        "category": "Eşya"
+      },
+      {
+        "id": "q15",
+        "term": "ZAMANAŞIMI",
+        "clue": "Belirli sürenin geçmesiyle borçluya alacağa karşı savunma imkânı veren kurum.",
+        "explanation": "Borcu kendiliğinden ortadan kaldırmaz; borçlu bunu ileri sürebilir.",
+        "difficulty": 2,
+        "category": "Borçlar"
+      },
+      {
+        "id": "q16",
+        "term": "HACİZ",
+        "clue": "Bir alacağın tahsili için borçlunun mal veya haklarına icra yoluyla el konulması.",
+        "explanation": "İcra takibinde alacağı karşılayacak malvarlığı hedeflenir.",
+        "difficulty": 1,
+        "category": "İcra"
+      },
+      {
+        "id": "q17",
+        "term": "İPOTEK",
+        "clue": "Bir alacağı güvenceye almak üzere taşınmaz üzerinde kurulan rehin hakkı.",
+        "explanation": "Taşınmazın mülkiyeti borçluda veya üçüncü kişide kalabilir.",
+        "difficulty": 2,
+        "category": "Eşya"
+      },
+      {
+        "id": "q18",
+        "term": "KEFALET",
+        "clue": "Başkasının borcunu ödememesinin sonuçlarından alacaklıya karşı sorumlu olma sözleşmesi.",
+        "explanation": "Güvenceyi bir eşya değil, borca teminat veren kişi sağlar.",
+        "difficulty": 2,
+        "category": "Borçlar"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "kind": "normal",
+    "title": "İz Sürme",
+    "questions": [
+      {
+        "id": "q19",
+        "term": "NAFAKA",
+        "clue": "Kanunun öngördüğü şartlarda bir kişinin geçimi için yapılan parasal katkı.",
+        "explanation": "Aile ilişkilerinden doğan bakım ve yardım yükümlülüğüyle ilgilidir.",
+        "difficulty": 1,
+        "category": "Aile"
+      },
+      {
+        "id": "q20",
+        "term": "VELAYET",
+        "clue": "Ana ve babanın küçük çocukları üzerindeki bakım, koruma ve temsil yetki ve görevleri.",
+        "explanation": "Çocuğun yararı, bu yetkilerin kullanılmasında esastır.",
+        "difficulty": 1,
+        "category": "Aile"
+      },
+      {
+        "id": "q21",
+        "term": "VESAYET",
+        "clue": "Velayet altında olmayan küçükleri ve bazı kısıtlıları korumaya yönelik hukuki kurum.",
+        "explanation": "Koruma altındaki kişi için vasi atanabilir.",
+        "difficulty": 2,
+        "category": "Medeni"
+      },
+      {
+        "id": "q22",
+        "term": "MİRAS",
+        "clue": "Bir kişinin ölümüyle geride bıraktığı ve mirasçılarına geçen malvarlığı ilişkileri.",
+        "explanation": "Haklarla birlikte devredilebilen borçlar da geçebilir.",
+        "difficulty": 1,
+        "category": "Miras"
+      },
+      {
+        "id": "q23",
+        "term": "DELİL",
+        "clue": "Bir olayın doğru olup olmadığını ispatlamak için başvurulan araç.",
+        "explanation": "Belge, tanık anlatımı veya bilirkişi incelemesi buna örnektir.",
+        "difficulty": 1,
+        "category": "Usul"
+      },
+      {
+        "id": "q24",
+        "term": "TANIK",
+        "clue": "Uyuşmazlık konusu olay hakkında bildiklerini mahkemeye anlatan kişi.",
+        "explanation": "Kendi algıladığı olayları aktarır; uzman görüşü vermekle görevli değildir.",
+        "difficulty": 1,
+        "category": "Usul"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "kind": "reward",
+    "title": "Mühür Noktası",
+    "questions": [
+      {
+        "id": "q25",
+        "term": "BİLİRKİŞİ",
+        "clue": "Çözümü özel veya teknik bilgi gerektiren konuda görüşüne başvurulan uzman.",
+        "explanation": "Hâkime uzmanlık bilgisi sağlar; hükmü kendisi vermez.",
+        "difficulty": 2,
+        "category": "Usul"
+      },
+      {
+        "id": "q26",
+        "term": "BERAAT",
+        "clue": "Ceza yargılamasında sanığın mahkûm edilmemesine ilişkin hüküm türü.",
+        "explanation": "Suçun sanık tarafından işlendiğinin sabit olmaması da bu sonucu doğurabilir.",
+        "difficulty": 1,
+        "category": "Ceza"
+      },
+      {
+        "id": "q27",
+        "term": "KAST",
+        "clue": "Suçun kanuni unsurlarını bilerek ve isteyerek gerçekleştirme.",
+        "explanation": "Failin bilgisi ve iradesi, suçun unsurlarına yönelir.",
+        "difficulty": 2,
+        "category": "Ceza"
+      },
+      {
+        "id": "q28",
+        "term": "TAKSİR",
+        "clue": "Dikkat ve özen yükümlülüğüne aykırılıkla, istenmeyen suç sonucuna neden olma.",
+        "explanation": "Sonuç istenmez; yükümlülüğe aykırı davranış belirleyicidir.",
+        "difficulty": 2,
+        "category": "Ceza"
+      },
+      {
+        "id": "q29",
+        "term": "UZLAŞTIRMA",
+        "clue": "Bazı suçlarda şüpheli ile mağdurun tarafsız bir kişi aracılığıyla anlaşmasının arandığı süreç.",
+        "explanation": "Ceza uyuşmazlığında taraflar arasında anlaşma sağlanması amaçlanır.",
+        "difficulty": 2,
+        "category": "Ceza"
+      },
+      {
+        "id": "q30",
+        "term": "ARABULUCULUK",
+        "clue": "Özel hukuk uyuşmazlığında tarafların tarafsız bir üçüncü kişinin yardımıyla çözüm araması.",
+        "explanation": "Çözüm kararını taraflar verir; üçüncü kişi iletişimi kolaylaştırır.",
+        "difficulty": 2,
+        "category": "Usul"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "kind": "normal",
+    "title": "İlk İz",
+    "questions": [
+      {
+        "id": "v1q1",
+        "term": "DAVA",
+        "clue": "Bir hakkın korunması için mahkemeden hukuki yardım istenmesi.",
+        "explanation": "Bir hakkın korunması için mahkemeden hukuki yardım istenmesi.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q2",
+        "term": "DAVACI",
+        "clue": "Mahkemede talepte bulunarak davayı açan taraf.",
+        "explanation": "Mahkemede talepte bulunarak davayı açan taraf.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q3",
+        "term": "DAVALI",
+        "clue": "Davada kendisine karşı talepte bulunulan taraf.",
+        "explanation": "Davada kendisine karşı talepte bulunulan taraf.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q4",
+        "term": "HÜKÜM",
+        "clue": "Mahkemenin uyuşmazlığın esası hakkında verdiği son karar.",
+        "explanation": "Mahkemenin uyuşmazlığın esası hakkında verdiği son karar.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q5",
+        "term": "İLAM",
+        "clue": "Mahkeme hükmünün taraflara verilen resmî yazılı örneği.",
+        "explanation": "Mahkeme hükmünün taraflara verilen resmî yazılı örneği.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q6",
+        "term": "DURUŞMA",
+        "clue": "Yargılamada tarafların ve delillerin mahkeme önünde ele alındığı oturum.",
+        "explanation": "Yargılamada tarafların ve delillerin mahkeme önünde ele alındığı oturum.",
+        "category": "Usul",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "kind": "normal",
+    "title": "Yeni Deliller",
+    "questions": [
+      {
+        "id": "v1q7",
+        "term": "DİLEKÇE",
+        "clue": "Bir makama istek veya şikâyet bildiren yazılı başvuru.",
+        "explanation": "Bir makama istek veya şikâyet bildiren yazılı başvuru.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q8",
+        "term": "YETKİ",
+        "clue": "Bir davaya hangi yer mahkemesinin bakacağını belirleyen alan.",
+        "explanation": "Bir davaya hangi yer mahkemesinin bakacağını belirleyen alan.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q9",
+        "term": "GÖREV",
+        "clue": "Bir davaya hangi tür mahkemenin bakacağını belirleyen alan.",
+        "explanation": "Bir davaya hangi tür mahkemenin bakacağını belirleyen alan.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q10",
+        "term": "İSPAT",
+        "clue": "Bir vakıanın doğruluğu konusunda mahkemede kanaat oluşturma faaliyeti.",
+        "explanation": "Bir vakıanın doğruluğu konusunda mahkemede kanaat oluşturma faaliyeti.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q11",
+        "term": "KARİNE",
+        "clue": "Bilinen bir olgudan bilinmeyen bir olgu hakkında çıkarılan sonuç.",
+        "explanation": "Bilinen bir olgudan bilinmeyen bir olgu hakkında çıkarılan sonuç.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q12",
+        "term": "YEMİN",
+        "clue": "Kanunun öngördüğü biçimde gerçeği söylediğini doğrulayan beyan.",
+        "explanation": "Kanunun öngördüğü biçimde gerçeği söylediğini doğrulayan beyan.",
+        "category": "Usul",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "kind": "normal",
+    "title": "Derin İnceleme",
+    "questions": [
+      {
+        "id": "v1q13",
+        "term": "KEŞİF",
+        "clue": "Mahkemenin bir yer veya nesne hakkında doğrudan gözlem yapması.",
+        "explanation": "Mahkemenin bir yer veya nesne hakkında doğrudan gözlem yapması.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q14",
+        "term": "ISLAH",
+        "clue": "Tarafın yaptığı usul işlemlerini kanuni koşullarla düzeltmesi.",
+        "explanation": "Tarafın yaptığı usul işlemlerini kanuni koşullarla düzeltmesi.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q15",
+        "term": "SULH",
+        "clue": "Tarafların aralarındaki uyuşmazlığı anlaşarak sona erdirmesi.",
+        "explanation": "Tarafların aralarındaki uyuşmazlığı anlaşarak sona erdirmesi.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q16",
+        "term": "TAHKİM",
+        "clue": "Uyuşmazlığın devlet mahkemesi yerine hakemlerce çözülmesi yöntemi.",
+        "explanation": "Uyuşmazlığın devlet mahkemesi yerine hakemlerce çözülmesi yöntemi.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q17",
+        "term": "HAKEM",
+        "clue": "Tahkimde uyuşmazlığı çözmek üzere görevlendirilen kişi.",
+        "explanation": "Tahkimde uyuşmazlığı çözmek üzere görevlendirilen kişi.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q18",
+        "term": "TENSİP",
+        "clue": "Dava açılınca yargılamanın yürütülmesine ilişkin ilk hazırlık kararları.",
+        "explanation": "Dava açılınca yargılamanın yürütülmesine ilişkin ilk hazırlık kararları.",
+        "category": "Usul",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "kind": "normal",
+    "title": "İz Sürme",
+    "questions": [
+      {
+        "id": "v1q19",
+        "term": "İTİRAZ",
+        "clue": "Bir işleme veya karara karşı çıkıldığını bildiren hukuki başvuru.",
+        "explanation": "Bir işleme veya karara karşı çıkıldığını bildiren hukuki başvuru.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q20",
+        "term": "MÜLKİYET",
+        "clue": "Bir şey üzerinde kullanma, yararlanma ve tasarruf yetkileri veren hak.",
+        "explanation": "Bir şey üzerinde kullanma, yararlanma ve tasarruf yetkileri veren hak.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q21",
+        "term": "PAYDAŞ",
+        "clue": "Paylı mülkiyette belirli bir payın sahibi olan kişi.",
+        "explanation": "Paylı mülkiyette belirli bir payın sahibi olan kişi.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q22",
+        "term": "İRTİFAK",
+        "clue": "Bir eşya üzerinde başkası yararına sınırlı yararlanma sağlayan ayni hak.",
+        "explanation": "Bir eşya üzerinde başkası yararına sınırlı yararlanma sağlayan ayni hak.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q23",
+        "term": "REHİN",
+        "clue": "Bir alacağı güvence altına almak için eşya veya hak üzerinde kurulan teminat.",
+        "explanation": "Bir alacağı güvence altına almak için eşya veya hak üzerinde kurulan teminat.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q24",
+        "term": "TAPU",
+        "clue": "Taşınmazlar üzerindeki hakların kaydedildiği resmî sicil.",
+        "explanation": "Taşınmazlar üzerindeki hakların kaydedildiği resmî sicil.",
+        "category": "Eşya",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "kind": "final",
+    "title": "Final Dosyası 1",
+    "questions": [
+      {
+        "id": "v1q25",
+        "term": "TESCİL",
+        "clue": "Bir hakkın veya hukuki durumun ilgili resmî sicile kaydedilmesi.",
+        "explanation": "Bir hakkın veya hukuki durumun ilgili resmî sicile kaydedilmesi.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q26",
+        "term": "TERKİN",
+        "clue": "Bir kaydın ilgili sicilden silinmesi işlemi.",
+        "explanation": "Bir kaydın ilgili sicilden silinmesi işlemi.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q27",
+        "term": "ŞERH",
+        "clue": "Bir hususun tapu siciline açıklayıcı veya koruyucu kayıt olarak yazılması.",
+        "explanation": "Bir hususun tapu siciline açıklayıcı veya koruyucu kayıt olarak yazılması.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q28",
+        "term": "KADASTRO",
+        "clue": "Taşınmazların sınır ve hukuki durumlarının belirlenip kayıt altına alınması.",
+        "explanation": "Taşınmazların sınır ve hukuki durumlarının belirlenip kayıt altına alınması.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q29",
+        "term": "TAŞINMAZ",
+        "clue": "Arazi gibi yerinden taşınamayan mal türü.",
+        "explanation": "Arazi gibi yerinden taşınamayan mal türü.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q30",
+        "term": "TAŞINIR",
+        "clue": "Bir yerden başka yere taşınabilen eşya türü.",
+        "explanation": "Bir yerden başka yere taşınabilen eşya türü.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q31",
+        "term": "İYİNİYET",
+        "clue": "Hukuki bir engeli gerekli özeni gösterdiği hâlde bilmemeyi anlatan kavram.",
+        "explanation": "Hukuki bir engeli gerekli özeni gösterdiği hâlde bilmemeyi anlatan kavram.",
+        "category": "Medeni",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q32",
+        "term": "EHLİYET",
+        "clue": "Hak sahibi olabilme veya hukuki işlem yapabilme yeterliliği.",
+        "explanation": "Hak sahibi olabilme veya hukuki işlem yapabilme yeterliliği.",
+        "category": "Medeni",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q33",
+        "term": "ERGİNLİK",
+        "clue": "Kişinin hukukça yetişkin sayılmasını ifade eden durum.",
+        "explanation": "Kişinin hukukça yetişkin sayılmasını ifade eden durum.",
+        "category": "Medeni",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "kind": "normal",
+    "title": "İlk İz",
+    "questions": [
+      {
+        "id": "v1q31",
+        "term": "İYİNİYET",
+        "clue": "Hukuki bir engeli gerekli özeni gösterdiği hâlde bilmemeyi anlatan kavram.",
+        "explanation": "Hukuki bir engeli gerekli özeni gösterdiği hâlde bilmemeyi anlatan kavram.",
+        "category": "Medeni",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q32",
+        "term": "EHLİYET",
+        "clue": "Hak sahibi olabilme veya hukuki işlem yapabilme yeterliliği.",
+        "explanation": "Hak sahibi olabilme veya hukuki işlem yapabilme yeterliliği.",
+        "category": "Medeni",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q33",
+        "term": "ERGİNLİK",
+        "clue": "Kişinin hukukça yetişkin sayılmasını ifade eden durum.",
+        "explanation": "Kişinin hukukça yetişkin sayılmasını ifade eden durum.",
+        "category": "Medeni",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q34",
+        "term": "GAİPLİK",
+        "clue": "Ölüm tehlikesi içinde kaybolan veya uzun süre haber alınamayan kişi hakkında verilen karar.",
+        "explanation": "Ölüm tehlikesi içinde kaybolan veya uzun süre haber alınamayan kişi hakkında verilen karar.",
+        "category": "Medeni",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q35",
+        "term": "HISIMLIK",
+        "clue": "Kişiler arasında soy, evlilik veya evlat edinmeyle oluşan yakınlık bağı.",
+        "explanation": "Kişiler arasında soy, evlilik veya evlat edinmeyle oluşan yakınlık bağı.",
+        "category": "Medeni",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q36",
+        "term": "SOYBAĞI",
+        "clue": "Çocuk ile ana veya babası arasındaki hukuki bağ.",
+        "explanation": "Çocuk ile ana veya babası arasındaki hukuki bağ.",
+        "category": "Aile",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "kind": "normal",
+    "title": "Yeni Deliller",
+    "questions": [
+      {
+        "id": "v1q37",
+        "term": "NİŞANLANMA",
+        "clue": "Birbirleriyle evlenmek üzere karşılıklı söz verme.",
+        "explanation": "Birbirleriyle evlenmek üzere karşılıklı söz verme.",
+        "category": "Aile",
+        "difficulty": 3
+      },
+      {
+        "id": "v1q38",
+        "term": "BOŞANMA",
+        "clue": "Geçerli evliliğin mahkeme kararıyla sona ermesi.",
+        "explanation": "Geçerli evliliğin mahkeme kararıyla sona ermesi.",
+        "category": "Aile",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q39",
+        "term": "TEREKE",
+        "clue": "Ölen kişinin mirasa konu hak ve borçlarının bütünü.",
+        "explanation": "Ölen kişinin mirasa konu hak ve borçlarının bütünü.",
+        "category": "Miras",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q40",
+        "term": "MİRASÇI",
+        "clue": "Ölenin mirasında kanun veya ölüme bağlı tasarrufla hak sahibi olan kişi.",
+        "explanation": "Ölenin mirasında kanun veya ölüme bağlı tasarrufla hak sahibi olan kişi.",
+        "category": "Miras",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q41",
+        "term": "TENKİS",
+        "clue": "Saklı payı aşan ölüme bağlı kazandırmaların kanuni sınıra indirilmesi.",
+        "explanation": "Saklı payı aşan ölüme bağlı kazandırmaların kanuni sınıra indirilmesi.",
+        "category": "Miras",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q42",
+        "term": "EDİM",
+        "clue": "Borç ilişkisinde borçlunun yerine getirmesi gereken davranış.",
+        "explanation": "Borç ilişkisinde borçlunun yerine getirmesi gereken davranış.",
+        "category": "Borçlar",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "kind": "normal",
+    "title": "Derin İnceleme",
+    "questions": [
+      {
+        "id": "v1q43",
+        "term": "İFA",
+        "clue": "Borçlanılan edimin gereği gibi yerine getirilmesi.",
+        "explanation": "Borçlanılan edimin gereği gibi yerine getirilmesi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q44",
+        "term": "ALACAK",
+        "clue": "Borç ilişkisinde karşı taraftan bir edimi isteme hakkı.",
+        "explanation": "Borç ilişkisinde karşı taraftan bir edimi isteme hakkı.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q45",
+        "term": "BORÇLU",
+        "clue": "Bir borç ilişkisinde edimi yerine getirmekle yükümlü kişi.",
+        "explanation": "Bir borç ilişkisinde edimi yerine getirmekle yükümlü kişi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q46",
+        "term": "ALACAKLI",
+        "clue": "Borçludan edimin yerine getirilmesini istemeye yetkili kişi.",
+        "explanation": "Borçludan edimin yerine getirilmesini istemeye yetkili kişi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q47",
+        "term": "SÖZLEŞME",
+        "clue": "Tarafların birbirine uygun irade açıklamalarıyla kurulan hukuki işlem.",
+        "explanation": "Tarafların birbirine uygun irade açıklamalarıyla kurulan hukuki işlem.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q48",
+        "term": "İCAP",
+        "clue": "Bir sözleşmeyi kurmaya yönelik bağlayıcı önerinin geleneksel adı.",
+        "explanation": "Bir sözleşmeyi kurmaya yönelik bağlayıcı önerinin geleneksel adı.",
+        "category": "Borçlar",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "kind": "normal",
+    "title": "İz Sürme",
+    "questions": [
+      {
+        "id": "v1q49",
+        "term": "KABUL",
+        "clue": "Sözleşme önerisine uygun olumlu irade açıklaması.",
+        "explanation": "Sözleşme önerisine uygun olumlu irade açıklaması.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q50",
+        "term": "GABİN",
+        "clue": "Sözleşmede zor durumdan veya deneyimsizlikten yararlanılarak sağlanan aşırı yararlanmanın eski adı.",
+        "explanation": "Sözleşmede zor durumdan veya deneyimsizlikten yararlanılarak sağlanan aşırı yararlanmanın eski adı.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q51",
+        "term": "HİLE",
+        "clue": "Bir kişiyi hukuki işlem yapmaya yöneltmek için aldatma.",
+        "explanation": "Bir kişiyi hukuki işlem yapmaya yöneltmek için aldatma.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q52",
+        "term": "İKRAH",
+        "clue": "Kişiyi korkutarak hukuki işlem yapmaya yöneltmenin geleneksel adı.",
+        "explanation": "Kişiyi korkutarak hukuki işlem yapmaya yöneltmenin geleneksel adı.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q53",
+        "term": "MUVAZAA",
+        "clue": "Tarafların gerçek iradelerine uymayan görünüşte bir işlem yapmaları.",
+        "explanation": "Tarafların gerçek iradelerine uymayan görünüşte bir işlem yapmaları.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q54",
+        "term": "BUTLAN",
+        "clue": "Bir hukuki işlemin geçerlilik şartlarındaki eksiklik nedeniyle hükümsüz olması.",
+        "explanation": "Bir hukuki işlemin geçerlilik şartlarındaki eksiklik nedeniyle hükümsüz olması.",
+        "category": "Borçlar",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "kind": "reward",
+    "title": "Mühür Noktası",
+    "questions": [
+      {
+        "id": "v1q55",
+        "term": "FESİH",
+        "clue": "Süregelen bir sözleşme ilişkisini ileriye etkili sona erdirme.",
+        "explanation": "Süregelen bir sözleşme ilişkisini ileriye etkili sona erdirme.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q56",
+        "term": "TAKAS",
+        "clue": "Karşılıklı ve aynı türden borçların kanuni şartlarla birbirini sona erdirmesi.",
+        "explanation": "Karşılıklı ve aynı türden borçların kanuni şartlarla birbirini sona erdirmesi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q57",
+        "term": "TEMLİK",
+        "clue": "Bir hak veya alacağın başka bir kişiye devredilmesi.",
+        "explanation": "Bir hak veya alacağın başka bir kişiye devredilmesi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q58",
+        "term": "TEVDİ",
+        "clue": "Bir şeyin korunmak veya teslim edilmek üzere yetkili yere bırakılması.",
+        "explanation": "Bir şeyin korunmak veya teslim edilmek üzere yetkili yere bırakılması.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q59",
+        "term": "RÜCU",
+        "clue": "Ödeme yapanın koşulları varsa ilgili kişiden bu tutarı geri istemesi.",
+        "explanation": "Ödeme yapanın koşulları varsa ilgili kişiden bu tutarı geri istemesi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q60",
+        "term": "İFLAS",
+        "clue": "Borçlunun malvarlığının alacaklıların topluca tatmini için tasfiyesine ilişkin süreç.",
+        "explanation": "Borçlunun malvarlığının alacaklıların topluca tatmini için tasfiyesine ilişkin süreç.",
+        "category": "İcra",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "kind": "normal",
+    "title": "İlk İz",
+    "questions": [
+      {
+        "id": "v1q61",
+        "term": "KONKORDATO",
+        "clue": "Borçlunun alacaklılarla kanuni usulde anlaşarak borçlarını yapılandırması yolu.",
+        "explanation": "Borçlunun alacaklılarla kanuni usulde anlaşarak borçlarını yapılandırması yolu.",
+        "category": "İcra",
+        "difficulty": 3
+      },
+      {
+        "id": "v1q62",
+        "term": "İCRA",
+        "clue": "Bir hakkın yetkili organlar aracılığıyla zorla yerine getirilmesi.",
+        "explanation": "Bir hakkın yetkili organlar aracılığıyla zorla yerine getirilmesi.",
+        "category": "İcra",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q63",
+        "term": "İHALE",
+        "clue": "Bir mal veya işin belirlenen usulle teklif sahiplerinden birine verilmesi.",
+        "explanation": "Bir mal veya işin belirlenen usulle teklif sahiplerinden birine verilmesi.",
+        "category": "Genel",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q64",
+        "term": "ŞÜPHELİ",
+        "clue": "Soruşturma aşamasında suç şüphesi altında bulunan kişi.",
+        "explanation": "Soruşturma aşamasında suç şüphesi altında bulunan kişi.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q65",
+        "term": "SANIK",
+        "clue": "Kovuşturma başlayınca hükmün kesinleşmesine kadar suç isnadı altındaki kişi.",
+        "explanation": "Kovuşturma başlayınca hükmün kesinleşmesine kadar suç isnadı altındaki kişi.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q66",
+        "term": "MAĞDUR",
+        "clue": "İşlenen suçtan doğrudan zarar gören kişi.",
+        "explanation": "İşlenen suçtan doğrudan zarar gören kişi.",
+        "category": "Ceza",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "kind": "normal",
+    "title": "Yeni Deliller",
+    "questions": [
+      {
+        "id": "v1q67",
+        "term": "MÜŞTEKİ",
+        "clue": "Suça ilişkin şikâyette bulunan kişinin yargılamadaki adı.",
+        "explanation": "Suça ilişkin şikâyette bulunan kişinin yargılamadaki adı.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q68",
+        "term": "İHBAR",
+        "clue": "Bir suç şüphesinin yetkili makamlara bildirilmesi.",
+        "explanation": "Bir suç şüphesinin yetkili makamlara bildirilmesi.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q69",
+        "term": "ŞİKAYET",
+        "clue": "Suçtan zarar görenin ilgili fiil için soruşturma yapılmasını istemesi.",
+        "explanation": "Suçtan zarar görenin ilgili fiil için soruşturma yapılmasını istemesi.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q70",
+        "term": "SORUŞTURMA",
+        "clue": "Suç şüphesinin öğrenilmesinden iddianamenin kabulüne kadarki evre.",
+        "explanation": "Suç şüphesinin öğrenilmesinden iddianamenin kabulüne kadarki evre.",
+        "category": "Ceza",
+        "difficulty": 3
+      },
+      {
+        "id": "v1q71",
+        "term": "KOVUŞTURMA",
+        "clue": "İddianamenin kabulünden hükmün kesinleşmesine kadarki ceza yargılaması evresi.",
+        "explanation": "İddianamenin kabulünden hükmün kesinleşmesine kadarki ceza yargılaması evresi.",
+        "category": "Ceza",
+        "difficulty": 3
+      },
+      {
+        "id": "v1q72",
+        "term": "İDDİANAME",
+        "clue": "Savcının suç isnadını ve delillerini açıklayarak kamu davası açılmasını istediği belge.",
+        "explanation": "Savcının suç isnadını ve delillerini açıklayarak kamu davası açılmasını istediği belge.",
+        "category": "Ceza",
+        "difficulty": 3
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "kind": "normal",
+    "title": "Derin İnceleme",
+    "questions": [
+      {
+        "id": "v1q73",
+        "term": "TUTUKLAMA",
+        "clue": "Kanuni koşullarla kişinin hâkim kararıyla özgürlüğünün geçici sınırlandırılması.",
+        "explanation": "Kanuni koşullarla kişinin hâkim kararıyla özgürlüğünün geçici sınırlandırılması.",
+        "category": "Ceza",
+        "difficulty": 3
+      },
+      {
+        "id": "v1q74",
+        "term": "GÖZALTI",
+        "clue": "Yakalanan kişinin soruşturma için kanuni süre içinde tutulması.",
+        "explanation": "Yakalanan kişinin soruşturma için kanuni süre içinde tutulması.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q75",
+        "term": "YAKALAMA",
+        "clue": "Suç şüphesi veya kanuni başka bir nedenle kişinin fiilen denetim altına alınması.",
+        "explanation": "Suç şüphesi veya kanuni başka bir nedenle kişinin fiilen denetim altına alınması.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q76",
+        "term": "MÜSADERE",
+        "clue": "Kanuni şartlarda bir eşyanın veya kazancın devlet mülkiyetine geçirilmesi.",
+        "explanation": "Kanuni şartlarda bir eşyanın veya kazancın devlet mülkiyetine geçirilmesi.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q77",
+        "term": "TEŞEBBÜS",
+        "clue": "Suçun icrasına başlanıp elde olmayan nedenlerle tamamlanamaması.",
+        "explanation": "Suçun icrasına başlanıp elde olmayan nedenlerle tamamlanamaması.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q78",
+        "term": "İŞTİRAK",
+        "clue": "Bir suçun işlenmesine birden fazla kişinin katılması.",
+        "explanation": "Bir suçun işlenmesine birden fazla kişinin katılması.",
+        "category": "Ceza",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "kind": "normal",
+    "title": "İz Sürme",
+    "questions": [
+      {
+        "id": "v1q79",
+        "term": "AZMETTİRME",
+        "clue": "Bir kişide suç işleme kararının oluşturulması.",
+        "explanation": "Bir kişide suç işleme kararının oluşturulması.",
+        "category": "Ceza",
+        "difficulty": 3
+      },
+      {
+        "id": "v1q80",
+        "term": "TEKERRÜR",
+        "clue": "Önceki mahkûmiyetten sonra kanuni şartlarda yeniden suç işlenmesi.",
+        "explanation": "Önceki mahkûmiyetten sonra kanuni şartlarda yeniden suç işlenmesi.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q81",
+        "term": "İNFAZ",
+        "clue": "Kesinleşen cezanın kanuni usule uygun yerine getirilmesi.",
+        "explanation": "Kesinleşen cezanın kanuni usule uygun yerine getirilmesi.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q82",
+        "term": "SAVUNMA",
+        "clue": "Bir iddia veya suçlamaya karşı kişinin kendi görüş ve delillerini sunması.",
+        "explanation": "Bir iddia veya suçlamaya karşı kişinin kendi görüş ve delillerini sunması.",
+        "category": "Genel",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q83",
+        "term": "MÜDAFİ",
+        "clue": "Ceza yargılamasında şüpheli veya sanığın savunmasını yapan avukat.",
+        "explanation": "Ceza yargılamasında şüpheli veya sanığın savunmasını yapan avukat.",
+        "category": "Ceza",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q84",
+        "term": "YÜRÜRLÜK",
+        "clue": "Bir hukuk kuralının uygulanabilir olarak geçerli bulunduğu durum.",
+        "explanation": "Bir hukuk kuralının uygulanabilir olarak geçerli bulunduğu durum.",
+        "category": "Genel",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "kind": "final",
+    "title": "Final Dosyası 2",
+    "questions": [
+      {
+        "id": "v1q85",
+        "term": "ANAYASA",
+        "clue": "Devletin temel yapısını ve temel hakları düzenleyen üstün hukuk metni.",
+        "explanation": "Devletin temel yapısını ve temel hakları düzenleyen üstün hukuk metni.",
+        "category": "Anayasa",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q86",
+        "term": "KANUN",
+        "clue": "Yasama organınca kanuni usulle kabul edilen genel düzenleme.",
+        "explanation": "Yasama organınca kanuni usulle kabul edilen genel düzenleme.",
+        "category": "Anayasa",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q87",
+        "term": "YÖNETMELİK",
+        "clue": "Kanunların uygulanmasını sağlamak üzere yetkili idarece çıkarılan düzenleme.",
+        "explanation": "Kanunların uygulanmasını sağlamak üzere yetkili idarece çıkarılan düzenleme.",
+        "category": "İdare",
+        "difficulty": 3
+      },
+      {
+        "id": "v1q88",
+        "term": "İPTAL",
+        "clue": "Bir hukuki işlemin geçerliliğinin yetkili karar veya iradeyle kaldırılması.",
+        "explanation": "Bir hukuki işlemin geçerliliğinin yetkili karar veya iradeyle kaldırılması.",
+        "category": "Genel",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q89",
+        "term": "KAMULAŞTIRMA",
+        "clue": "Kamu yararı için özel mülkiyetteki taşınmazın kanuni usulle idarece edinilmesi.",
+        "explanation": "Kamu yararı için özel mülkiyetteki taşınmazın kanuni usulle idarece edinilmesi.",
+        "category": "İdare",
+        "difficulty": 3
+      },
+      {
+        "id": "v1q1",
+        "term": "DAVA",
+        "clue": "Bir hakkın korunması için mahkemeden hukuki yardım istenmesi.",
+        "explanation": "Bir hakkın korunması için mahkemeden hukuki yardım istenmesi.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q2",
+        "term": "DAVACI",
+        "clue": "Mahkemede talepte bulunarak davayı açan taraf.",
+        "explanation": "Mahkemede talepte bulunarak davayı açan taraf.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q3",
+        "term": "DAVALI",
+        "clue": "Davada kendisine karşı talepte bulunulan taraf.",
+        "explanation": "Davada kendisine karşı talepte bulunulan taraf.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q4",
+        "term": "HÜKÜM",
+        "clue": "Mahkemenin uyuşmazlığın esası hakkında verdiği son karar.",
+        "explanation": "Mahkemenin uyuşmazlığın esası hakkında verdiği son karar.",
+        "category": "Usul",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "kind": "normal",
+    "title": "İlk İz",
+    "questions": [
+      {
+        "id": "v1q2",
+        "term": "DAVACI",
+        "clue": "Mahkemede talepte bulunarak davayı açan taraf.",
+        "explanation": "Mahkemede talepte bulunarak davayı açan taraf.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q3",
+        "term": "DAVALI",
+        "clue": "Davada kendisine karşı talepte bulunulan taraf.",
+        "explanation": "Davada kendisine karşı talepte bulunulan taraf.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q4",
+        "term": "HÜKÜM",
+        "clue": "Mahkemenin uyuşmazlığın esası hakkında verdiği son karar.",
+        "explanation": "Mahkemenin uyuşmazlığın esası hakkında verdiği son karar.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q5",
+        "term": "İLAM",
+        "clue": "Mahkeme hükmünün taraflara verilen resmî yazılı örneği.",
+        "explanation": "Mahkeme hükmünün taraflara verilen resmî yazılı örneği.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q6",
+        "term": "DURUŞMA",
+        "clue": "Yargılamada tarafların ve delillerin mahkeme önünde ele alındığı oturum.",
+        "explanation": "Yargılamada tarafların ve delillerin mahkeme önünde ele alındığı oturum.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q7",
+        "term": "DİLEKÇE",
+        "clue": "Bir makama istek veya şikâyet bildiren yazılı başvuru.",
+        "explanation": "Bir makama istek veya şikâyet bildiren yazılı başvuru.",
+        "category": "Usul",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "kind": "normal",
+    "title": "Yeni Deliller",
+    "questions": [
+      {
+        "id": "v1q8",
+        "term": "YETKİ",
+        "clue": "Bir davaya hangi yer mahkemesinin bakacağını belirleyen alan.",
+        "explanation": "Bir davaya hangi yer mahkemesinin bakacağını belirleyen alan.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q9",
+        "term": "GÖREV",
+        "clue": "Bir davaya hangi tür mahkemenin bakacağını belirleyen alan.",
+        "explanation": "Bir davaya hangi tür mahkemenin bakacağını belirleyen alan.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q10",
+        "term": "İSPAT",
+        "clue": "Bir vakıanın doğruluğu konusunda mahkemede kanaat oluşturma faaliyeti.",
+        "explanation": "Bir vakıanın doğruluğu konusunda mahkemede kanaat oluşturma faaliyeti.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q11",
+        "term": "KARİNE",
+        "clue": "Bilinen bir olgudan bilinmeyen bir olgu hakkında çıkarılan sonuç.",
+        "explanation": "Bilinen bir olgudan bilinmeyen bir olgu hakkında çıkarılan sonuç.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q12",
+        "term": "YEMİN",
+        "clue": "Kanunun öngördüğü biçimde gerçeği söylediğini doğrulayan beyan.",
+        "explanation": "Kanunun öngördüğü biçimde gerçeği söylediğini doğrulayan beyan.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q13",
+        "term": "KEŞİF",
+        "clue": "Mahkemenin bir yer veya nesne hakkında doğrudan gözlem yapması.",
+        "explanation": "Mahkemenin bir yer veya nesne hakkında doğrudan gözlem yapması.",
+        "category": "Usul",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "kind": "normal",
+    "title": "Derin İnceleme",
+    "questions": [
+      {
+        "id": "v1q14",
+        "term": "ISLAH",
+        "clue": "Tarafın yaptığı usul işlemlerini kanuni koşullarla düzeltmesi.",
+        "explanation": "Tarafın yaptığı usul işlemlerini kanuni koşullarla düzeltmesi.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q15",
+        "term": "SULH",
+        "clue": "Tarafların aralarındaki uyuşmazlığı anlaşarak sona erdirmesi.",
+        "explanation": "Tarafların aralarındaki uyuşmazlığı anlaşarak sona erdirmesi.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q16",
+        "term": "TAHKİM",
+        "clue": "Uyuşmazlığın devlet mahkemesi yerine hakemlerce çözülmesi yöntemi.",
+        "explanation": "Uyuşmazlığın devlet mahkemesi yerine hakemlerce çözülmesi yöntemi.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q17",
+        "term": "HAKEM",
+        "clue": "Tahkimde uyuşmazlığı çözmek üzere görevlendirilen kişi.",
+        "explanation": "Tahkimde uyuşmazlığı çözmek üzere görevlendirilen kişi.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q18",
+        "term": "TENSİP",
+        "clue": "Dava açılınca yargılamanın yürütülmesine ilişkin ilk hazırlık kararları.",
+        "explanation": "Dava açılınca yargılamanın yürütülmesine ilişkin ilk hazırlık kararları.",
+        "category": "Usul",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q19",
+        "term": "İTİRAZ",
+        "clue": "Bir işleme veya karara karşı çıkıldığını bildiren hukuki başvuru.",
+        "explanation": "Bir işleme veya karara karşı çıkıldığını bildiren hukuki başvuru.",
+        "category": "Usul",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "kind": "normal",
+    "title": "İz Sürme",
+    "questions": [
+      {
+        "id": "v1q20",
+        "term": "MÜLKİYET",
+        "clue": "Bir şey üzerinde kullanma, yararlanma ve tasarruf yetkileri veren hak.",
+        "explanation": "Bir şey üzerinde kullanma, yararlanma ve tasarruf yetkileri veren hak.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q21",
+        "term": "PAYDAŞ",
+        "clue": "Paylı mülkiyette belirli bir payın sahibi olan kişi.",
+        "explanation": "Paylı mülkiyette belirli bir payın sahibi olan kişi.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q22",
+        "term": "İRTİFAK",
+        "clue": "Bir eşya üzerinde başkası yararına sınırlı yararlanma sağlayan ayni hak.",
+        "explanation": "Bir eşya üzerinde başkası yararına sınırlı yararlanma sağlayan ayni hak.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q23",
+        "term": "REHİN",
+        "clue": "Bir alacağı güvence altına almak için eşya veya hak üzerinde kurulan teminat.",
+        "explanation": "Bir alacağı güvence altına almak için eşya veya hak üzerinde kurulan teminat.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q24",
+        "term": "TAPU",
+        "clue": "Taşınmazlar üzerindeki hakların kaydedildiği resmî sicil.",
+        "explanation": "Taşınmazlar üzerindeki hakların kaydedildiği resmî sicil.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q25",
+        "term": "TESCİL",
+        "clue": "Bir hakkın veya hukuki durumun ilgili resmî sicile kaydedilmesi.",
+        "explanation": "Bir hakkın veya hukuki durumun ilgili resmî sicile kaydedilmesi.",
+        "category": "Eşya",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "kind": "reward",
+    "title": "Mühür Noktası",
+    "questions": [
+      {
+        "id": "v1q26",
+        "term": "TERKİN",
+        "clue": "Bir kaydın ilgili sicilden silinmesi işlemi.",
+        "explanation": "Bir kaydın ilgili sicilden silinmesi işlemi.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q27",
+        "term": "ŞERH",
+        "clue": "Bir hususun tapu siciline açıklayıcı veya koruyucu kayıt olarak yazılması.",
+        "explanation": "Bir hususun tapu siciline açıklayıcı veya koruyucu kayıt olarak yazılması.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q28",
+        "term": "KADASTRO",
+        "clue": "Taşınmazların sınır ve hukuki durumlarının belirlenip kayıt altına alınması.",
+        "explanation": "Taşınmazların sınır ve hukuki durumlarının belirlenip kayıt altına alınması.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q29",
+        "term": "TAŞINMAZ",
+        "clue": "Arazi gibi yerinden taşınamayan mal türü.",
+        "explanation": "Arazi gibi yerinden taşınamayan mal türü.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q30",
+        "term": "TAŞINIR",
+        "clue": "Bir yerden başka yere taşınabilen eşya türü.",
+        "explanation": "Bir yerden başka yere taşınabilen eşya türü.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q31",
+        "term": "İYİNİYET",
+        "clue": "Hukuki bir engeli gerekli özeni gösterdiği hâlde bilmemeyi anlatan kavram.",
+        "explanation": "Hukuki bir engeli gerekli özeni gösterdiği hâlde bilmemeyi anlatan kavram.",
+        "category": "Medeni",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "kind": "normal",
+    "title": "İlk İz",
+    "questions": [
+      {
+        "id": "v1q32",
+        "term": "EHLİYET",
+        "clue": "Hak sahibi olabilme veya hukuki işlem yapabilme yeterliliği.",
+        "explanation": "Hak sahibi olabilme veya hukuki işlem yapabilme yeterliliği.",
+        "category": "Medeni",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q33",
+        "term": "ERGİNLİK",
+        "clue": "Kişinin hukukça yetişkin sayılmasını ifade eden durum.",
+        "explanation": "Kişinin hukukça yetişkin sayılmasını ifade eden durum.",
+        "category": "Medeni",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q34",
+        "term": "GAİPLİK",
+        "clue": "Ölüm tehlikesi içinde kaybolan veya uzun süre haber alınamayan kişi hakkında verilen karar.",
+        "explanation": "Ölüm tehlikesi içinde kaybolan veya uzun süre haber alınamayan kişi hakkında verilen karar.",
+        "category": "Medeni",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q35",
+        "term": "HISIMLIK",
+        "clue": "Kişiler arasında soy, evlilik veya evlat edinmeyle oluşan yakınlık bağı.",
+        "explanation": "Kişiler arasında soy, evlilik veya evlat edinmeyle oluşan yakınlık bağı.",
+        "category": "Medeni",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q36",
+        "term": "SOYBAĞI",
+        "clue": "Çocuk ile ana veya babası arasındaki hukuki bağ.",
+        "explanation": "Çocuk ile ana veya babası arasındaki hukuki bağ.",
+        "category": "Aile",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q37",
+        "term": "NİŞANLANMA",
+        "clue": "Birbirleriyle evlenmek üzere karşılıklı söz verme.",
+        "explanation": "Birbirleriyle evlenmek üzere karşılıklı söz verme.",
+        "category": "Aile",
+        "difficulty": 3
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "kind": "normal",
+    "title": "Yeni Deliller",
+    "questions": [
+      {
+        "id": "v1q38",
+        "term": "BOŞANMA",
+        "clue": "Geçerli evliliğin mahkeme kararıyla sona ermesi.",
+        "explanation": "Geçerli evliliğin mahkeme kararıyla sona ermesi.",
+        "category": "Aile",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q39",
+        "term": "TEREKE",
+        "clue": "Ölen kişinin mirasa konu hak ve borçlarının bütünü.",
+        "explanation": "Ölen kişinin mirasa konu hak ve borçlarının bütünü.",
+        "category": "Miras",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q40",
+        "term": "MİRASÇI",
+        "clue": "Ölenin mirasında kanun veya ölüme bağlı tasarrufla hak sahibi olan kişi.",
+        "explanation": "Ölenin mirasında kanun veya ölüme bağlı tasarrufla hak sahibi olan kişi.",
+        "category": "Miras",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q41",
+        "term": "TENKİS",
+        "clue": "Saklı payı aşan ölüme bağlı kazandırmaların kanuni sınıra indirilmesi.",
+        "explanation": "Saklı payı aşan ölüme bağlı kazandırmaların kanuni sınıra indirilmesi.",
+        "category": "Miras",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q42",
+        "term": "EDİM",
+        "clue": "Borç ilişkisinde borçlunun yerine getirmesi gereken davranış.",
+        "explanation": "Borç ilişkisinde borçlunun yerine getirmesi gereken davranış.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q43",
+        "term": "İFA",
+        "clue": "Borçlanılan edimin gereği gibi yerine getirilmesi.",
+        "explanation": "Borçlanılan edimin gereği gibi yerine getirilmesi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "kind": "normal",
+    "title": "Derin İnceleme",
+    "questions": [
+      {
+        "id": "v1q44",
+        "term": "ALACAK",
+        "clue": "Borç ilişkisinde karşı taraftan bir edimi isteme hakkı.",
+        "explanation": "Borç ilişkisinde karşı taraftan bir edimi isteme hakkı.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q45",
+        "term": "BORÇLU",
+        "clue": "Bir borç ilişkisinde edimi yerine getirmekle yükümlü kişi.",
+        "explanation": "Bir borç ilişkisinde edimi yerine getirmekle yükümlü kişi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q46",
+        "term": "ALACAKLI",
+        "clue": "Borçludan edimin yerine getirilmesini istemeye yetkili kişi.",
+        "explanation": "Borçludan edimin yerine getirilmesini istemeye yetkili kişi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q47",
+        "term": "SÖZLEŞME",
+        "clue": "Tarafların birbirine uygun irade açıklamalarıyla kurulan hukuki işlem.",
+        "explanation": "Tarafların birbirine uygun irade açıklamalarıyla kurulan hukuki işlem.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q48",
+        "term": "İCAP",
+        "clue": "Bir sözleşmeyi kurmaya yönelik bağlayıcı önerinin geleneksel adı.",
+        "explanation": "Bir sözleşmeyi kurmaya yönelik bağlayıcı önerinin geleneksel adı.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q49",
+        "term": "KABUL",
+        "clue": "Sözleşme önerisine uygun olumlu irade açıklaması.",
+        "explanation": "Sözleşme önerisine uygun olumlu irade açıklaması.",
+        "category": "Borçlar",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "kind": "normal",
+    "title": "İz Sürme",
+    "questions": [
+      {
+        "id": "v1q50",
+        "term": "GABİN",
+        "clue": "Sözleşmede zor durumdan veya deneyimsizlikten yararlanılarak sağlanan aşırı yararlanmanın eski adı.",
+        "explanation": "Sözleşmede zor durumdan veya deneyimsizlikten yararlanılarak sağlanan aşırı yararlanmanın eski adı.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q51",
+        "term": "HİLE",
+        "clue": "Bir kişiyi hukuki işlem yapmaya yöneltmek için aldatma.",
+        "explanation": "Bir kişiyi hukuki işlem yapmaya yöneltmek için aldatma.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q52",
+        "term": "İKRAH",
+        "clue": "Kişiyi korkutarak hukuki işlem yapmaya yöneltmenin geleneksel adı.",
+        "explanation": "Kişiyi korkutarak hukuki işlem yapmaya yöneltmenin geleneksel adı.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q53",
+        "term": "MUVAZAA",
+        "clue": "Tarafların gerçek iradelerine uymayan görünüşte bir işlem yapmaları.",
+        "explanation": "Tarafların gerçek iradelerine uymayan görünüşte bir işlem yapmaları.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q54",
+        "term": "BUTLAN",
+        "clue": "Bir hukuki işlemin geçerlilik şartlarındaki eksiklik nedeniyle hükümsüz olması.",
+        "explanation": "Bir hukuki işlemin geçerlilik şartlarındaki eksiklik nedeniyle hükümsüz olması.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q55",
+        "term": "FESİH",
+        "clue": "Süregelen bir sözleşme ilişkisini ileriye etkili sona erdirme.",
+        "explanation": "Süregelen bir sözleşme ilişkisini ileriye etkili sona erdirme.",
+        "category": "Borçlar",
+        "difficulty": 2
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "kind": "final",
+    "title": "Final Dosyası 3",
+    "questions": [
+      {
+        "id": "v1q56",
+        "term": "TAKAS",
+        "clue": "Karşılıklı ve aynı türden borçların kanuni şartlarla birbirini sona erdirmesi.",
+        "explanation": "Karşılıklı ve aynı türden borçların kanuni şartlarla birbirini sona erdirmesi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q57",
+        "term": "TEMLİK",
+        "clue": "Bir hak veya alacağın başka bir kişiye devredilmesi.",
+        "explanation": "Bir hak veya alacağın başka bir kişiye devredilmesi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q58",
+        "term": "TEVDİ",
+        "clue": "Bir şeyin korunmak veya teslim edilmek üzere yetkili yere bırakılması.",
+        "explanation": "Bir şeyin korunmak veya teslim edilmek üzere yetkili yere bırakılması.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q59",
+        "term": "RÜCU",
+        "clue": "Ödeme yapanın koşulları varsa ilgili kişiden bu tutarı geri istemesi.",
+        "explanation": "Ödeme yapanın koşulları varsa ilgili kişiden bu tutarı geri istemesi.",
+        "category": "Borçlar",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q60",
+        "term": "İFLAS",
+        "clue": "Borçlunun malvarlığının alacaklıların topluca tatmini için tasfiyesine ilişkin süreç.",
+        "explanation": "Borçlunun malvarlığının alacaklıların topluca tatmini için tasfiyesine ilişkin süreç.",
+        "category": "İcra",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q61",
+        "term": "KONKORDATO",
+        "clue": "Borçlunun alacaklılarla kanuni usulde anlaşarak borçlarını yapılandırması yolu.",
+        "explanation": "Borçlunun alacaklılarla kanuni usulde anlaşarak borçlarını yapılandırması yolu.",
+        "category": "İcra",
+        "difficulty": 3
+      },
+      {
+        "id": "v1q62",
+        "term": "İCRA",
+        "clue": "Bir hakkın yetkili organlar aracılığıyla zorla yerine getirilmesi.",
+        "explanation": "Bir hakkın yetkili organlar aracılığıyla zorla yerine getirilmesi.",
+        "category": "İcra",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q63",
+        "term": "İHALE",
+        "clue": "Bir mal veya işin belirlenen usulle teklif sahiplerinden birine verilmesi.",
+        "explanation": "Bir mal veya işin belirlenen usulle teklif sahiplerinden birine verilmesi.",
+        "category": "Genel",
+        "difficulty": 2
+      },
+      {
+        "id": "v1q64",
+        "term": "ŞÜPHELİ",
+        "clue": "Soruşturma aşamasında suç şüphesi altında bulunan kişi.",
+        "explanation": "Soruşturma aşamasında suç şüphesi altında bulunan kişi.",
+        "category": "Ceza",
+        "difficulty": 2
+      }
+    ]
+  }
+]

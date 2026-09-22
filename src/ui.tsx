@@ -1,0 +1,553 @@
+import React from "react";
+import { LinearGradient } from "expo-linear-gradient";
+import { Ambient, Seal } from "./art";
+import {
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useGame } from "./store";
+import { colors, spacing, radius, typography, shadows } from "./theme";
+export const C = colors;
+export function GameCard({
+  children,
+  style,
+  tone = "default",
+}: {
+  tone?: "default" | "paper";
+  children: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
+}) {
+  const success = StyleSheet.flatten(style)?.backgroundColor === "#E2EED6";
+  return (
+    <LinearGradient
+      colors={
+        success
+          ? ["#193E38", "#112D2A"]
+          : tone === "paper"
+            ? ["#FFF8EA", "#E8DCC5"]
+            : ["#23334DEE", "#101F38F5"]
+      }
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={[s.card, style]}
+    >
+      {children}
+    </LinearGradient>
+  );
+}
+export function Button({
+  title,
+  onPress,
+  disabled = false,
+  secondary = false,
+}: {
+  title: string;
+  onPress: () => void;
+  disabled?: boolean;
+  secondary?: boolean;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ disabled }}
+      disabled={disabled}
+      onPress={onPress}
+      style={({ pressed }) => [
+        s.button,
+        secondary ? s.secondary : shadows.gold,
+        disabled && { opacity: 0.38 },
+        pressed && { transform: [{ translateY: 2 }], borderBottomWidth: 1 },
+      ]}
+    >
+      <LinearGradient
+        pointerEvents="none"
+        colors={
+          secondary ? ["#263952", "#15243E"] : ["#FFE3A0", "#E9BB59", "#C88E33"]
+        }
+        style={[StyleSheet.absoluteFill, { borderRadius: 28 }]}
+      />
+      <Text style={[s.buttonText, secondary && { color: C.ink }]}>{title}</Text>
+    </Pressable>
+  );
+}
+export const PrimaryButton = Button;
+export function SecondaryButton(props: React.ComponentProps<typeof Button>) {
+  return <Button {...props} secondary />;
+}
+export function Label({ children }: { children: React.ReactNode }) {
+  return <Text style={s.label}>{children}</Text>;
+}
+export function CurrencyBadge({ amount }: { amount: number }) {
+  return (
+    <View accessibilityLabel={`${amount} Mühür`} style={s.currency}>
+      <Seal size={22} />
+      <Text style={s.currencyText}>{amount}</Text>
+    </View>
+  );
+}
+export function TopBar({
+  title,
+  back,
+  right,
+}: {
+  title: string;
+  back?: () => void;
+  right?: React.ReactNode;
+}) {
+  return (
+    <View style={s.top}>
+      {back ? (
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Geri"
+          onPress={back}
+          style={s.back}
+        >
+          <Text style={{ color: C.ink, fontSize: 27 }}>‹</Text>
+        </Pressable>
+      ) : null}
+      <Text style={s.brand}>{title}</Text>
+      {right}
+    </View>
+  );
+}
+export function Top({
+  title,
+  back,
+  right,
+}: {
+  title: string;
+  back?: () => void;
+  right?: string;
+}) {
+  return (
+    <TopBar
+      title={title}
+      back={back}
+      right={right ? <Text style={s.gold}>{right}</Text> : undefined}
+    />
+  );
+}
+export function ProgressBar({
+  value,
+  total = 1000,
+}: {
+  value: number;
+  total?: number;
+}) {
+  return (
+    <View
+      accessibilityRole="progressbar"
+      accessibilityValue={{ min: 0, max: total, now: value }}
+      style={s.track}
+    >
+      <View
+        style={[
+          s.fill,
+          { width: `${Math.min(100, Math.max(0, (value / total) * 100))}%` },
+        ]}
+      />
+    </View>
+  );
+}
+export function XPTrack({ xp }: { xp: number }) {
+  return (
+    <View style={{ gap: 9 }}>
+      <View style={s.between}>
+        <Text style={s.small}>{xp} XP</Text>
+        <Text style={s.small}>Sonraki seviyeye {1000 - (xp % 1000)} XP</Text>
+      </View>
+      <ProgressBar value={xp % 1000} />
+    </View>
+  );
+}
+export function Stars({
+  count = 0,
+  size = 23,
+  color = C.gold,
+}: {
+  color?: string;
+  count?: number;
+  size?: number;
+}) {
+  return (
+    <Text
+      accessibilityLabel={`${count} yıldız`}
+      style={{ color, fontSize: size, letterSpacing: 4 }}
+    >
+      {"★".repeat(count)}
+      <Text style={{ color: "#6B7693" }}>{"☆".repeat(3 - count)}</Text>
+    </Text>
+  );
+}
+export function StatCard({
+  label,
+  value,
+  icon,
+}: {
+  label: string;
+  value: string | number;
+  icon?: string;
+}) {
+  return (
+    <GameCard style={{ flex: 1, minWidth: 125, gap: 8, padding: 16 }}>
+      {icon ? (
+        <Text style={{ color: C.gold, fontSize: 21 }}>{icon}</Text>
+      ) : null}
+      <Text style={s.value}>{value}</Text>
+      <Text style={s.muted}>{label}</Text>
+    </GameCard>
+  );
+}
+export function LevelNode({
+  kind = "normal",
+  number,
+  current,
+  done,
+  stars = 0,
+  onPress,
+}: {
+  kind?: "normal" | "reward" | "final";
+  number: number;
+  current: boolean;
+  done: boolean;
+  stars?: number;
+  onPress?: () => void;
+}) {
+  return (
+    <View style={{ alignItems: "center", gap: 7 }}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`Bölüm ${number}, ${current ? "mevcut" : done ? "tamamlandı" : "kilitli"}`}
+        accessibilityState={{ disabled: !onPress }}
+        disabled={!onPress}
+        onPress={onPress}
+        style={[
+          s.node,
+          current && s.currentNode,
+          done && !current && s.doneNode,
+          kind === "final" && {
+            width: 82,
+            height: 82,
+            borderRadius: 26,
+            borderWidth: 2,
+          },
+        ]}
+      >
+        <LinearGradient
+          pointerEvents="none"
+          colors={
+            current
+              ? ["#FFECA6", "#F5C843", "#CF9A26"]
+              : done
+                ? ["#A4FFDF", "#54DDA7", "#259273"]
+                : ["#2C3A51", "#152038"]
+          }
+          style={[StyleSheet.absoluteFill, { borderRadius: current ? 40 : 32 }]}
+        />
+        <Text
+          style={{
+            color: current ? C.bg : done ? "#09372A" : C.muted,
+            fontSize: current ? 30 : 24,
+            fontWeight: "800",
+          }}
+        >
+          {done && !current ? "✓" : number}
+        </Text>
+      </Pressable>
+      {done ? (
+        <Stars count={stars} size={16} />
+      ) : (
+        <Text style={s.small}>{current ? "ŞİMDİ OYNA" : "KİLİTLİ"}</Text>
+      )}
+    </View>
+  );
+}
+export function LetterTile({
+  letter,
+  used,
+  disabled,
+  onPress,
+  size,
+  label,
+}: {
+  letter: string;
+  used: boolean;
+  disabled: boolean;
+  onPress: () => void;
+  size: number;
+  label: string;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ disabled, selected: used }}
+      disabled={disabled}
+      onPress={onPress}
+      style={({ pressed }) => [
+        s.tile,
+        { width: size, minHeight: Math.max(48, size) },
+        used && { backgroundColor: C.bg, opacity: 0.4 },
+        pressed && { backgroundColor: C.gold, transform: [{ scale: 0.95 }] },
+      ]}
+    >
+      {({ pressed }) => (
+        <Text
+          style={{
+            color: pressed ? C.bg : C.ink,
+            fontSize: 23,
+            fontWeight: "800",
+          }}
+        >
+          {letter}
+        </Text>
+      )}
+    </Pressable>
+  );
+}
+export function AnswerSlot({
+  letter,
+  locked,
+  active,
+  failed,
+  width,
+  onPress,
+  label,
+}: {
+  letter: string;
+  locked: boolean;
+  active: boolean;
+  failed: boolean;
+  width: number;
+  onPress: () => void;
+  label: string;
+}) {
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      accessibilityState={{ disabled: locked, selected: active }}
+      disabled={locked}
+      onPress={onPress}
+      style={[
+        s.slot,
+        { width },
+        active && { borderColor: C.gold },
+        locked && { backgroundColor: "#393322", borderColor: C.gold },
+        failed && { borderColor: C.red },
+      ]}
+    >
+      <Text
+        style={{
+          color: locked ? C.gold : C.ink,
+          fontSize: 20,
+          fontWeight: "800",
+        }}
+      >
+        {letter}
+      </Text>
+    </Pressable>
+  );
+}
+export function Shell({
+  children,
+  header,
+  footer,
+  compact,
+  scrollRef,
+}: {
+  children: React.ReactNode;
+  header?: React.ReactNode;
+  footer?: React.ReactNode;
+  compact?: boolean;
+  scrollRef?: React.RefObject<ScrollView | null>;
+}) {
+  const { error, retry } = useGame();
+  return (
+    <SafeAreaView style={s.safe}>
+      <Ambient />
+      {header ? (
+        <View
+          style={[
+            s.frame,
+            {
+              padding: 14,
+              backgroundColor: "#0C1934B8",
+              borderRadius: 22,
+              marginTop: 10,
+              marginBottom: 12,
+              width: "94%",
+            },
+          ]}
+        >
+          {header}
+        </View>
+      ) : null}
+      <ScrollView
+        ref={scrollRef}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={[s.page, compact && { paddingTop: 0 }]}
+      >
+        {error ? (
+          <Pressable accessibilityRole="button" onPress={retry}>
+            <Text style={s.error}>{error}</Text>
+          </Pressable>
+        ) : null}
+        {children}
+      </ScrollView>
+      {footer ? (
+        <View
+          style={[
+            s.frame,
+            { padding: 16, backgroundColor: C.panel, borderRadius: 22 },
+          ]}
+        >
+          {footer}
+        </View>
+      ) : null}
+    </SafeAreaView>
+  );
+}
+export const s = StyleSheet.create({
+  safe: { flex: 1, backgroundColor: C.bg },
+  frame: { width: "100%", maxWidth: 560, alignSelf: "center" },
+  page: {
+    padding: 16,
+    paddingBottom: 28,
+    marginVertical: 12,
+    backgroundColor: "transparent",
+    borderRadius: 26,
+    width: "94%",
+    maxWidth: 560,
+    alignSelf: "center",
+    gap: 20,
+  },
+  card: {
+    backgroundColor: C.panel,
+    borderRadius: radius.lg,
+    padding: spacing.xl,
+    borderWidth: 1,
+    borderColor: "#52607980",
+    ...shadows.card,
+  },
+  top: { flexDirection: "row", alignItems: "center", gap: 12, minHeight: 48 },
+  brand: { color: C.ink, fontSize: 21, fontWeight: "800", flex: 1 },
+  back: {
+    width: 44,
+    height: 44,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: C.panel,
+    borderRadius: radius.md,
+  },
+  currency: {
+    flexDirection: "row",
+    gap: 7,
+    alignItems: "center",
+    paddingHorizontal: 12,
+    minHeight: 36,
+    borderRadius: radius.sm,
+    backgroundColor: C.panel,
+  },
+  currencyText: { color: C.ink, fontSize: 15, fontWeight: "700" },
+  gold: { color: C.gold, fontSize: 17, fontWeight: "700" },
+  label: {
+    color: C.gold,
+    fontSize: typography.caption,
+    fontWeight: "800",
+    letterSpacing: 1.1,
+  },
+  text: { color: C.ink, fontSize: typography.body, lineHeight: 24 },
+  muted: { color: C.muted, fontSize: 14, lineHeight: 21 },
+  small: { color: C.muted, fontSize: 12, lineHeight: 18 },
+  value: { fontSize: 27, fontWeight: "800", color: C.ink },
+  hero: {
+    color: C.ink,
+    fontSize: typography.hero,
+    fontWeight: "800",
+    lineHeight: 39,
+  },
+  between: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 10,
+  },
+  row: { flexDirection: "row", gap: 12, flexWrap: "wrap" },
+  button: {
+    minHeight: 56,
+    backgroundColor: C.gold,
+    borderRadius: 30,
+    borderBottomWidth: 4,
+    borderBottomColor: "#8B6228",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  secondary: {
+    backgroundColor: C.raised,
+    borderBottomColor: C.line,
+    borderBottomWidth: 2,
+  },
+  buttonText: {
+    color: "#332512",
+    fontSize: 15,
+    fontWeight: "800",
+    letterSpacing: 0.7,
+    textAlign: "center",
+  },
+  track: {
+    height: 7,
+    backgroundColor: "#34425B",
+    borderRadius: 9,
+    overflow: "hidden",
+  },
+  fill: { height: 7, backgroundColor: C.gold, borderRadius: 9 },
+  note: { fontSize: 13, color: C.muted, lineHeight: 21, textAlign: "center" },
+  error: { color: C.red, fontSize: 14, padding: 12 },
+  node: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: C.panel,
+    borderWidth: 3,
+    borderColor: C.line,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  currentNode: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: C.gold,
+    borderColor: "#FFEBA0",
+    ...shadows.gold,
+  },
+  doneNode: { backgroundColor: C.green, borderColor: "#A2F7D6" },
+  tile: {
+    backgroundColor: C.raised,
+    borderRadius: radius.md,
+    borderBottomWidth: 3,
+    borderColor: "#111C32",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  slot: {
+    minHeight: 48,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    borderBottomWidth: 3,
+    borderColor: C.line,
+    backgroundColor: C.panel,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
