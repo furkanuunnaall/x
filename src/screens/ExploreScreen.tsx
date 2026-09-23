@@ -3,10 +3,10 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from "react-native";
+import { Text } from "../AppText";
 import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
 import {
@@ -73,7 +73,7 @@ export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
                   (r) => r.file > i * 10 && r.file <= (i + 1) * 10,
                 ).length
               }
-              /10 dosya
+              /10 bölüm
             </Text>
           </View>
         ))}
@@ -144,7 +144,7 @@ export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
           </View>
           <Text style={s.text}>{q.explanation}</Text>
           <Text style={s.small}>
-            İlk çözüm · Dosya{" "}
+            İlk çözüm · Bölüm{" "}
             {
               files.find((f) => f.questions.some((item) => item.id === q.id))
                 ?.id
@@ -166,7 +166,7 @@ export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
           </Text>
           {!unlocked.length ? (
             <Button
-              title="DOSYAYA DÖN"
+              title="BÖLÜME DÖN"
               onPress={() =>
                 navigation.navigate(
                   game.results.some((r) => r.file === game.file)

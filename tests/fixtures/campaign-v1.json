@@ -497,7 +497,7 @@
   {
     "id": 10,
     "kind": "final",
-    "title": "Final Dosyası 1",
+    "title": "Final Bölümü 1",
     "questions": [
       {
         "id": "v1q25",
@@ -1071,7 +1071,7 @@
   {
     "id": 20,
     "kind": "final",
-    "title": "Final Dosyası 2",
+    "title": "Final Bölümü 2",
     "questions": [
       {
         "id": "v1q85",
@@ -1645,7 +1645,7 @@
   {
     "id": 30,
     "kind": "final",
-    "title": "Final Dosyası 3",
+    "title": "Final Bölümü 3",
     "questions": [
       {
         "id": "v1q56",

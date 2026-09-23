@@ -97,7 +97,7 @@ export function generateLevel(
         kind,
         title:
           options.title ??
-          (kind === "final" ? `Final Dosyası ${id / 10}` : `Dosya ${id}`),
+          (kind === "final" ? `Final Bölümü ${id / 10}` : `Bölüm ${id}`),
         questions: chosen,
         puzzle,
       };

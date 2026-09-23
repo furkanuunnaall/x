@@ -1,5 +1,10 @@
 import React, { useEffect } from "react";
-import { Modal, Pressable, Text, View } from "react-native";
+import {
+  Modal,
+  Pressable,
+  View,
+} from "react-native";
+import { Text } from "./AppText";
 import { useGame } from "./store";
 import { productOf } from "./product";
 import { Button, C, GameCard, Label, s } from "./ui";

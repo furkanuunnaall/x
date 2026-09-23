@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  Animated,
+  Pressable,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
+import { Text } from "../AppText";
+import { NativeLetterInput, showKeyboard } from "../NativeLetterInput";
 import { useDiscovery } from "../discovery/store";
 import {
   dailyQuestion,
@@ -8,7 +16,7 @@ import {
   roundFor,
   scoreGuess,
 } from "../discovery/model";
-import { DiscoveryStatus, markColors, TurkishKeyboard } from "../discovery/ui";
+import { DiscoveryStatus, markColors } from "../discovery/ui";
 import { Button, C, GameCard, Label, Shell, TopBar, s } from "../ui";
 import { Props } from "../navigation";
 import { useReducedMotion } from "../motion";
@@ -21,21 +29,14 @@ export default function DailyScreen({ navigation }: Props<"Daily">) {
   const [history, setHistory] = useState(false);
   const shake = useRef(new Animated.Value(0)).current;
   const reduced = useReducedMotion();
+  const input = useRef<TextInput>(null);
   useEffect(() => {
     setShowClue(false);
     setHistory(false);
   }, [day]);
-  const marks: Record<string, Mark> = {};
-  const priority = { absent: 0, present: 1, correct: 2 };
-  round.guesses.forEach((guess) =>
-    scoreGuess(guess, q.term).forEach((mark, i) => {
-      if (
-        marks[guess[i]] === undefined ||
-        priority[mark] > priority[marks[guess[i]]]
-      )
-        marks[guess[i]] = mark;
-    }),
-  );
+  useEffect(() => {
+    if (ready && !solved) showKeyboard(input.current);
+  }, [ready, solved]);
   function submit() {
     if (round.draft.length !== q.term.length) return;
     dispatch({ type: "guess", day });
@@ -128,23 +129,28 @@ export default function DailyScreen({ navigation }: Props<"Daily">) {
           ),
         )}
         {!solved ? (
-          <Animated.View
-            style={[d.row, { transform: [{ translateX: shake }] }]}
-          >
-            {Array.from({ length: q.term.length }, (_, i) => (
-              <View
-                key={i}
-                style={[
-                  d.slot,
-                  i === round.draft.length && {
-                    borderColor: C.gold,
-                    borderWidth: 2,
-                  },
-                ]}
-              >
-                <Text style={d.letter}>{round.draft[i] || "·"}</Text>
-              </View>
-            ))}
+          <Animated.View style={{ transform: [{ translateX: shake }] }}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Tahmin satırı, klavyeyi aç"
+              onPress={() => showKeyboard(input.current)}
+              style={d.row}
+            >
+              {Array.from({ length: q.term.length }, (_, i) => (
+                <View
+                  key={i}
+                  style={[
+                    d.slot,
+                    i === round.draft.length && {
+                      borderColor: C.gold,
+                      borderWidth: 2,
+                    },
+                  ]}
+                >
+                  <Text style={d.letter}>{round.draft[i] || "·"}</Text>
+                </View>
+              ))}
+            </Pressable>
           </Animated.View>
         ) : null}
       </View>
@@ -176,12 +182,23 @@ export default function DailyScreen({ navigation }: Props<"Daily">) {
               <Text style={s.gold}>Tanımı göster · ücretsiz</Text>
             </Pressable>
           )}
-          <TurkishKeyboard
-            marks={marks}
-            disabled={!ready}
-            onLetter={(letter) =>
-              dispatch({ type: "draft", day, value: round.draft + letter })
+          <NativeLetterInput
+            ref={input}
+            editable={ready}
+            onLetters={(letters) =>
+              dispatch({
+                type: "draft",
+                day,
+                value: (round.draft + letters.join("")).slice(
+                  0,
+                  q.term.length,
+                ),
+              })
             }
+            onDelete={() =>
+              dispatch({ type: "draft", day, value: round.draft.slice(0, -1) })
+            }
+            onSubmit={submit}
           />
           <View style={s.row}>
             <View style={{ flex: 1 }}>
@@ -210,7 +227,7 @@ export default function DailyScreen({ navigation }: Props<"Daily">) {
       )}
       <Text style={s.note}>
         Her gün yeni bir şifre. Günlük damgalar ayrı bir koleksiyon; XP, Mühür
-        ve dosya serin ana oyunda devam eder.
+        ve bölüm serin ana oyunda devam eder.
       </Text>
     </Shell>
   );

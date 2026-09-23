@@ -143,8 +143,8 @@ export function badges(g: Game) {
   return [
     {
       id: "first",
-      title: "İlk Dosya",
-      detail: "İlk dosyanı tamamla.",
+      title: "İlk Bölüm",
+      detail: "İlk bölümünü tamamla.",
       value: g.results.length,
       total: 1,
       icon: "01",
@@ -159,8 +159,8 @@ export function badges(g: Game) {
     },
     {
       id: "perfect",
-      title: "Mükemmel Dosya",
-      detail: "Bir dosyada üç yıldız kazan.",
+      title: "Mükemmel Bölüm",
+      detail: "Bir bölümde üç yıldız kazan.",
       value: g.results.filter((r) => r.stars === 3).length,
       total: 1,
       icon: "★",
@@ -184,7 +184,7 @@ export function badges(g: Game) {
     {
       id: "streak",
       title: "Seri Ustası",
-      detail: "7 günlük dosya serisine ulaş.",
+      detail: "7 günlük bölüm serisine ulaş.",
       value: g.daily,
       total: 7,
       icon: "7",
@@ -192,7 +192,7 @@ export function badges(g: Game) {
     {
       id: "final",
       title: "Final Ustası",
-      detail: "Bir Final Dosyası çöz.",
+      detail: "Bir Final Bölümü çöz.",
       value: g.results.filter((r) => r.file % 10 === 0).length,
       total: 1,
       icon: "◆",
@@ -357,7 +357,7 @@ export function dailyQuestions(day: string) {
 }
 export const taskDefinitions = [
   { title: "5 kavram çöz", total: 5 },
-  { title: "1 dosya tamamla", total: 1 },
+  { title: "1 bölüm tamamla", total: 1 },
   { title: "3 doğruyu seri yap", total: 3 },
 ];
 export function taskValues(t: TaskDay) {

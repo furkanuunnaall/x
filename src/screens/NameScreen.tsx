@@ -1,5 +1,10 @@
 import React, { useRef, useState } from "react";
-import { Text, TextInput, View, StyleSheet } from "react-native";
+import {
+  TextInput,
+  View,
+  StyleSheet,
+} from "react-native";
+import { Text } from "../AppText";
 import { useGame } from "../store";
 import { cleanName, productOf, validName } from "../product";
 import { Button, C, Label, Shell, TopBar, s } from "../ui";
@@ -36,12 +41,12 @@ export default function NameScreen({ navigation }: Props<"Name">) {
         <View style={v.halo}>
           <Seal size={82} />
         </View>
-        <Label>{editing ? "OYUNCU PROFİLİN" : "HER DOSYA BİR KEŞİF"}</Label>
+        <Label>{editing ? "OYUNCU PROFİLİN" : "HER BÖLÜM BİR KEŞİF"}</Label>
         <Text style={v.heading}>
           {editing ? "İmzanı güncelle." : "Önce seni tanıyalım."}
         </Text>
         <Text style={v.description}>
-          Adını yaz, karakterini seç. İlk dosyan seni bekliyor.
+          Adını yaz, karakterini seç. İlk bölümün seni bekliyor.
         </Text>
       </View>
       <View style={v.form}>

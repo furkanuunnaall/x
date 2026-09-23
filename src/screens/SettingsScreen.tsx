@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { Modal, Switch, Text, View } from "react-native";
+import {
+  Modal,
+  Switch,
+  View,
+} from "react-native";
+import { Text } from "../AppText";
 import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
 import { productOf, Settings } from "../product";
@@ -59,7 +64,7 @@ export default function SettingsScreen({ navigation }: Props<"Settings">) {
           Hukuk kavramlarıyla oynanan bağımsız bir kelime oyunu.
         </Text>
         <Text style={s.muted}>
-          Kurgusal karakterler, 30 dosya ve günlük keşifler. İlerleme bu cihazda
+          Kurgusal karakterler, 30 bölüm ve günlük keşifler. İlerleme bu cihazda
           saklanır. İçerik oyun amaçlı kısa tanımlardan oluşur.
         </Text>
       </GameCard>
@@ -96,7 +101,7 @@ export default function SettingsScreen({ navigation }: Props<"Settings">) {
           >
             <Text style={s.hero}>Baştan başlamak mı?</Text>
             <Text style={s.text}>
-              Tüm dosyalar, XP, Mühür, karakter, günlük ödüller ve favoriler bu
+              Tüm bölümler, XP, Mühür, karakter, günlük ödüller ve favoriler bu
               cihazdan silinecek. Bu işlem geri alınamaz.
             </Text>
             {error ? <Text style={s.error}>{error}</Text> : null}

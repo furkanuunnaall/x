@@ -1,6 +1,10 @@
 import LeagueScreen from "./screens/LeagueScreen";
 import React from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  View,
+} from "react-native";
+import { logoFont, Text } from "./AppText";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -42,7 +46,7 @@ export default function AppNavigation() {
             <Text
               style={{
                 color: C.ink,
-                fontFamily: "Georgia",
+                fontFamily: logoFont,
                 fontSize: 48,
                 letterSpacing: 5,
               }}

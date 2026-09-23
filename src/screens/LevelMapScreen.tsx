@@ -1,6 +1,11 @@
 import { CurrencyBadge } from "../ui";
 import React, { useRef, useState } from "react";
-import { ScrollView, Text, View, useWindowDimensions } from "react-native";
+import {
+  ScrollView,
+  View,
+  useWindowDimensions,
+} from "react-native";
+import { Text } from "../AppText";
 import { LinearGradient } from "expo-linear-gradient";
 import { files } from "../content";
 import { useGame } from "../store";
@@ -66,7 +71,7 @@ export default function LevelMapScreen({
       scrollRef={scroll}
       header={
         <TopBar
-          title="Dosya yolculuğu"
+          title="Bölüm yolculuğu"
           back={onClose}
           right={<CurrencyBadge amount={g.seals} />}
         />
@@ -75,8 +80,8 @@ export default function LevelMapScreen({
       <View style={{ gap: 5 }}>
         <Label>HER MÜHÜR BİR ADIM İLERİ</Label>
         <Text style={s.muted}>
-          {g.results.filter((r) => r.sealed).length} dosya mühürlendi ·{" "}
-          {files.length} dosyalık yolculuk
+          {g.results.filter((r) => r.sealed).length} bölüm mühürlendi ·{" "}
+          {files.length} bölümlük yolculuk
         </Text>
       </View>
       <View
@@ -166,8 +171,8 @@ export default function LevelMapScreen({
                 {file.id % 5 === 0 ? (
                   <Text style={[s.small, { color: C.gold }]}>
                     {file.kind === "final"
-                      ? "◆ FINAL DOSYASI"
-                      : "▣ ÖDÜL DOSYASI"}
+                      ? "◆ FİNAL BÖLÜMÜ"
+                      : "▣ ÖDÜL BÖLÜMÜ"}
                   </Text>
                 ) : null}
               </View>
@@ -189,7 +194,7 @@ export default function LevelMapScreen({
                     }}
                   >
                     <Label>
-                      {current ? "ŞU ANKİ DOSYAN" : "TAMAMLANAN DOSYA"}
+                      {current ? "ŞU ANKİ BÖLÜMÜN" : "TAMAMLANAN BÖLÜM"}
                     </Label>
                     <View style={s.between}>
                       <Text
@@ -199,7 +204,7 @@ export default function LevelMapScreen({
                           fontWeight: "800",
                         }}
                       >
-                        DOSYA {String(file.id).padStart(2, "0")}
+                        BÖLÜM {String(file.id).padStart(2, "0")}
                       </Text>
                       <Stars count={result?.stars ?? 0} size={20} />
                     </View>

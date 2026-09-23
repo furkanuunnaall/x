@@ -1,26 +1,40 @@
 import React from "react";
 import {
-  ImageBackground,
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
   View,
   useWindowDimensions,
 } from "react-native";
+import { logoFont, Text } from "../AppText";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { useGame } from "../store";
 import { dailyNow, entry } from "../game";
 import { files } from "../content";
 import { Props } from "../navigation";
-import { C as Palette, CurrencyBadge, Stars, ProgressBar } from "../homeUi";
+import { C as Palette, CurrencyBadge, ProgressBar } from "../homeUi";
 import { Seal } from "../art";
+import { LivingBackground } from "../LivingBackground";
 import { useDiscovery } from "../discovery/store";
 import { Avatar } from "../character";
-import { productOf, knownTerms, newTaskDay, playerName } from "../product";
+import { productOf, newTaskDay, playerName } from "../product";
 
 const C = { ...Palette, ink: "#FFF8EA", muted: "#D9D3C7", gold: "#F6CE50" };
+const months = [
+  "OCAK",
+  "ŞUBAT",
+  "MART",
+  "NİSAN",
+  "MAYIS",
+  "HAZİRAN",
+  "TEMMUZ",
+  "AĞUSTOS",
+  "EYLÜL",
+  "EKİM",
+  "KASIM",
+  "ARALIK",
+];
 export default function Home({ navigation }: Props<"Home">) {
   const { game: g, error, retry } = useGame();
   const { day } = useDiscovery();
@@ -38,11 +52,7 @@ export default function Home({ navigation }: Props<"Home">) {
     );
   return (
     <View style={h.screen}>
-      <ImageBackground
-        source={require("../../assets/courtyard.png")}
-        resizeMode="cover"
-        style={StyleSheet.absoluteFill}
-      />
+      <LivingBackground source={require("../../assets/courtyard.png")} />
       <LinearGradient
         pointerEvents="none"
         colors={["#08132977", "#10244322", "#08122599", "#081225F5"]}
@@ -74,11 +84,11 @@ export default function Home({ navigation }: Props<"Home">) {
               <Text style={h.settingsIcon}>⚙</Text>
             </Pressable>
           </View>
-          {error && (
+          {error ? (
             <Pressable accessibilityRole="button" onPress={retry}>
               <Text style={h.error}>{error} · Tekrar dene</Text>
             </Pressable>
-          )}
+          ) : null}
           <View
             style={[
               h.brandArea,
@@ -93,7 +103,7 @@ export default function Home({ navigation }: Props<"Home">) {
           <View style={[h.stage, compact && { minHeight: 220 }]}>
             <View style={h.rail}>
               <Shortcut
-                title="GÖREVLER"
+                title="GÜNLÜK GÖREVLER"
                 icon="✦"
                 detail={`${tasks.claimed.length}/3`}
                 label="Günlük görevleri aç"
@@ -102,14 +112,13 @@ export default function Home({ navigation }: Props<"Home">) {
               <Shortcut
                 title="ROZETLER"
                 icon="★"
-                detail={`${p.unlockedAchievements.length}/7`}
                 label="Başarımları aç"
                 onPress={() => navigation.navigate("Achievements")}
               />
             </View>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel={`Dosya ${g.file}, ${current.title}. Haritayı aç`}
+              accessibilityLabel={`Bölüm ${g.file}, ${current.title}. Haritayı aç`}
               onPress={() => navigation.navigate("Map")}
               style={h.journey}
             >
@@ -117,9 +126,6 @@ export default function Home({ navigation }: Props<"Home">) {
                 colors={["#D2B77233", "#102448CC", "#142445DD"]}
                 style={[h.orbit, compact && { minHeight: 170 }]}
               >
-                <Text style={h.fileLabel}>
-                  {current.kind === "final" ? "FINAL DOSYASI" : "DOSYA"}
-                </Text>
                 <Text
                   style={[
                     h.number,
@@ -129,7 +135,6 @@ export default function Home({ navigation }: Props<"Home">) {
                   {g.file}
                 </Text>
                 <Text style={h.fileTitle}>{current.title}</Text>
-                <Stars color="#F6CE50" count={result?.stars ?? 0} size={19} />
                 <Text style={h.mapLink}>YOLCULUĞUN ›</Text>
               </LinearGradient>
             </Pressable>
@@ -137,7 +142,6 @@ export default function Home({ navigation }: Props<"Home">) {
               <Shortcut
                 title="KAVRAMLAR"
                 icon="▤"
-                detail={String(knownTerms(g).length)}
                 label="Kavram koleksiyonunu aç"
                 onPress={() =>
                   navigation.navigate("Explore", { tab: "collection" })
@@ -156,14 +160,14 @@ export default function Home({ navigation }: Props<"Home">) {
             <View style={h.progress}>
               <Text style={h.progressText}>
                 {result
-                  ? "DOSYA TAMAMLANDI"
+                  ? "BÖLÜM TAMAMLANDI"
                   : `${count} / ${current.questions.length} KAVRAM ÇÖZÜLDÜ`}
               </Text>
               <ProgressBar value={count} total={current.questions.length} />
             </View>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Dosyaya devam et"
+              accessibilityLabel="Bölüme devam et"
               onPress={go}
               style={({ pressed }) => [
                 h.playButton,
@@ -174,13 +178,13 @@ export default function Home({ navigation }: Props<"Home">) {
               ]}
             >
               <LinearGradient
-                colors={["#70D83F", "#3FB420", "#289116"]}
+                colors={["#14A874", "#08805A", "#05593F"]}
                 style={h.playGradient}
               >
                 <Text style={h.playCaption}>
                   {result ? "SONUCU GÖR" : "DEVAM ET"}
                 </Text>
-                <Text style={h.playText}>DOSYA {g.file} ›</Text>
+                <Text style={h.playText}>BÖLÜM {g.file} ›</Text>
               </LinearGradient>
             </Pressable>
             <Pressable
@@ -198,7 +202,9 @@ export default function Home({ navigation }: Props<"Home">) {
                 </Text>
               </View>
               <View style={h.calendar}>
-                <Text style={h.calendarTop}>BUGÜN</Text>
+                <Text style={h.calendarTop}>
+                  {months[Number(day.slice(5, 7)) - 1]}
+                </Text>
                 <Text style={h.calendarDay}>{Number(day.slice(-2))}</Text>
               </View>
             </Pressable>
@@ -237,7 +243,7 @@ function Shortcut({
 }: {
   title: string;
   icon: string;
-  detail: string;
+  detail?: string;
   label: string;
   onPress: () => void;
 }) {
@@ -260,9 +266,11 @@ function Shortcut({
         ) : (
           <Text style={h.shortcutIcon}>{icon}</Text>
         )}
-        <View style={h.counter}>
-          <Text style={h.counterText}>{detail}</Text>
-        </View>
+        {detail ? (
+          <View style={h.counter}>
+            <Text style={h.counterText}>{detail}</Text>
+          </View>
+        ) : null}
       </LinearGradient>
       <Text style={h.shortcutLabel}>{title}</Text>
     </Pressable>
@@ -320,7 +328,7 @@ const h = StyleSheet.create({
     fontWeight: "700",
   },
   brand: {
-    fontFamily: "Georgia",
+    fontFamily: logoFont,
     color: "#FFF8E8",
     fontSize: 66,
     letterSpacing: 5,
@@ -367,11 +375,10 @@ const h = StyleSheet.create({
     fontSize: 10,
     color: "#FFF8E8",
     fontWeight: "800",
-    backgroundColor: "#101B30E8",
-    paddingVertical: 5,
-    paddingHorizontal: 6,
-    borderRadius: 10,
-    overflow: "hidden",
+    textAlign: "center",
+    textShadowColor: "#050C1ACC",
+    textShadowRadius: 6,
+    textShadowOffset: { width: 0, height: 1 },
   },
   counter: {
     position: "absolute",
@@ -404,12 +411,6 @@ const h = StyleSheet.create({
     shadowRadius: 22,
     shadowOffset: { width: 0, height: 0 },
   },
-  fileLabel: {
-    color: "#F1DCAD",
-    fontSize: 10,
-    letterSpacing: 2,
-    fontWeight: "800",
-  },
   number: { color: "#FFFAEC", fontSize: 72, lineHeight: 80, fontWeight: "800" },
   fileTitle: {
     color: C.ink,
@@ -437,7 +438,7 @@ const h = StyleSheet.create({
     borderRadius: 40,
     borderWidth: 2,
     borderBottomWidth: 6,
-    borderColor: "#237813",
+    borderColor: "#023826",
     overflow: "hidden",
     shadowColor: "#EAB640",
     shadowRadius: 18,
@@ -454,12 +455,12 @@ const h = StyleSheet.create({
     fontSize: 10,
     letterSpacing: 2,
     fontWeight: "800",
-    color: "#EBFFE2",
+    color: "#F6CE50",
   },
   playText: {
     fontSize: 28,
     fontWeight: "900",
-    color: "#FFFFFF",
+    color: "#F2FFF8",
     letterSpacing: 0.7,
   },
   daily: {
@@ -477,26 +478,30 @@ const h = StyleSheet.create({
   dailyTitle: { color: "#FFF8E8", fontSize: 17, fontWeight: "800" },
   dailyDetail: { color: C.muted, fontSize: 11, lineHeight: 17 },
   calendar: {
-    backgroundColor: "#F1E9D8",
-    width: 46,
-    borderRadius: 8,
+    backgroundColor: "#14233B",
+    width: 50,
+    borderRadius: 10,
+    borderWidth: 1.5,
+    borderColor: "#D3B468",
     overflow: "hidden",
     alignItems: "center",
   },
   calendarTop: {
-    backgroundColor: "#5F76A0",
+    backgroundColor: "#D3B468",
     width: "100%",
-    color: "#FFF",
+    color: "#332512",
     fontSize: 8,
     fontWeight: "800",
+    letterSpacing: 0.5,
     textAlign: "center",
     padding: 3,
   },
   calendarDay: {
-    fontSize: 24,
-    color: "#24324A",
+    fontSize: 22,
     fontWeight: "800",
-    paddingVertical: 3,
+    color: "#FFF8EA",
+    paddingTop: 2,
+    paddingBottom: 4,
   },
   profile: {
     flexDirection: "row",

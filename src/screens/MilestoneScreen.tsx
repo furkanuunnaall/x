@@ -1,5 +1,8 @@
 import React from "react";
-import { Text, View } from "react-native";
+import {
+  View,
+} from "react-native";
+import { Text } from "../AppText";
 import { useGame } from "../store";
 import { productOf } from "../product";
 import { Button, GameCard, Label, Shell, TopBar, s } from "../ui";
@@ -19,13 +22,13 @@ export default function MilestoneScreen({
       <View style={{ alignItems: "center", padding: 30 }}>
         <Seal size={130} value="✦" />
       </View>
-      <Label>DOSYA {file} TAMAMLANDI</Label>
+      <Label>BÖLÜM {file} TAMAMLANDI</Label>
       <Text style={s.hero}>Bir mühür daha, bir adım ileri.</Text>
       <GameCard style={{ gap: 20 }}>
         <Text style={s.hero}>+50 Mühür</Text>
         <Text style={s.text}>+1 ücretsiz Harf Aç</Text>
         <Text style={s.muted}>
-          Ana dosyalarda kullanılır. Ödül tek seferliktir.
+          Ana bölümlerde kullanılır. Ödül tek seferliktir.
         </Text>
       </GameCard>
       <Button

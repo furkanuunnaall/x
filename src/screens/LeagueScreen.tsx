@@ -1,5 +1,8 @@
 import React from "react";
-import { Text, View } from "react-native";
+import {
+  View,
+} from "react-native";
+import { Text } from "../AppText";
 import { Avatar } from "../character";
 import { Button, C, GameCard, Label, Shell, TopBar, s } from "../ui";
 import { Props } from "../navigation";

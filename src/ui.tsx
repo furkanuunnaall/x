@@ -5,11 +5,11 @@ import {
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
   View,
   StyleProp,
   ViewStyle,
 } from "react-native";
+import { Text } from "./AppText";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGame } from "./store";
 import { colors, spacing, radius, typography, shadows } from "./theme";

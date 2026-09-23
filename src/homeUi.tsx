@@ -1,5 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {
+  View,
+  StyleSheet,
+} from "react-native";
+import { Text } from "./AppText";
 import { Seal } from "./art";
 import { colors as C, spacing, radius, typography, shadows } from "./homeTheme";
 export { C };
@@ -32,26 +36,6 @@ export function ProgressBar({
         ]}
       />
     </View>
-  );
-}
-
-export function Stars({
-  count = 0,
-  size = 23,
-  color = C.gold,
-}: {
-  color?: string;
-  count?: number;
-  size?: number;
-}) {
-  return (
-    <Text
-      accessibilityLabel={`${count} yıldız`}
-      style={{ color, fontSize: size, letterSpacing: 4 }}
-    >
-      {"★".repeat(count)}
-      <Text style={{ color: "#6B7693" }}>{"☆".repeat(3 - count)}</Text>
-    </Text>
   );
 }
 

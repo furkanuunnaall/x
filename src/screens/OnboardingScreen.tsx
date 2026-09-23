@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import {
+  View,
+} from "react-native";
+import { Text } from "../AppText";
 import { useGame } from "../store";
 import { Button, C, Shell, s, GameCard } from "../ui";
 import { FileArt, Seal } from "../art";
 const slides = [
   [
     "Hukuk kelimelerini çöz.",
-    "Tanımları oku, kavramları bul, dosyaları tamamla.",
+    "Tanımları oku, kavramları bul, bölümleri tamamla.",
   ],
-  ["Dosyaları ilerlet.", "Yıldız kazan, XP topla ve yeni dosyaları aç."],
+  ["Bölümleri ilerlet.", "Yıldız kazan, XP topla ve yeni bölümleri aç."],
   ["Kendini geliştir.", "Günlük görevler, seriler ve başarımlarla ilerle."],
 ];
 export default function OnboardingScreen() {
@@ -49,7 +52,7 @@ export default function OnboardingScreen() {
                   textAlign: "center",
                 }}
               >
-                Bir dosyayı tamamlayan son dokunuş.
+                Bir bölümü tamamlayan son dokunuş.
               </Text>
               <View style={{ flexDirection: "row", gap: 5, marginTop: 14 }}>
                 {"MÜHÜR".split("").map((letter, i) => (

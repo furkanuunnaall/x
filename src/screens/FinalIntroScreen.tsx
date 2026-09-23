@@ -1,5 +1,8 @@
 import React from "react";
-import { Text, View } from "react-native";
+import {
+  View,
+} from "react-native";
+import { Text } from "../AppText";
 import { useGame } from "../store";
 import { Button, GameCard, Label, Shell, TopBar, s } from "../ui";
 import { Seal } from "../art";
@@ -8,16 +11,16 @@ export default function FinalIntroScreen({ navigation }: Props<"FinalIntro">) {
   const { game } = useGame();
   return (
     <Shell>
-      <TopBar title="Özel dosya" back={() => navigation.goBack()} />
+      <TopBar title="Özel bölüm" back={() => navigation.goBack()} />
       <View style={{ alignItems: "center", padding: 32 }}>
         <Seal size={140} value="◆" />
       </View>
-      <Label>FINAL DOSYASI {String(game.file / 10).padStart(2, "0")}</Label>
+      <Label>FİNAL BÖLÜMÜ {String(game.file / 10).padStart(2, "0")}</Label>
       <Text style={[s.hero, { fontSize: 38, lineHeight: 46 }]}>
-        FINAL DOSYASI
+        FİNAL BÖLÜMÜ
       </Text>
       <Text style={s.gold}>Bütün izler burada birleşiyor.</Text>
-      <Text style={s.text}>Bu dosyada öğrendiklerini bir araya getir.</Text>
+      <Text style={s.text}>Bu bölümde öğrendiklerini bir araya getir.</Text>
       <GameCard style={{ gap: 14, borderColor: "#A37832" }}>
         <Text style={s.text}>9 kavram · Zorlu inceleme</Text>
         <Text style={s.gold}>Cevap XP’sine ek +250 XP</Text>

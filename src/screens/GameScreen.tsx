@@ -1,20 +1,20 @@
-import { TurkishKeyboard } from "../discovery/ui";
+import { NativeLetterInput, showKeyboard } from "../NativeLetterInput";
 import { productOf } from "../product";
 import { useFeedback } from "../feedback";
 import { adjacentUnsolved, nextBlank } from "../wordFlow";
 import { Ambient, Seal } from "../art";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Modal,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
-  Text,
+  TextInput,
   View,
   useWindowDimensions,
 } from "react-native";
+import { Text } from "../AppText";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -66,6 +66,10 @@ export default function GameScreen({ navigation }: Props<"Game">) {
   const nextQuestion = adjacentUnsolved(unresolved, selected, 1);
   const result = g.results.find((r) => r.file === g.file);
   const scroll = useRef<ScrollView>(null);
+  const input = useRef<TextInput>(null);
+  useEffect(() => {
+    if (!e.solved) input.current?.focus();
+  }, []);
   function choose(id: string) {
     if (entry(g, id).solved) return;
     dispatch({ type: "select", id });
@@ -74,13 +78,19 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     setFailed(false);
     setFeedback("");
     setSuccess(null);
+    showKeyboard(input.current);
   }
-  function typeLetter(letter: string) {
+  function typeLetters(letters: string[]) {
     if (e.solved || active < 0) return;
-    dispatch({ type: "key", id: q.id, key: letter, index: active });
     const updated = [...draft];
-    updated[active] = letter;
-    setCursor(nextBlank(updated, active));
+    let index: number | null = active;
+    for (const letter of letters) {
+      if (index === null) break;
+      dispatch({ type: "key", id: q.id, key: letter, index });
+      updated[index] = letter;
+      index = nextBlank(updated, index);
+    }
+    setCursor(index);
     setFeedback("");
     setFailed(false);
   }
@@ -191,7 +201,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
           <Text style={s.backText}>‹</Text>
         </Pressable>
         <View style={{ flex: 1, alignItems: "center", gap: 3 }}>
-          <Text style={s.title}>DOSYA {g.file}</Text>
+          <Text style={s.title}>BÖLÜM {g.file}</Text>
           <Text style={s.progressText}>
             {count} / {qs.length}
           </Text>
@@ -199,7 +209,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
         <CurrencyBadge amount={g.seals} />
       </View>
       <View
-        accessibilityLabel="Dosyadaki kelime satırları"
+        accessibilityLabel="Bölümdeki kelime satırları"
         onLayout={(event) => setBoardWidth(event.nativeEvent.layout.width)}
         style={s.board}
       >
@@ -262,6 +272,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                       onPress={(event) => {
                         event.stopPropagation();
                         if (!current) choose(item.id);
+                        else showKeyboard(input.current);
                         setCursor(i);
                       }}
                       key={i}
@@ -361,7 +372,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
         </Animated.View>
         {e.solved ? (
           <Button
-            title={result ? "DOSYA SONUCUNU GÖR" : "DEVAM ET →"}
+            title={result ? "BÖLÜM SONUCUNU GÖR" : "DEVAM ET →"}
             onPress={next}
           />
         ) : (
@@ -436,13 +447,6 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                 />
               </View>
             </View>
-            <View style={s.keyboardPanel}>
-              <TurkishKeyboard
-                rounded
-                onLetter={typeLetter}
-                disabled={active < 0}
-              />
-            </View>
             {feedback ? (
               <Text
                 accessibilityLiveRegion="polite"
@@ -454,6 +458,12 @@ export default function GameScreen({ navigation }: Props<"Game">) {
           </>
         )}
       </ScrollView>
+      <NativeLetterInput
+        ref={input}
+        onLetters={typeLetters}
+        onDelete={remove}
+        onSubmit={() => (e.solved ? next() : submit())}
+      />
       <Modal
         visible={sheet === "word"}
         transparent
@@ -553,14 +563,6 @@ const s = StyleSheet.create({
   backText: { color: C.ink, fontSize: 32 },
   title: { color: C.ink, fontSize: 19, fontWeight: "800" },
   progressText: { color: C.muted, fontSize: 14 },
-  keyboardPanel: {
-    backgroundColor: "#142237",
-    borderRadius: 24,
-    paddingHorizontal: 9,
-    paddingVertical: 4,
-    borderWidth: 1,
-    borderColor: "#24334A",
-  },
   board: {
     width: "100%",
     maxWidth: 560,
@@ -656,7 +658,6 @@ const s = StyleSheet.create({
   },
   clue: {
     color: "#F5F1E7",
-    fontFamily: Platform.OS === "android" ? "serif" : "Georgia",
     fontSize: 19,
     lineHeight: 27,
     fontWeight: "500",

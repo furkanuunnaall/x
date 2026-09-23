@@ -1,5 +1,8 @@
 import React from "react";
-import { Text, View } from "react-native";
+import {
+  View,
+} from "react-native";
+import { Text } from "../AppText";
 import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
 import { newTaskDay, productOf, taskDefinitions, taskValues } from "../product";
@@ -62,7 +65,7 @@ export default function TasksScreen({ navigation }: Props<"Tasks">) {
         />
       </GameCard>
       <Text style={s.note}>
-        Görevler yerel takvim gününde yenilenir. Ana dosyalar ve ilk kez çözülen
+        Görevler yerel takvim gününde yenilenir. Ana bölümler ve ilk kez çözülen
         günlük bulmacalar sayılır; tekrar oyunları sayılmaz.
       </Text>
     </Shell>

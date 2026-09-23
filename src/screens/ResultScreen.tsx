@@ -1,6 +1,10 @@
 import { Seal } from "../art";
 import React, { useRef, useEffect } from "react";
-import { Animated, Text, View } from "react-native";
+import {
+  Animated,
+  View,
+} from "react-native";
+import { Text } from "../AppText";
 import { useGame } from "../store";
 import { productOf } from "../product";
 import { files } from "../content";
@@ -46,7 +50,7 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
     return (
       <Shell>
         <Button
-          title="DOSYAYA DÖN"
+          title="BÖLÜME DÖN"
           onPress={() => navigation.replace("Game")}
         />
       </Shell>
@@ -54,7 +58,7 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
   return (
     <Shell>
       <TopBar
-        title={`${g.file % 10 === 0 ? "Final Dosyası" : "Dosya"} ${String(g.file).padStart(2, "0")}`}
+        title={`${g.file % 10 === 0 ? "Final Bölümü" : "Bölüm"} ${String(g.file).padStart(2, "0")}`}
         back={() => navigation.navigate("Home")}
       />
       <Reveal>
@@ -81,13 +85,13 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
             {r.sealed ? "MÜHRÜNÜ BIRAKTIN" : "BÜTÜN KAVRAMLAR ÇÖZÜLDÜ"}
           </Label>
           <Text style={[s.hero, { textAlign: "center" }]}>
-            {g.file % 10 === 0 ? "FINAL DOSYASI\nÇÖZÜLDÜ" : "DOSYA\nTAMAMLANDI"}
+            {g.file % 10 === 0 ? "FİNAL BÖLÜMÜ\nÇÖZÜLDÜ" : "BÖLÜM\nTAMAMLANDI"}
           </Text>
           <Stars count={r.stars} size={48} />
           <Text style={s.muted}>
             {r.stars === 3
               ? "Kusursuz takip. Üç yıldız senin."
-              : "Bir dosya daha çözüldü."}
+              : "Bir bölüm daha çözüldü."}
           </Text>
         </View>
       </Reveal>
@@ -95,8 +99,8 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
         <GameCard
           style={{ gap: 10, borderColor: C.gold, backgroundColor: "#392C35" }}
         >
-          <Label>◆ FINAL USTASI</Label>
-          <Text style={s.text}>Final dosyasına mührünü bıraktın.</Text>
+          <Label>◆ FİNAL USTASI</Label>
+          <Text style={s.text}>Final bölümüne mührünü bıraktın.</Text>
           <Text style={s.muted}>
             +250 bonus XP ve +100 ek Mühür aşağıdaki toplam ödüle dahildir.
           </Text>
@@ -142,10 +146,10 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
         />
       ) : null}
       {r.file < files.length ? (
-        <Button title="SONRAKİ DOSYA →" onPress={nextFile} />
+        <Button title="SONRAKİ BÖLÜM →" onPress={nextFile} />
       ) : (
         <Text style={s.note}>
-          30 dosyanın tamamı çözüldü. Yolculuğun arşivde!
+          30 bölümün tamamı çözüldü. Yolculuğun arşivde!
         </Text>
       )}
       <SecondaryButton

@@ -2,7 +2,12 @@ import { Avatar } from "../character";
 import { productOf, knownTerms, playerName } from "../product";
 import { Seal } from "../art";
 import React, { useState } from "react";
-import { Pressable, Text, View, StyleSheet } from "react-native";
+import {
+  Pressable,
+  View,
+  StyleSheet,
+} from "react-native";
+import { Text } from "../AppText";
 import { useGame } from "../store";
 import { dailyNow } from "../game";
 import { Props } from "../navigation";
@@ -43,14 +48,14 @@ export default function Profile({ navigation }: Props<"Profile">) {
       {!ranking && (
         <Button
           secondary
-          title="KİŞİSEL DOSYA SIRALAMAM"
+          title="KİŞİSEL BÖLÜM SIRALAMAM"
           onPress={() => setRanking(true)}
         />
       )}
       {ranking ? (
         <>
           <GameCard style={{ gap: 8 }}>
-            <Label>✦ KİŞİSEL DOSYA SIRALAMAN</Label>
+            <Label>✦ KİŞİSEL BÖLÜM SIRALAMAN</Label>
             <Text style={s.text}>En güçlü sonuçların, aynı kürsüde.</Text>
             <Text style={s.small}>
               Yıldız, ardından XP’ye göre sıralanır. Yalnızca bu cihazdaki
@@ -103,7 +108,7 @@ export default function Profile({ navigation }: Props<"Profile">) {
                             },
                           ]}
                         >
-                          Dosya {ranked[i].file}
+                          Bölüm {ranked[i].file}
                         </Text>
                         <Stars count={ranked[i].stars} size={17} />
                         <Text style={[s.gold, { fontSize: 17 }]}>
@@ -135,7 +140,7 @@ export default function Profile({ navigation }: Props<"Profile">) {
                   </Text>
                   <View style={{ flex: 1, gap: 5 }}>
                     <Text style={[s.text, { fontWeight: "700" }]}>
-                      Dosya {r.file}
+                      Bölüm {r.file}
                     </Text>
                     <Text style={s.small}>
                       {r.count} kavram · {r.best} en uzun seri
@@ -155,10 +160,10 @@ export default function Profile({ navigation }: Props<"Profile">) {
               <Seal size={80} value="★" />
               <Text style={s.hero}>Kürsü seni bekliyor.</Text>
               <Text style={[s.muted, { textAlign: "center" }]}>
-                İlk dosyanı tamamladığında kişisel sıralaman burada oluşacak.
+                İlk bölümünü tamamladığında kişisel sıralaman burada oluşacak.
               </Text>
               <Button
-                title="DOSYAYA DEVAM ET"
+                title="BÖLÜME DEVAM ET"
                 onPress={() =>
                   navigation.navigate(g.file % 10 === 0 ? "FinalIntro" : "Game")
                 }
@@ -184,7 +189,7 @@ export default function Profile({ navigation }: Props<"Profile">) {
               </View>
             </View>
             <View style={{ alignItems: "center", gap: 8 }}>
-              <Label>{p.selectedRole ?? "DOSYA ÇÖZÜCÜ"}</Label>
+              <Label>{p.selectedRole ?? "KAVRAM ÇÖZÜCÜ"}</Label>
               <Text style={v.playerName}>{playerName(g)}</Text>
             </View>
             <XPTrack xp={g.xp} />
@@ -205,7 +210,7 @@ export default function Profile({ navigation }: Props<"Profile">) {
             {[
               ["Mevcut bölüm", g.file],
               [
-                "Üç yıldızlı dosya",
+                "Üç yıldızlı bölüm",
                 g.results.filter((r) => r.stars === 3).length,
               ],
               ["En uzun doğru serisi", g.best],

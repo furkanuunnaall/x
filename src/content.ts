@@ -246,7 +246,7 @@ export const files = Array.from({ length: 30 }, (_, i) => {
         ? ("reward" as const)
         : ("normal" as const),
     title: final
-      ? `Final Dosyası ${id / 10}`
+      ? `Final Bölümü ${id / 10}`
       : [
           "İlk İz",
           "Yeni Deliller",

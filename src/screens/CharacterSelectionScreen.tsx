@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { Pressable, Text, View, StyleSheet } from "react-native";
+import {
+  Pressable,
+  View,
+  StyleSheet,
+} from "react-native";
+import { Text } from "../AppText";
 import { LinearGradient } from "expo-linear-gradient";
 import { useGame } from "../store";
 import { characters, Gender, productOf, Role, playerName } from "../product";

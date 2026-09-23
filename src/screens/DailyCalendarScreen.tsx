@@ -3,9 +3,9 @@ import {
   ImageBackground,
   Pressable,
   StyleSheet,
-  Text,
   View,
 } from "react-native";
+import { Text } from "../AppText";
 import { LinearGradient } from "expo-linear-gradient";
 import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
@@ -106,7 +106,7 @@ export default function DailyCalendarScreen({ navigation }: Props<"Daily">) {
           >
             <Text style={v.bannerTitle}>HUKUK GÜNLÜĞÜ</Text>
             <Text style={v.bannerDetail}>
-              Her gün yeni bir dosya. Üç yeni kavram.
+              Her gün yeni bir bulmaca. Üç yeni kavram.
             </Text>
           </LinearGradient>
         </ImageBackground>
@@ -164,7 +164,7 @@ export default function DailyCalendarScreen({ navigation }: Props<"Daily">) {
         <Text style={v.progressIcon}>✦</Text>
         <View style={{ flex: 1, gap: 5 }}>
           <Text style={[s.text, { fontWeight: "800" }]}>
-            {solvedMonth} günlük dosya tamamlandı
+            {solvedMonth} günlük bulmaca tamamlandı
           </Text>
           <Text style={s.small}>
             Bu ay çözdüğün günler takvimde ✓ ile işaretlenir.
@@ -174,12 +174,12 @@ export default function DailyCalendarScreen({ navigation }: Props<"Daily">) {
       <GameCard style={{ gap: 14 }}>
         <View style={v.selection}>
           <View style={v.dateBadge}>
-            <Text style={v.dateMonth}>{months[m - 1].slice(0, 3)}</Text>
+            <Text style={v.dateMonth}>{months[m - 1]}</Text>
             <Text style={v.dateNumber}>{Number(selected.slice(-2))}</Text>
           </View>
           <View style={{ flex: 1, gap: 5 }}>
             <Text style={[s.text, { fontWeight: "800" }]}>
-              {selected === today ? "Bugünün bulmacası" : "Arşiv dosyası"}
+              {selected === today ? "Bugünün bulmacası" : "Arşiv bulmacası"}
             </Text>
             <Text style={s.small}>
               {completed ? "Tamamlandı · Yeniden oyna" : "3 hukuk kavramı"}
@@ -266,20 +266,21 @@ const v = StyleSheet.create({
   dateBadge: {
     width: 62,
     borderRadius: 12,
-    backgroundColor: "#1B2C46",
+    backgroundColor: "#14233B",
     overflow: "hidden",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: C.line,
+    borderWidth: 1.5,
+    borderColor: "#D3B468",
   },
   dateMonth: {
-    backgroundColor: "#7488AC",
-    color: "#FFF",
+    backgroundColor: "#D3B468",
+    color: "#332512",
     fontWeight: "800",
-    fontSize: 12,
+    fontSize: 10,
+    letterSpacing: 0.5,
     padding: 5,
     textAlign: "center",
     width: "100%",
   },
-  dateNumber: { color: C.ink, fontSize: 32, fontWeight: "900", padding: 6 },
+  dateNumber: { color: "#FFF8EA", fontSize: 30, fontWeight: "800", padding: 6 },
 });

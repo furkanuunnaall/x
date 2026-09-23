@@ -131,7 +131,7 @@ export function achievements(g: Game, d: Discovery) {
       id: "first",
       icon: "01",
       title: "İlk mühür",
-      detail: "Bir dosyayı çöz ve mühürle.",
+      detail: "Bir bölümü çöz ve mühürle.",
       value: g.results.filter((r) => r.sealed).length,
       total: 1,
     },
@@ -146,8 +146,8 @@ export function achievements(g: Game, d: Discovery) {
     {
       id: "star",
       icon: "★",
-      title: "Kusursuz dosya",
-      detail: "Bir dosyada 3 yıldız kazan.",
+      title: "Kusursuz bölüm",
+      detail: "Bir bölümde 3 yıldız kazan.",
       value: g.results.filter((r) => r.stars === 3).length,
       total: 1,
     },
@@ -170,7 +170,7 @@ export function achievements(g: Game, d: Discovery) {
     {
       id: "all",
       icon: "M",
-      title: "Dosya ustası",
+      title: "Bölüm ustası",
       detail: "30 kavramın tamamını çöz.",
       value: unlockedQuestions(g).length,
       total: questions.length,

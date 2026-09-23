@@ -1,5 +1,10 @@
 import React from "react";
-import { View, Text, StyleSheet, ImageBackground } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ImageBackground,
+} from "react-native";
+import { Text } from "./AppText";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors as C } from "./theme";
 /** Original seal and document artwork, built from native shapes. */

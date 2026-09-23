@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, Pressable, Text, View } from "react-native";
+import {
+  Animated,
+  Pressable,
+  View,
+} from "react-native";
+import { Text } from "../AppText";
 import { files } from "../content";
 import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
@@ -66,7 +71,7 @@ export default function SessionScreen({
     else dispatch({ type: "replay-start", file });
     setFailed(false);
   }
-  const title = daily ? "Günün şifresi" : `Dosya ${file} · Tekrar`;
+  const title = daily ? "Günün şifresi" : `Bölüm ${file} · Tekrar`;
   return (
     <Shell header={<TopBar title={title} back={() => navigation.goBack()} />}>
       <Label>
@@ -81,7 +86,7 @@ export default function SessionScreen({
           >
             <Text style={{ fontSize: 50, color: C.gold }}>✦</Text>
             <Text style={s.hero}>
-              {daily ? "GÜNLÜK DOSYA ÇÖZÜLDÜ" : "TEKRAR TAMAMLANDI"}
+              {daily ? "GÜNLÜK BULMACA ÇÖZÜLDÜ" : "TEKRAR TAMAMLANDI"}
             </Text>
             <Text style={s.text}>
               {session.solved.length}/{qs.length} kavram · {session.mistakes}{" "}
@@ -96,7 +101,7 @@ export default function SessionScreen({
               </>
             ) : (
               <Text style={s.muted}>
-                Bu alıştırma XP, Mühür veya dosya yıldızlarını değiştirmez.
+                Bu alıştırma XP, Mühür veya bölüm yıldızlarını değiştirmez.
               </Text>
             )}
           </GameCard>
