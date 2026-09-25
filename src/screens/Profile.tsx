@@ -32,10 +32,10 @@ export default function Profile({ navigation }: Props<"Profile">) {
     (a, b) => b.stars - a.stars || b.xp - a.xp || a.file - b.file,
   );
   return (
-    <Shell>
+    <Shell scroll>
       <TopBar
         title={ranking ? "Kişisel sıralama" : "Oyuncu profilin"}
-        back={() => (ranking ? setRanking(false) : navigation.navigate("Home"))}
+        back={() => (ranking ? setRanking(false) : navigation.popTo("Home"))}
         right={<CurrencyBadge amount={g.seals} />}
       />
       {!ranking && (

@@ -65,12 +65,12 @@ export default function DailyCalendarScreen({ navigation }: Props<"Daily">) {
       header={
         <TopBar
           title="Günlük bulmaca"
-          back={() => navigation.navigate("Home")}
+          back={() => navigation.popTo("Home")}
           right={<CurrencyBadge amount={game.seals} />}
         />
       }
     >
-      <GameCard style={{ padding: 14, gap: 16 }}>
+      <GameCard style={{ padding: 12, gap: 10 }}>
         <View style={v.monthHeader}>
           <Pressable
             accessibilityRole="button"
@@ -158,57 +158,39 @@ export default function DailyCalendarScreen({ navigation }: Props<"Daily">) {
             );
           })}
         </View>
-        <Text style={s.note}>Bugün ücretsiz · Geçmiş bir günü aç: 3 Mühür</Text>
+        <Text style={v.footer}>
+          ✦ Bu ay {solvedMonth} bulmaca çözüldü · Geçmiş gün: 3 Mühür
+        </Text>
       </GameCard>
-      <View style={v.monthProgress}>
-        <Text style={v.progressIcon}>✦</Text>
-        <View style={{ flex: 1, gap: 5 }}>
-          <Text style={[s.text, { fontWeight: "800" }]}>
-            {solvedMonth} günlük bulmaca tamamlandı
+      <GameCard style={v.selection}>
+        <View style={v.dateBadge}>
+          <Text style={v.dateMonth}>{months[m - 1]}</Text>
+          <Text style={v.dateNumber}>{Number(selected.slice(-2))}</Text>
+        </View>
+        <View style={{ flex: 1, gap: 3 }}>
+          <Text style={v.selectionTitle}>
+            {selected === today ? "Bugünün bulmacası" : "Arşiv bulmacası"}
           </Text>
           <Text style={s.small}>
-            Bu ay çözdüğün günler takvimde ✓ ile işaretlenir.
+            {completed
+              ? "Tamamlandı · tekrar ödül yok"
+              : "+100 XP · +20 Mühür"}
           </Text>
         </View>
-      </View>
-      <GameCard style={{ gap: 14 }}>
-        <View style={v.selection}>
-          <View style={v.dateBadge}>
-            <Text style={v.dateMonth}>{months[m - 1]}</Text>
-            <Text style={v.dateNumber}>{Number(selected.slice(-2))}</Text>
-          </View>
-          <View style={{ flex: 1, gap: 5 }}>
-            <Text style={[s.text, { fontWeight: "800" }]}>
-              {selected === today ? "Bugünün bulmacası" : "Arşiv bulmacası"}
-            </Text>
-            <Text style={s.small}>
-              {completed ? "Tamamlandı · Yeniden oyna" : "3 hukuk kavramı"}
-            </Text>
-            <Text style={s.small}>
-              {cost
-                ? "3 Mühür · Bir kez öde, tekrar ücretsiz"
-                : "Ücretsiz erişim"}
-            </Text>
-          </View>
-        </View>
         <Button
+          small
           title={
             game.seals < cost
-              ? "YETERSİZ MÜHÜR"
+              ? "YETERSİZ"
               : completed
-                ? "BULMACAYI AÇ"
+                ? "AÇ"
                 : cost
-                  ? "3 MÜHÜR İLE AÇ"
+                  ? "3 MÜHÜR"
                   : "BAŞLA"
           }
           disabled={future || game.seals < cost}
           onPress={start}
         />
-        <Text style={s.note}>
-          {completed
-            ? "Bu tarihin ödülü alındı; tekrar ödül verilmez."
-            : "+100 XP · +20 Mühür — bu tarihi tamamlayınca bir kez."}
-        </Text>
       </GameCard>
     </Shell>
   );
@@ -219,52 +201,56 @@ const v = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
   },
-  month: { color: C.ink, fontSize: 27, fontWeight: "900", letterSpacing: 1 },
+  month: { color: C.ink, fontSize: 21, fontWeight: "800", letterSpacing: 1 },
   arrow: {
-    width: 44,
-    height: 44,
+    width: 40,
+    height: 36,
     alignItems: "center",
     justifyContent: "center",
   },
-  arrowText: { fontSize: 34, color: C.muted },
-  banner: { height: 110, borderRadius: 16, overflow: "hidden" },
-  bannerShade: { flex: 1, justifyContent: "flex-end", padding: 14, gap: 5 },
-  bannerTitle: { color: "#FFF9EA", fontSize: 22, fontWeight: "900" },
-  bannerDetail: { color: "#EEE2CE", fontSize: 12 },
+  arrowText: { fontSize: 30, color: C.muted },
+  banner: { height: 50, borderRadius: 12, overflow: "hidden" },
+  bannerShade: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 12,
+    gap: 1,
+  },
+  bannerTitle: { color: "#FFF9EA", fontSize: 14, fontWeight: "800" },
+  bannerDetail: { color: "#EEE2CE", fontSize: 11 },
   grid: { flexDirection: "row", flexWrap: "wrap" },
   cellWrap: {
     width: "14.285714%",
-    padding: 2,
+    paddingHorizontal: 2,
+    paddingVertical: 1.5,
     alignItems: "center",
     justifyContent: "center",
   },
-  weekday: { color: C.muted, fontWeight: "800", paddingVertical: 6 },
+  weekday: { color: C.muted, fontWeight: "800", fontSize: 11 },
   day: {
     width: "100%",
-    minHeight: 44,
+    height: 30,
     backgroundColor: "#14233D",
-    borderRadius: 8,
+    borderRadius: 7,
     borderWidth: 2,
     borderColor: "transparent",
     alignItems: "center",
     justifyContent: "center",
   },
-  dayText: { color: C.ink, fontSize: 19, fontWeight: "800" },
+  dayText: { color: C.ink, fontSize: 14, fontWeight: "800", lineHeight: 16 },
   today: { borderColor: C.green },
   selected: { backgroundColor: C.green, borderColor: C.green },
-  tinyDate: { fontSize: 9, color: C.muted },
-  monthProgress: {
+  tinyDate: { fontSize: 8, lineHeight: 9, color: C.muted },
+  footer: { color: C.muted, fontSize: 12, textAlign: "center" },
+  selection: {
     flexDirection: "row",
-    gap: 14,
+    gap: 12,
     alignItems: "center",
-    padding: 16,
-    backgroundColor: C.panel,
-    borderRadius: 20,
+    padding: 12,
   },
-  progressIcon: { color: C.gold, fontSize: 36 },
-  selection: { flexDirection: "row", gap: 16, alignItems: "center" },
+  selectionTitle: { color: C.ink, fontSize: 15, fontWeight: "800" },
   dateBadge: {
-    width: 62,
+    width: 50,
     borderRadius: 12,
     backgroundColor: "#14233B",
     overflow: "hidden",
@@ -276,11 +262,11 @@ const v = StyleSheet.create({
     backgroundColor: "#D3B468",
     color: "#332512",
     fontWeight: "800",
-    fontSize: 10,
+    fontSize: 8,
     letterSpacing: 0.5,
-    padding: 5,
+    padding: 3,
     textAlign: "center",
     width: "100%",
   },
-  dateNumber: { color: "#FFF8EA", fontSize: 30, fontWeight: "800", padding: 6 },
+  dateNumber: { color: "#FFF8EA", fontSize: 20, fontWeight: "800", padding: 3 },
 });

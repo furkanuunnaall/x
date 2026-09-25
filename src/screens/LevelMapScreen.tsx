@@ -2,11 +2,13 @@ import { CurrencyBadge } from "../ui";
 import React, { useRef, useState } from "react";
 import {
   ScrollView,
+  StyleSheet,
   View,
   useWindowDimensions,
 } from "react-native";
 import { Text } from "../AppText";
 import { LinearGradient } from "expo-linear-gradient";
+import { LockSimpleIcon } from "phosphor-react-native";
 import { files } from "../content";
 import { useGame } from "../store";
 import {
@@ -37,6 +39,8 @@ export default function LevelMapScreen({
   const scroll = useRef<ScrollView>(null);
   const arranged = [...files].reverse();
   let offset = 30;
+  // The map reads bottom-up, so each volume header sits just below its first bölüm.
+  const volumes: { number: number; y: number }[] = [];
   const nodes = arranged.map((file, i) => {
     const current = file.id === g.file;
     const node = {
@@ -49,6 +53,10 @@ export default function LevelMapScreen({
       file.id === selectedFile
         ? 430 * Math.max(1, fontScale)
         : 174 * Math.max(1, fontScale);
+    if (file.id % 10 === 1) {
+      volumes.push({ number: (file.id - 1) / 10 + 1, y: offset - 40 });
+      offset += 60;
+    }
     return node;
   });
   const focus = nodes.find((n) => n.current)!;
@@ -68,6 +76,7 @@ export default function LevelMapScreen({
   }
   return (
     <Shell
+      scroll
       scrollRef={scroll}
       header={
         <TopBar
@@ -127,6 +136,28 @@ export default function LevelMapScreen({
             }}
           />
         ))}
+        {volumes.map(({ number, y }) => {
+          const start = (number - 1) * 10;
+          const done = g.results.filter(
+            (r) => r.file > start && r.file <= start + 10,
+          ).length;
+          const locked = g.file <= start;
+          return (
+            <View key={number} style={[m.volume, { top: y }]}>
+              <View style={m.volumeLine} />
+              <View style={[m.volumePill, locked && { borderColor: C.line }]}>
+                {locked ? (
+                  <LockSimpleIcon size={14} weight="fill" color={C.muted} />
+                ) : null}
+                <Text style={[m.volumeTitle, locked && { color: C.muted }]}>
+                  CİLT {["I", "II", "III"][number - 1]}
+                </Text>
+                <Text style={m.volumeCount}>{done}/10 bölüm</Text>
+              </View>
+              <View style={m.volumeLine} />
+            </View>
+          );
+        })}
         {nodes.map(({ file, current, x, y }) => {
           const result = g.results.find((r) => r.file === file.id);
           return (
@@ -234,3 +265,33 @@ export default function LevelMapScreen({
     </Shell>
   );
 }
+const m = StyleSheet.create({
+  volume: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    height: 44,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
+  volumeLine: { flex: 1, height: 1, backgroundColor: "#8A784266" },
+  volumePill: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 9,
+    borderRadius: 99,
+    borderWidth: 1,
+    borderColor: "#8A7842",
+    backgroundColor: C.panel,
+  },
+  volumeTitle: {
+    color: C.gold,
+    fontSize: 14,
+    fontWeight: "800",
+    letterSpacing: 2,
+  },
+  volumeCount: { color: C.muted, fontSize: 12, fontWeight: "700" },
+});

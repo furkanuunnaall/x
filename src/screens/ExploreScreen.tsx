@@ -47,7 +47,7 @@ export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
       header={
         <TopBar
           title="Kavram koleksiyonu"
-          back={() => navigation.navigate("Home")}
+          back={() => navigation.popTo("Home")}
         />
       }
     >
@@ -62,25 +62,10 @@ export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
         <ProgressBar value={unlocked.length} total={questions.length} />
         <Text style={s.muted}>Çözdüğün her kavram burada bir kart olur.</Text>
       </View>
-      <View style={e.shelf}>
-        {[0, 1, 2].map((i) => (
-          <View key={i} style={e.book}>
-            <Text style={e.bookNumber}>{String(i + 1).padStart(2, "0")}</Text>
-            <Text style={s.small}>CİLT</Text>
-            <Text style={s.gold}>
-              {
-                game.results.filter(
-                  (r) => r.file > i * 10 && r.file <= (i + 1) * 10,
-                ).length
-              }
-              /10 bölüm
-            </Text>
-          </View>
-        ))}
-      </View>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
+        style={{ flexGrow: 0 }}
         contentContainerStyle={{ gap: 8 }}
       >
         {["Tümü", ...new Set(questions.map((q) => q.category))].map((c) => (
@@ -123,6 +108,11 @@ export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
             : "☆ Favorilerimi göster"}
         </Text>
       </Pressable>
+      <ScrollView
+        style={{ flex: 1 }}
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={{ gap: 20, paddingBottom: 12 }}
+      >
       {shown.map((q) => (
         <GameCard key={q.id} style={{ gap: 10 }}>
           <View style={s.between}>
@@ -178,6 +168,7 @@ export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
           ) : null}
         </GameCard>
       ) : null}
+      </ScrollView>
     </Shell>
   );
 }
@@ -194,31 +185,6 @@ const e = StyleSheet.create({
   tab: { flex: 1, padding: 14, alignItems: "center", borderRadius: 11 },
   active: { backgroundColor: "#314159" },
   tabText: { color: C.muted, fontSize: 16, fontWeight: "700" },
-  shelf: {
-    flexDirection: "row",
-    gap: 6,
-    borderBottomWidth: 5,
-    borderBottomColor: "#46516C",
-    paddingBottom: 6,
-  },
-  book: {
-    flex: 1,
-    paddingVertical: 15,
-    paddingHorizontal: 3,
-    backgroundColor: "#24344C",
-    borderRadius: 6,
-    borderLeftWidth: 3,
-    borderLeftColor: "#5F718C",
-    borderWidth: 1,
-    borderColor: "#3E526E",
-    alignItems: "center",
-  },
-  bookNumber: {
-    color: C.ink,
-    fontSize: 23,
-    fontWeight: "800",
-    marginBottom: 8,
-  },
   search: {
     color: C.ink,
     backgroundColor: "#192A44",

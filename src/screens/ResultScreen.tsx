@@ -1,25 +1,12 @@
 import { Seal } from "../art";
 import React, { useRef, useEffect } from "react";
-import {
-  Animated,
-  View,
-} from "react-native";
+import { Animated, StyleSheet, View } from "react-native";
 import { Text } from "../AppText";
 import { useGame } from "../store";
 import { productOf } from "../product";
 import { files } from "../content";
 import { Props } from "../navigation";
-import {
-  Button,
-  GameCard,
-  Label,
-  Shell,
-  Stars,
-  TopBar,
-  C,
-  s,
-  SecondaryButton,
-} from "../ui";
+import { Button, GameCard, Label, Shell, Stars, TopBar, C, s } from "../ui";
 import { Reveal, useReducedMotion } from "../motion";
 export default function ResultScreen({ navigation }: Props<"Result">) {
   const { game: g, dispatch } = useGame();
@@ -55,118 +42,117 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
         />
       </Shell>
     );
+  const final = g.file % 10 === 0;
+  const stats: [string, string | number][] = [
+    ["Kavram", `${r.count}/${files[g.file - 1].questions.length}`],
+    ["XP", `+${r.xp}`],
+    ["Mühür", `+${r.seals}`],
+    ["En uzun seri", r.best],
+    ["İpucu", r.hints],
+    ["Hata", r.mistakes ?? g.run.mistakes],
+  ];
   return (
     <Shell>
-      <TopBar
-        title={`${g.file % 10 === 0 ? "Final Bölümü" : "Bölüm"} ${String(g.file).padStart(2, "0")}`}
-        back={() => navigation.navigate("Home")}
-      />
-      <Reveal>
-        <View style={{ alignItems: "center", gap: 18, paddingVertical: 20 }}>
-          <Animated.View
-            style={{
-              width: 92,
-              height: 92,
-              borderRadius: 46,
-              backgroundColor: C.panel,
-              borderWidth: 2,
-              borderColor: C.gold,
-              justifyContent: "center",
-              alignItems: "center",
-              transform: [{ scale: stamp }],
-            }}
-          >
-            <Seal
-              size={84}
-              value={g.file % 10 === 0 ? "◆" : r.sealed ? "✓" : "M"}
-            />
-          </Animated.View>
-          <Label>
-            {r.sealed ? "MÜHRÜNÜ BIRAKTIN" : "BÜTÜN KAVRAMLAR ÇÖZÜLDÜ"}
-          </Label>
-          <Text style={[s.hero, { textAlign: "center" }]}>
-            {g.file % 10 === 0 ? "FİNAL BÖLÜMÜ\nÇÖZÜLDÜ" : "BÖLÜM\nTAMAMLANDI"}
-          </Text>
-          <Stars count={r.stars} size={48} />
-          <Text style={s.muted}>
-            {r.stars === 3
-              ? "Kusursuz takip. Üç yıldız senin."
-              : "Bir bölüm daha çözüldü."}
-          </Text>
-        </View>
-      </Reveal>
-      {g.file % 10 === 0 ? (
-        <GameCard
-          style={{ gap: 10, borderColor: C.gold, backgroundColor: "#392C35" }}
-        >
-          <Label>◆ FİNAL USTASI</Label>
-          <Text style={s.text}>Final bölümüne mührünü bıraktın.</Text>
-          <Text style={s.muted}>
-            +250 bonus XP ve +100 ek Mühür aşağıdaki toplam ödüle dahildir.
-          </Text>
-        </GameCard>
-      ) : null}
-      <GameCard style={{ gap: 19 }}>
-        {[
-          [
-            "Çözülen kavram",
-            `${r.count}/${files[g.file - 1].questions.length}`,
-          ],
-          ["Kazanılan XP", `+${r.xp} XP`],
-          ["Kazanılan Mühür", `+${r.seals} ◈`],
-          ["En uzun seri", `${r.best} doğru`],
-          ["Kullanılan ipucu", r.hints],
-          ["Hata sayısı", r.mistakes ?? g.run.mistakes],
-        ].map(([label, value]) => (
-          <View key={label} style={s.between}>
-            <Text style={s.muted}>{label}</Text>
-            <Text
-              style={[
-                s.text,
-                {
-                  fontWeight: "800",
-                  color: label === "Kazanılan Mühür" ? C.gold : C.ink,
-                },
-              ]}
-            >
-              {value}
+      <View style={v.body}>
+        <TopBar
+          title={`${final ? "Final Bölümü" : "Bölüm"} ${String(g.file).padStart(2, "0")}`}
+          back={() => navigation.popTo("Home")}
+        />
+        <Reveal>
+          <View style={v.hero}>
+            <Animated.View style={[v.stamp, { transform: [{ scale: stamp }] }]}>
+              <Seal size={62} value={final ? "◆" : r.sealed ? "✓" : "M"} />
+            </Animated.View>
+            <Label>
+              {r.sealed ? "MÜHRÜNÜ BIRAKTIN" : "BÜTÜN KAVRAMLAR ÇÖZÜLDÜ"}
+            </Label>
+            <Text style={v.title}>
+              {final ? "FİNAL BÖLÜMÜ ÇÖZÜLDÜ" : "BÖLÜM TAMAMLANDI"}
+            </Text>
+            <Stars count={r.stars} size={34} />
+            <Text style={final ? s.gold : s.muted}>
+              {final
+                ? "◆ Final ustası · +250 XP ve +100 Mühür dahil"
+                : r.stars === 3
+                  ? "Kusursuz takip. Üç yıldız senin."
+                  : "Bir bölüm daha çözüldü."}
             </Text>
           </View>
-        ))}
-      </GameCard>
-      {g.file % 5 === 0 ? (
-        <Button
-          secondary
-          title={
-            productOf(g).claimedMilestones.includes(g.file)
-              ? "✓ KİLOMETRE TAŞI ÖDÜLÜ ALINDI"
-              : "KİLOMETRE TAŞI · ÖDÜLÜNÜ GÖR"
-          }
-          onPress={() => navigation.navigate("Milestone", { file: g.file })}
-        />
-      ) : null}
-      {r.file < files.length ? (
-        <Button title="SONRAKİ BÖLÜM →" onPress={nextFile} />
-      ) : (
-        <Text style={s.note}>
-          30 bölümün tamamı çözüldü. Yolculuğun arşivde!
-        </Text>
-      )}
-      <SecondaryButton
-        title="HARİTAYA DÖN"
-        onPress={() => {
-          dispatch({ type: "seal" });
-          navigation.navigate("Map");
-        }}
-      />
-      <Button
-        secondary
-        title="TEKRAR OYNA · ÖDÜLSÜZ"
-        onPress={() => {
-          dispatch({ type: "replay-start", file: g.file });
-          navigation.navigate("Practice", { file: g.file });
-        }}
-      />
+        </Reveal>
+        <GameCard style={v.stats}>
+          {stats.map(([label, value]) => (
+            <View key={label} style={v.stat}>
+              <Text style={[v.statValue, label === "Mühür" && { color: C.gold }]}>
+                {value}
+              </Text>
+              <Text style={v.statLabel}>{label}</Text>
+            </View>
+          ))}
+        </GameCard>
+        {r.file < files.length ? (
+          <Button title="SONRAKİ BÖLÜM →" onPress={nextFile} />
+        ) : (
+          <Text style={s.note}>
+            30 bölümün tamamı çözüldü. Yolculuğun arşivde!
+          </Text>
+        )}
+        <View style={v.row}>
+          <View style={{ flex: 1 }}>
+            <Button
+              small
+              secondary
+              title="HARİTAYA DÖN"
+              onPress={() => {
+                dispatch({ type: "seal" });
+                navigation.popTo("Map");
+              }}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Button
+              small
+              secondary
+              title="TEKRAR OYNA"
+              onPress={() => {
+                dispatch({ type: "replay-start", file: g.file });
+                navigation.navigate("Practice", { file: g.file });
+              }}
+            />
+          </View>
+        </View>
+        <Text style={s.note}>Tekrar oyunları ödül vermez.</Text>
+      </View>
     </Shell>
   );
 }
+const v = StyleSheet.create({
+  body: { gap: 12 },
+  hero: { alignItems: "center", gap: 8, paddingVertical: 4 },
+  stamp: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: C.panel,
+    borderWidth: 2,
+    borderColor: C.gold,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    color: C.ink,
+    fontSize: 24,
+    fontWeight: "800",
+    textAlign: "center",
+  },
+  stats: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    rowGap: 12,
+  },
+  stat: { width: "33.33%", alignItems: "center", gap: 2 },
+  statValue: { color: C.ink, fontSize: 19, fontWeight: "800" },
+  statLabel: { color: C.muted, fontSize: 11 },
+  row: { flexDirection: "row", gap: 10 },
+});

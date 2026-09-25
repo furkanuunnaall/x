@@ -1,20 +1,32 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
+  Animated,
   Pressable,
-  ScrollView,
   StyleSheet,
   View,
   useWindowDimensions,
 } from "react-native";
 import { logoFont, Text } from "../AppText";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
+import {
+  BookOpenTextIcon,
+  FlameIcon,
+  GearSixIcon,
+  HourglassMediumIcon,
+  MapTrifoldIcon,
+  MedalIcon,
+  TargetIcon,
+} from "phosphor-react-native";
 import { useGame } from "../store";
-import { dailyNow, entry } from "../game";
+import { dailyNow, dayKey, entry } from "../game";
+import { useReducedMotion } from "../motion";
 import { files } from "../content";
 import { Props } from "../navigation";
 import { C as Palette, CurrencyBadge, ProgressBar } from "../homeUi";
-import { Seal } from "../art";
 import { LivingBackground } from "../LivingBackground";
 import { useDiscovery } from "../discovery/store";
 import { Avatar } from "../character";
@@ -45,7 +57,11 @@ export default function Home({ navigation }: Props<"Home">) {
   const count = current.questions.filter((q) => entry(g, q.id).solved).length;
   const result = g.results.find((r) => r.file === g.file);
   const dailyDone = p.dailyPuzzleClaims.includes(day);
-  const compact = height < 740 || width < 360;
+  const insets = useSafeAreaInsets();
+  // The home screen does not scroll, so it scales down to the height left after notches.
+  const usable = height - insets.top - insets.bottom;
+  const compact = usable < 860 || width < 360;
+  const tight = usable < 690;
   const go = () =>
     navigation.navigate(
       result ? "Result" : g.file % 10 === 0 ? "FinalIntro" : "Game",
@@ -60,29 +76,16 @@ export default function Home({ navigation }: Props<"Home">) {
         style={StyleSheet.absoluteFill}
       />
       <SafeAreaView style={{ flex: 1 }}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={[
+        <View
+          style={[
             h.content,
-            { minHeight: Math.max(620, height - 54) },
+            compact && { gap: 8, paddingBottom: 8 },
             fontScale > 1.3 && { gap: 24 },
           ]}
         >
           <View style={h.top}>
             <CurrencyBadge amount={g.seals} />
-            <View style={h.streak}>
-              <Text style={h.streakIcon}>✦</Text>
-              <Text style={h.streakValue}>{dailyNow(g)}</Text>
-              <Text style={h.streakLabel}>GÜN</Text>
-            </View>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel="Ayarları aç"
-              onPress={() => navigation.navigate("Settings")}
-              style={h.settings}
-            >
-              <Text style={h.settingsIcon}>⚙</Text>
-            </Pressable>
+            <Streak days={dailyNow(g)} lit={g.lastDay === dayKey()} />
           </View>
           {error ? (
             <Pressable accessibilityRole="button" onPress={retry}>
@@ -92,26 +95,43 @@ export default function Home({ navigation }: Props<"Home">) {
           <View
             style={[
               h.brandArea,
-              compact && { paddingTop: 18, paddingBottom: 16 },
+              compact && { paddingTop: 10, paddingBottom: 8 },
+              tight && { paddingTop: 0, paddingBottom: 0, gap: 2 },
             ]}
           >
-            <Text style={h.brandOverline}>HER KAVRAM BİR İZ</Text>
-            <Text style={[h.brand, compact && { fontSize: 51 }]}>MÜHÜR</Text>
+            {tight ? null : (
+              <Text style={h.brandOverline}>HER KAVRAM BİR İZ</Text>
+            )}
+            <Text
+              style={[
+                h.brand,
+                compact && { fontSize: 52 },
+                tight && { fontSize: 42 },
+              ]}
+            >
+              MÜHÜR
+            </Text>
             <View style={h.brandRule} />
             <Text style={h.tagline}>HUKUK KELİME OYUNU</Text>
           </View>
-          <View style={[h.stage, compact && { minHeight: 220 }]}>
-            <View style={h.rail}>
+          <View
+            style={[
+              h.stage,
+              compact && { minHeight: 214 },
+              tight && { minHeight: 180 },
+            ]}
+          >
+            <View style={[h.rail, tight && { gap: 8 }]}>
               <Shortcut
                 title="GÜNLÜK GÖREVLER"
-                icon="✦"
+                icon={<TargetIcon size={32} weight="regular" color="#FFE09A" />}
                 detail={`${tasks.claimed.length}/3`}
                 label="Günlük görevleri aç"
                 onPress={() => navigation.navigate("Tasks")}
               />
               <Shortcut
                 title="ROZETLER"
-                icon="★"
+                icon={<MedalIcon size={32} weight="regular" color="#FFE09A" />}
                 label="Başarımları aç"
                 onPress={() => navigation.navigate("Achievements")}
               />
@@ -124,12 +144,17 @@ export default function Home({ navigation }: Props<"Home">) {
             >
               <LinearGradient
                 colors={["#D2B77233", "#102448CC", "#142445DD"]}
-                style={[h.orbit, compact && { minHeight: 170 }]}
+                style={[
+                  h.orbit,
+                  compact && { minHeight: 176, paddingVertical: 14 },
+                  tight && { minHeight: 150, paddingVertical: 10 },
+                ]}
               >
                 <Text
                   style={[
                     h.number,
-                    compact && { fontSize: 55, lineHeight: 62 },
+                    compact && { fontSize: 56, lineHeight: 62 },
+                    tight && { fontSize: 44, lineHeight: 50 },
                   ]}
                 >
                   {g.file}
@@ -138,10 +163,10 @@ export default function Home({ navigation }: Props<"Home">) {
                 <Text style={h.mapLink}>YOLCULUĞUN ›</Text>
               </LinearGradient>
             </Pressable>
-            <View style={h.rail}>
+            <View style={[h.rail, tight && { gap: 8 }]}>
               <Shortcut
                 title="KAVRAMLAR"
-                icon="▤"
+                icon={<BookOpenTextIcon size={32} weight="regular" color="#FFE09A" />}
                 label="Kavram koleksiyonunu aç"
                 onPress={() =>
                   navigation.navigate("Explore", { tab: "collection" })
@@ -149,7 +174,7 @@ export default function Home({ navigation }: Props<"Home">) {
               />
               <Shortcut
                 title="HARİTA"
-                icon="⌁"
+                icon={<MapTrifoldIcon size={32} weight="regular" color="#FFE09A" />}
                 detail={`${g.results.filter((r) => r.sealed).length}/${files.length}`}
                 label="Bölüm haritasını aç"
                 onPress={() => navigation.navigate("Map")}
@@ -179,19 +204,25 @@ export default function Home({ navigation }: Props<"Home">) {
             >
               <LinearGradient
                 colors={["#14A874", "#08805A", "#05593F"]}
-                style={h.playGradient}
+                style={[h.playGradient, tight && { paddingVertical: 8 }]}
               >
                 <Text style={h.playCaption}>
                   {result ? "SONUCU GÖR" : "DEVAM ET"}
                 </Text>
-                <Text style={h.playText}>BÖLÜM {g.file} ›</Text>
+                <Text style={[h.playText, tight && { fontSize: 23 }]}>
+                  BÖLÜM {g.file} ›
+                </Text>
               </LinearGradient>
             </Pressable>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel="Günün şifresini aç"
               onPress={() => navigation.navigate("Daily")}
-              style={({ pressed }) => [h.daily, pressed && { opacity: 0.8 }]}
+              style={({ pressed }) => [
+                h.daily,
+                tight && { minHeight: 62, paddingVertical: 8 },
+                pressed && { opacity: 0.8 },
+              ]}
             >
               <View style={{ flex: 1, gap: 5 }}>
                 <Text style={h.dailyTitle}>GÜNLÜK BULMACA</Text>
@@ -209,28 +240,95 @@ export default function Home({ navigation }: Props<"Home">) {
               </View>
             </Pressable>
           </View>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Profili aç"
-            onPress={() => navigation.navigate("Profile")}
-            style={h.profile}
+          <View
+            style={[h.profile, compact && { marginTop: 0, paddingVertical: 4 }]}
           >
-            <Avatar
-              borderColor="#946213"
-              gender={p.selectedGender}
-              role={p.selectedRole}
-              size={44}
-            />
-            <View style={{ flex: 1, gap: 3 }}>
-              <Text style={h.playerName}>{playerName(g)}</Text>
-              <Text style={h.playerDetail}>
-                Seviye {Math.floor(g.xp / 1000) + 1} · {p.selectedRole}
-              </Text>
-            </View>
-            <Text style={h.profileLink}>PROFİL ›</Text>
-          </Pressable>
-        </ScrollView>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Profili aç"
+              onPress={() => navigation.navigate("Profile")}
+              style={({ pressed }) => [
+                h.profileButton,
+                pressed && { opacity: 0.8 },
+              ]}
+            >
+              <Avatar
+                borderColor="#946213"
+                gender={p.selectedGender}
+                role={p.selectedRole}
+                size={44}
+              />
+              <View style={{ flexShrink: 1, gap: 3 }}>
+                <Text style={h.playerName}>{playerName(g)}</Text>
+                <Text style={h.playerDetail}>
+                  Seviye {Math.floor(g.xp / 1000) + 1} · {p.selectedRole}
+                </Text>
+              </View>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Ayarları aç"
+              onPress={() => navigation.navigate("Settings")}
+              style={({ pressed }) => [
+                h.settings,
+                pressed && { transform: [{ scale: 0.94 }] },
+              ]}
+            >
+              <GearSixIcon size={24} weight="regular" color={C.ink} />
+            </Pressable>
+          </View>
+        </View>
       </SafeAreaView>
+    </View>
+  );
+}
+// Unlit until a bölüm is finished today; until then an hourglass shows the day is still open.
+function Streak({ days, lit }: { days: number; lit: boolean }) {
+  const reduced = useReducedMotion();
+  const pulse = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    pulse.setValue(0);
+    if (reduced) return;
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, {
+          toValue: 1,
+          duration: lit ? 1600 : 700,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulse, {
+          toValue: 0,
+          duration: lit ? 1600 : 700,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [lit, reduced]);
+  const scale = pulse.interpolate({
+    inputRange: [0, 1],
+    outputRange: [1, lit ? 1.08 : 1.15],
+  });
+  return (
+    <View
+      accessible
+      accessibilityLabel={`${days} günlük istikrar, ${lit ? "bugün tamamlandı" : "bugün henüz bölüm bitirmedin"}`}
+      style={[h.streak, lit && h.streakLit]}
+    >
+      <Animated.View
+        style={[
+          h.flame,
+          { transform: [{ scale }], opacity: lit ? 1 : 0.85 },
+        ]}
+      >
+        <FlameIcon size={22} weight="fill" color={lit ? "#FF9F43" : "#7D8AA3"} />
+      </Animated.View>
+      <Text style={[h.streakValue, !lit && { color: "#C9D0DC" }]}>{days}</Text>
+      {lit ? null : (
+        <HourglassMediumIcon size={16} weight="fill" color="#FFB86B" />
+      )}
+      <Text style={[h.streakLabel, lit && { color: "#FFC98A" }]}>İSTİKRAR</Text>
     </View>
   );
 }
@@ -242,7 +340,7 @@ function Shortcut({
   onPress,
 }: {
   title: string;
-  icon: string;
+  icon: React.ReactNode;
   detail?: string;
   label: string;
   onPress: () => void;
@@ -257,21 +355,27 @@ function Shortcut({
         pressed && { transform: [{ scale: 0.95 }] },
       ]}
     >
-      <LinearGradient
-        colors={["#526888", "#20314C", "#10213B"]}
-        style={h.shortcutOrb}
-      >
-        {icon === "★" ? (
-          <Seal size={40} value="★" />
-        ) : (
-          <Text style={h.shortcutIcon}>{icon}</Text>
-        )}
+      {/* The counter sits beside the gradient, not inside it: Android clips a native
+          gradient view's children to its rounded bounds. */}
+      <View>
+        <LinearGradient
+          colors={["#526888", "#20314C", "#10213B"]}
+          style={h.shortcutOrb}
+        >
+          {typeof icon === "string" ? (
+            <Text style={h.shortcutIcon}>{icon}</Text>
+          ) : (
+            icon
+          )}
+        </LinearGradient>
         {detail ? (
           <View style={h.counter}>
-            <Text style={h.counterText}>{detail}</Text>
+            <Text numberOfLines={1} style={h.counterText}>
+              {detail}
+            </Text>
           </View>
         ) : null}
-      </LinearGradient>
+      </View>
       <Text style={h.shortcutLabel}>{title}</Text>
     </Pressable>
   );
@@ -279,6 +383,7 @@ function Shortcut({
 const h = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#0B1830" },
   content: {
+    flex: 1,
     width: "100%",
     maxWidth: 560,
     alignSelf: "center",
@@ -301,9 +406,15 @@ const h = StyleSheet.create({
     borderRadius: 24,
     backgroundColor: "#101C35CC",
   },
-  streakIcon: { color: "#FFBA57", fontSize: 23 },
+  streakLit: { borderColor: "#FF9F4399", backgroundColor: "#2A1A12CC" },
+  flame: { alignItems: "center", justifyContent: "center" },
   streakValue: { color: C.ink, fontWeight: "800", fontSize: 20 },
-  streakLabel: { color: C.muted, fontSize: 10, fontWeight: "800" },
+  streakLabel: {
+    color: C.muted,
+    fontSize: 10,
+    fontWeight: "800",
+    letterSpacing: 0.8,
+  },
   settings: {
     width: 44,
     height: 44,
@@ -314,7 +425,6 @@ const h = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#101C35CC",
   },
-  settingsIcon: { color: C.ink, fontSize: 27 },
   brandArea: {
     alignItems: "center",
     paddingTop: 28,
@@ -384,9 +494,9 @@ const h = StyleSheet.create({
     position: "absolute",
     right: -8,
     top: -7,
-    minWidth: 26,
-    paddingHorizontal: 4,
-    minHeight: 21,
+    minWidth: 28,
+    paddingHorizontal: 6,
+    height: 21,
     borderRadius: 11,
     backgroundColor: "#AD7830",
     borderWidth: 1,
@@ -394,7 +504,14 @@ const h = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  counterText: { color: "#FFFFFF", fontSize: 10, fontWeight: "800" },
+  counterText: {
+    color: "#FFFFFF",
+    fontSize: 10,
+    lineHeight: 13,
+    fontWeight: "800",
+    includeFontPadding: false,
+    textAlignVertical: "center",
+  },
   journey: { flex: 1, maxWidth: 250 },
   orbit: {
     borderRadius: 120,
@@ -506,12 +623,18 @@ const h = StyleSheet.create({
   profile: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     gap: 10,
     marginTop: 6,
     paddingVertical: 8,
   },
+  profileButton: {
+    flexShrink: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+  },
   playerName: { color: C.ink, fontSize: 14, fontWeight: "700" },
   playerDetail: { color: C.muted, fontSize: 11 },
-  profileLink: { color: C.gold, fontSize: 11, fontWeight: "800" },
   error: { color: C.red, backgroundColor: C.bg, padding: 10, borderRadius: 10 },
 });

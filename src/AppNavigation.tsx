@@ -77,6 +77,8 @@ export default function AppNavigation() {
         <Stack.Navigator
           screenOptions={{
             headerShown: false,
+            // Screens under the current one stop re-rendering on every state change (typing).
+            freezeOnBlur: true,
             contentStyle: { backgroundColor: C.bg },
             animation: p.settings.reduceMotion ? "none" : "default",
           }}

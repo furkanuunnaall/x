@@ -6,7 +6,7 @@ export default function MapScreen({ navigation }: Props<"Map">) {
   const { game, dispatch } = useGame();
   return (
     <LevelMapScreen
-      onClose={() => navigation.navigate("Home")}
+      onClose={() => navigation.popTo("Home")}
       onReward={(file) => navigation.navigate("Milestone", { file })}
       onPlay={(file = game.file) => {
         if (game.results.some((r) => r.file === file)) {

@@ -2,19 +2,27 @@ import { NativeLetterInput, showKeyboard } from "../NativeLetterInput";
 import { productOf } from "../product";
 import { useFeedback } from "../feedback";
 import { adjacentUnsolved, nextBlank } from "../wordFlow";
-import { Ambient, Seal } from "../art";
+import { Ambient, SealCoin } from "../art";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Modal,
   Pressable,
-  ScrollView,
   StyleSheet,
   TextInput,
   View,
   useWindowDimensions,
 } from "react-native";
 import { Text } from "../AppText";
+import {
+  BackspaceIcon,
+  CaretLeftIcon,
+  CaretRightIcon,
+  GavelIcon,
+  KeyIcon,
+  Icon,
+  MagnifyingGlassIcon,
+} from "phosphor-react-native";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -60,12 +68,15 @@ export default function GameScreen({ navigation }: Props<"Game">) {
   const [boardWidth, setBoardWidth] = useState(Math.min(width, 560));
   const active =
     cursor !== null && !e.letters[cursor] ? cursor : draft.findIndex((c) => !c);
+  // Fast typing can deliver several key events before React re-renders; handlers read and
+  // advance this instead of the render-time draft, or two letters land in the same slot.
+  const live = useRef({ draft, active });
+  live.current = { draft, active };
   const count = qs.filter((item) => entry(g, item.id).solved).length;
   const unresolved = qs.map((item) => !entry(g, item.id).solved);
   const previousQuestion = adjacentUnsolved(unresolved, selected, -1);
   const nextQuestion = adjacentUnsolved(unresolved, selected, 1);
   const result = g.results.find((r) => r.file === g.file);
-  const scroll = useRef<ScrollView>(null);
   const input = useRef<TextInput>(null);
   useEffect(() => {
     if (!e.solved) input.current?.focus();
@@ -81,20 +92,28 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     showKeyboard(input.current);
   }
   function typeLetters(letters: string[]) {
-    if (e.solved || active < 0) return;
-    const updated = [...draft];
-    let index: number | null = active;
+    if (e.solved || live.current.active < 0) return;
+    const updated = [...live.current.draft];
+    let index: number | null = live.current.active;
     for (const letter of letters) {
       if (index === null) break;
       dispatch({ type: "key", id: q.id, key: letter, index });
       updated[index] = letter;
       index = nextBlank(updated, index);
     }
+    live.current = { draft: updated, active: index ?? -1 };
     setCursor(index);
     setFeedback("");
     setFailed(false);
   }
   function remove() {
+    const updated = [...live.current.draft];
+    for (let i = updated.length - 1; i >= 0; i--)
+      if (updated[i] && !e.letters[i]) {
+        updated[i] = "";
+        break;
+      }
+    live.current = { draft: updated, active: updated.findIndex((c) => !c) };
     dispatch({ type: "delete", id: q.id });
     setCursor(null);
     setFeedback("");
@@ -195,7 +214,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Geri"
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.popTo("Home")}
           style={s.back}
         >
           <Text style={s.backText}>‹</Text>
@@ -306,11 +325,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
           );
         })}
       </View>
-      <ScrollView
-        ref={scroll}
-        contentContainerStyle={s.content}
-        keyboardShouldPersistTaps="handled"
-      >
+      <View style={s.content}>
         {error ? (
           <Pressable onPress={retry}>
             <Text style={s.error}>{error}</Text>
@@ -322,19 +337,22 @@ export default function GameScreen({ navigation }: Props<"Game">) {
         >
           <GameCard
             tone="default"
-            style={[s.card, e.solved && { backgroundColor: "#E2EED6" }]}
+            style={[s.card, e.solved && s.solvedCard]}
           >
             <View style={s.questionHeader}>
-              <Text style={[s.eyebrow, e.solved && { color: C.green }]}>
+              <Text
+                numberOfLines={1}
+                style={[s.eyebrow, e.solved && { color: C.green }]}
+              >
                 {e.solved
-                  ? "✓ DOĞRU"
-                  : `${selected + 1}. SORU · ${q.term.length} HARF`}
+                  ? `✓ DOĞRU · ${q.category.toLocaleUpperCase("tr-TR")}`
+                  : `${selected + 1}. SORU · ${q.category.toLocaleUpperCase("tr-TR")} · ${q.term.length} HARF`}
               </Text>
               {!e.solved ? (
                 <View style={s.questionArrows}>
                   <QuestionArrow
                     label="Önceki soru"
-                    glyph="‹"
+                    Glyph={CaretLeftIcon}
                     disabled={previousQuestion === null}
                     onPress={() =>
                       previousQuestion !== null &&
@@ -343,7 +361,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                   />
                   <QuestionArrow
                     label="Sonraki soru"
-                    glyph="›"
+                    Glyph={CaretRightIcon}
                     disabled={nextQuestion === null}
                     onPress={() =>
                       nextQuestion !== null && choose(qs[nextQuestion].id)
@@ -356,9 +374,11 @@ export default function GameScreen({ navigation }: Props<"Game">) {
               <>
                 <Text style={s.solvedTerm}>{q.term}</Text>
                 {success?.id === q.id ? (
-                  <Text style={s.gold}>
-                    +{success.xp} XP · {success.combo}’li seri
-                  </Text>
+                  <View style={s.rewardPill}>
+                    <Text style={s.rewardText}>
+                      +{success.xp} XP · {success.combo}’li seri
+                    </Text>
+                  </View>
                 ) : null}
                 <Text style={s.explanation}>{q.explanation}</Text>
               </>
@@ -380,14 +400,14 @@ export default function GameScreen({ navigation }: Props<"Game">) {
             <View style={s.boosters}>
               {[
                 {
-                  icon: "✦",
+                  icon: MagnifyingGlassIcon,
                   title: "İpucu",
                   detail: `${costs.extra} Mühür`,
                   disabled: e.extra || g.seals < costs.extra,
                   onPress: () => buy("extra"),
                 },
                 {
-                  icon: "A",
+                  icon: KeyIcon,
                   title: "Harf Aç",
                   detail:
                     letterPrice === 0 ? "Ücretsiz" : `${letterPrice} Mühür`,
@@ -395,7 +415,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                   onPress: () => buy("letter"),
                 },
                 {
-                  icon: "gavel",
+                  icon: GavelIcon,
                   title: "Kelime Aç",
                   detail: `${wordPrice} Mühür`,
                   disabled: missing.length === 0 || g.seals < wordPrice,
@@ -412,16 +432,12 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                   style={[s.booster, b.disabled && { opacity: 0.4 }]}
                 >
                   <View style={s.boosterIcon}>
-                    {b.icon === "gavel" ? (
-                      <GavelIcon />
-                    ) : (
-                      <Text style={s.boosterIconText}>{b.icon}</Text>
-                    )}
+                    <b.icon size={24} weight="bold" color={C.gold} />
                   </View>
                   <View style={s.boosterCopy}>
                     <Text style={s.boosterTitle}>{b.title}</Text>
                     <View style={s.boosterCost}>
-                      {b.detail === "Ücretsiz" ? null : <Seal size={17} />}
+                      {b.detail === "Ücretsiz" ? null : <SealCoin size={17} />}
                       <Text style={s.boosterPrice}>
                         {b.detail.replace(" Mühür", "")}
                       </Text>
@@ -437,7 +453,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                 onPress={remove}
                 style={s.delete}
               >
-                <Text style={s.boosterTitle}>⌫ Sil</Text>
+                <BackspaceIcon size={26} weight="bold" color={C.ink} />
               </Pressable>
               <View style={{ flex: 1 }}>
                 <Button
@@ -457,7 +473,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
             ) : null}
           </>
         )}
-      </ScrollView>
+      </View>
       <NativeLetterInput
         ref={input}
         onLetters={typeLetters}
@@ -500,23 +516,14 @@ export default function GameScreen({ navigation }: Props<"Game">) {
   );
 }
 
-function GavelIcon() {
-  return (
-    <View accessibilityElementsHidden style={s.gavel}>
-      <View style={s.gavelHead} />
-      <View style={s.gavelHandle} />
-    </View>
-  );
-}
-
 function QuestionArrow({
   label,
-  glyph,
+  Glyph,
   disabled,
   onPress,
 }: {
   label: string;
-  glyph: string;
+  Glyph: Icon;
   disabled: boolean;
   onPress: () => void;
 }) {
@@ -527,13 +534,14 @@ function QuestionArrow({
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={onPress}
+      hitSlop={6}
       style={({ pressed }) => [
         s.questionArrow,
         disabled && { opacity: 0.28 },
         pressed && { transform: [{ scale: 0.92 }] },
       ]}
     >
-      <Text style={s.questionArrowText}>{glyph}</Text>
+      <Glyph size={16} weight="bold" color="#F8E7B6" />
     </Pressable>
   );
 }
@@ -612,6 +620,7 @@ const s = StyleSheet.create({
   },
   letter: { color: "#17243B", fontWeight: "800" },
   content: {
+    flex: 1,
     width: "100%",
     maxWidth: 560,
     alignSelf: "center",
@@ -621,36 +630,31 @@ const s = StyleSheet.create({
   },
   card: {
     borderRadius: radius.lg,
-    padding: 18,
-    minHeight: 118,
-    gap: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    gap: 8,
     ...shadows.card,
   },
   questionHeader: {
-    minHeight: 42,
+    minHeight: 32,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     gap: 12,
   },
-  questionArrows: { flexDirection: "row", gap: 7 },
+  questionArrows: { flexDirection: "row", gap: 8 },
   questionArrow: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: "#3C4B63",
     backgroundColor: "#14233B",
     alignItems: "center",
     justifyContent: "center",
   },
-  questionArrowText: {
-    color: "#F8E7B6",
-    fontSize: 28,
-    lineHeight: 31,
-    fontWeight: "700",
-  },
   eyebrow: {
+    flexShrink: 1,
     color: C.gold,
     fontSize: 12,
     fontWeight: "800",
@@ -658,13 +662,32 @@ const s = StyleSheet.create({
   },
   clue: {
     color: "#F5F1E7",
-    fontSize: 19,
-    lineHeight: 27,
+    fontSize: 17,
+    lineHeight: 24,
     fontWeight: "500",
   },
   extra: { color: "#C0CABF", fontSize: 14, lineHeight: 20 },
-  solvedTerm: { color: C.ink, fontSize: 25, fontWeight: "800" },
-  gold: { color: C.gold, fontSize: 18, fontWeight: "800" },
+  solvedCard: {
+    backgroundColor: "#0E3A2D",
+    borderWidth: 1,
+    borderColor: "#2F8F68",
+  },
+  solvedTerm: {
+    color: C.ink,
+    fontSize: 28,
+    fontWeight: "800",
+    letterSpacing: 1,
+  },
+  rewardPill: {
+    alignSelf: "flex-start",
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 99,
+    backgroundColor: "#CFAB4B22",
+    borderWidth: 1,
+    borderColor: "#CFAB4B66",
+  },
+  rewardText: { color: C.gold, fontSize: 13, fontWeight: "800" },
   explanation: { color: C.muted, fontSize: 15, lineHeight: 22 },
   boosters: { flexDirection: "row", gap: 8 },
   booster: {
@@ -689,7 +712,6 @@ const s = StyleSheet.create({
     shadowRadius: 7,
     shadowOffset: { width: 0, height: 4 },
   },
-  boosterIconText: { color: C.gold, fontSize: 20, fontWeight: "900" },
   boosterCopy: { flexShrink: 1, gap: 2 },
   boosterCost: {
     minHeight: 19,
@@ -697,27 +719,6 @@ const s = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 3,
-  },
-  gavel: {
-    width: 29,
-    height: 29,
-    transform: [{ rotate: "-38deg" }],
-    alignItems: "center",
-  },
-  gavelHead: {
-    width: 25,
-    height: 10,
-    borderRadius: 3,
-    backgroundColor: C.gold,
-    borderWidth: 1,
-    borderColor: "#806026",
-  },
-  gavelHandle: {
-    width: 6,
-    height: 21,
-    marginTop: -1,
-    borderRadius: 3,
-    backgroundColor: "#E5C36C",
   },
   boosterTitle: { color: C.ink, fontWeight: "800", fontSize: 12 },
   boosterPrice: { color: C.gold, fontSize: 12, fontWeight: "700" },

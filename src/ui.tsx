@@ -1,6 +1,6 @@
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { Ambient, Seal } from "./art";
+import { Ambient, SealCoin } from "./art";
 import {
   Pressable,
   ScrollView,
@@ -46,11 +46,13 @@ export function Button({
   onPress,
   disabled = false,
   secondary = false,
+  small = false,
 }: {
   title: string;
   onPress: () => void;
   disabled?: boolean;
   secondary?: boolean;
+  small?: boolean;
 }) {
   return (
     <Pressable
@@ -60,6 +62,7 @@ export function Button({
       onPress={onPress}
       style={({ pressed }) => [
         s.button,
+        small && s.smallButton,
         secondary ? s.secondary : shadows.gold,
         disabled && { opacity: 0.38 },
         pressed && { transform: [{ translateY: 2 }], borderBottomWidth: 1 },
@@ -72,7 +75,15 @@ export function Button({
         }
         style={[StyleSheet.absoluteFill, { borderRadius: 28 }]}
       />
-      <Text style={[s.buttonText, secondary && { color: C.ink }]}>{title}</Text>
+      <Text
+        style={[
+          s.buttonText,
+          small && { fontSize: 12, letterSpacing: 0.4 },
+          secondary && { color: C.ink },
+        ]}
+      >
+        {title}
+      </Text>
     </Pressable>
   );
 }
@@ -86,7 +97,7 @@ export function Label({ children }: { children: React.ReactNode }) {
 export function CurrencyBadge({ amount }: { amount: number }) {
   return (
     <View accessibilityLabel={`${amount} Mühür`} style={s.currency}>
-      <Seal size={22} />
+      <SealCoin size={24} />
       <Text style={s.currencyText}>{amount}</Text>
     </View>
   );
@@ -269,49 +280,6 @@ export function LevelNode({
     </View>
   );
 }
-export function LetterTile({
-  letter,
-  used,
-  disabled,
-  onPress,
-  size,
-  label,
-}: {
-  letter: string;
-  used: boolean;
-  disabled: boolean;
-  onPress: () => void;
-  size: number;
-  label: string;
-}) {
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ disabled, selected: used }}
-      disabled={disabled}
-      onPress={onPress}
-      style={({ pressed }) => [
-        s.tile,
-        { width: size, minHeight: Math.max(48, size) },
-        used && { backgroundColor: C.bg, opacity: 0.4 },
-        pressed && { backgroundColor: C.gold, transform: [{ scale: 0.95 }] },
-      ]}
-    >
-      {({ pressed }) => (
-        <Text
-          style={{
-            color: pressed ? C.bg : C.ink,
-            fontSize: 23,
-            fontWeight: "800",
-          }}
-        >
-          {letter}
-        </Text>
-      )}
-    </Pressable>
-  );
-}
 export function AnswerSlot({
   letter,
   locked,
@@ -361,15 +329,22 @@ export function Shell({
   header,
   footer,
   compact,
+  scroll = false,
   scrollRef,
 }: {
   children: React.ReactNode;
   header?: React.ReactNode;
   footer?: React.ReactNode;
   compact?: boolean;
+  scroll?: boolean;
   scrollRef?: React.RefObject<ScrollView | null>;
 }) {
   const { error, retry } = useGame();
+  const errorBanner = error ? (
+    <Pressable accessibilityRole="button" onPress={retry}>
+      <Text style={s.error}>{error}</Text>
+    </Pressable>
+  ) : null;
   return (
     <SafeAreaView style={s.safe}>
       <Ambient />
@@ -390,18 +365,21 @@ export function Shell({
           {header}
         </View>
       ) : null}
-      <ScrollView
-        ref={scrollRef}
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={[s.page, compact && { paddingTop: 0 }]}
-      >
-        {error ? (
-          <Pressable accessibilityRole="button" onPress={retry}>
-            <Text style={s.error}>{error}</Text>
-          </Pressable>
-        ) : null}
-        {children}
-      </ScrollView>
+      {scroll ? (
+        <ScrollView
+          ref={scrollRef}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={[s.page, compact && { paddingTop: 0 }]}
+        >
+          {errorBanner}
+          {children}
+        </ScrollView>
+      ) : (
+        <View style={[s.page, s.fixedPage, compact && { paddingTop: 0 }]}>
+          {errorBanner}
+          {children}
+        </View>
+      )}
       {footer ? (
         <View
           style={[
@@ -429,6 +407,7 @@ export const s = StyleSheet.create({
     alignSelf: "center",
     gap: 20,
   },
+  fixedPage: { flex: 1, overflow: "hidden", paddingBottom: 16 },
   card: {
     backgroundColor: C.panel,
     borderRadius: radius.lg,
@@ -492,6 +471,12 @@ export const s = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  smallButton: {
+    minHeight: 40,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderBottomWidth: 3,
+  },
   secondary: {
     backgroundColor: C.raised,
     borderBottomColor: C.line,
@@ -532,14 +517,6 @@ export const s = StyleSheet.create({
     ...shadows.gold,
   },
   doneNode: { backgroundColor: C.green, borderColor: "#A2F7D6" },
-  tile: {
-    backgroundColor: C.raised,
-    borderRadius: radius.md,
-    borderBottomWidth: 3,
-    borderColor: "#111C32",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   slot: {
     minHeight: 48,
     borderRadius: radius.sm,

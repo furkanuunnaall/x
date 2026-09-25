@@ -147,7 +147,6 @@ export function badges(g: Game) {
       detail: "İlk bölümünü tamamla.",
       value: g.results.length,
       total: 1,
-      icon: "01",
     },
     {
       id: "sharp",
@@ -155,7 +154,6 @@ export function badges(g: Game) {
       detail: "5 doğru cevabı art arda ver.",
       value: g.best,
       total: 5,
-      icon: "✦",
     },
     {
       id: "perfect",
@@ -163,7 +161,6 @@ export function badges(g: Game) {
       detail: "Bir bölümde üç yıldız kazan.",
       value: g.results.filter((r) => r.stars === 3).length,
       total: 1,
-      icon: "★",
     },
     {
       id: "hunter",
@@ -171,7 +168,6 @@ export function badges(g: Game) {
       detail: "50 farklı kavram çöz.",
       value: known,
       total: 50,
-      icon: "50",
     },
     {
       id: "hundred",
@@ -179,7 +175,6 @@ export function badges(g: Game) {
       detail: "100 farklı kavram çöz.",
       value: known,
       total: 100,
-      icon: "100",
     },
     {
       id: "streak",
@@ -187,7 +182,6 @@ export function badges(g: Game) {
       detail: "7 günlük bölüm serisine ulaş.",
       value: g.daily,
       total: 7,
-      icon: "7",
     },
     {
       id: "final",
@@ -195,7 +189,6 @@ export function badges(g: Game) {
       detail: "Bir Final Bölümü çöz.",
       value: g.results.filter((r) => r.file % 10 === 0).length,
       total: 1,
-      icon: "◆",
     },
   ];
 }

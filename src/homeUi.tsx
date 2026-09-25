@@ -4,13 +4,13 @@ import {
   StyleSheet,
 } from "react-native";
 import { Text } from "./AppText";
-import { Seal } from "./art";
+import { SealCoin } from "./art";
 import { colors as C, spacing, radius, typography, shadows } from "./homeTheme";
 export { C };
 export function CurrencyBadge({ amount }: { amount: number }) {
   return (
     <View accessibilityLabel={`${amount} Mühür`} style={s.currency}>
-      <Seal size={22} />
+      <SealCoin size={26} />
       <Text style={s.currencyText}>{amount}</Text>
     </View>
   );
@@ -40,16 +40,19 @@ export function ProgressBar({
 }
 
 const s = StyleSheet.create({
+  // Same dark glass pill as the streak badge, so the two top badges read as a pair.
   currency: {
     flexDirection: "row",
-    gap: 7,
+    gap: 6,
     alignItems: "center",
     paddingHorizontal: 12,
-    minHeight: 36,
-    borderRadius: 10,
-    backgroundColor: C.panel,
+    minHeight: 44,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: "#9DACC266",
+    backgroundColor: "#101C35CC",
   },
-  currencyText: { color: C.ink, fontSize: 15, fontWeight: "700" },
+  currencyText: { color: "#FFF5E3", fontSize: 20, fontWeight: "800" },
   track: {
     height: 7,
     backgroundColor: "#D2C7B5",

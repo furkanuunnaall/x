@@ -17,6 +17,7 @@ type Store = {
   retry: () => void;
   reset: () => Promise<void>;
 };
+const typing = new Set(["key", "delete", "select", "session-key", "draft"]);
 const Context = createContext<Store>(null!);
 export const useGame = () => useContext(Context);
 export function GameProvider({ children }: { children: React.ReactNode }) {
@@ -29,8 +30,17 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     queue.current = createSaveQueue(AsyncStorage, (failed) =>
       setError(failed ? "İlerleme kaydedilemedi. Tekrar dene." : ""),
     );
-  const save = (g: Game) => {
-    void queue.current!.save(g);
+  // Keystrokes are coalesced into one write; everything else is saved immediately.
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const flush = () => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = null;
+    void queue.current!.save(current.current);
+  };
+  const save = (later = false) => {
+    if (!later) return flush();
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(flush, 500);
   };
   const load = async () => {
     try {
@@ -47,8 +57,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     void load();
     const sub = AppState.addEventListener("change", (state) => {
       if (state === "active") setGame({ ...current.current });
+      else if (timer.current) flush();
     });
-    return () => sub.remove();
+    return () => {
+      sub.remove();
+      if (timer.current) flush();
+    };
   }, []);
   const dispatch = (a: Action) => {
     if (!ready) return;
@@ -56,7 +70,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     if (next === current.current) return;
     current.current = next;
     setGame(next);
-    save(next);
+    save(typing.has(a.type));
   };
   return (
     <Context.Provider
@@ -66,6 +80,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         error,
         dispatch,
         reset: async () => {
+          if (timer.current) clearTimeout(timer.current);
+          timer.current = null;
           await queue.current!.idle();
           const fresh = initialGame();
           await AsyncStorage.setItem(SAVE_KEY, JSON.stringify(fresh));
@@ -74,7 +90,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           setError("");
         },
         retry: () => {
-          if (ready) save(current.current);
+          if (ready) save();
           else void load();
         },
       }}

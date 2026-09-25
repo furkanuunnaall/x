@@ -61,6 +61,7 @@ const players: {
 export default function LeagueScreen({ navigation }: Props<"League">) {
   return (
     <Shell
+      scroll
       header={
         <TopBar
           title="Mühür Ligi"
