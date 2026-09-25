@@ -9,6 +9,7 @@ import {
   coreReducer,
 } from "../src/game";
 import { files, questions } from "../src/content";
+import { unlockedQuestions } from "../src/discovery/model";
 import {
   badges,
   dailyQuestions,
@@ -246,4 +247,12 @@ test("player names normalize, persist independently of character and reject blan
   delete old.product.firstName;
   delete old.product.lastName;
   assert.equal(productOf(parseSave(JSON.stringify(old))).firstName, "");
+});
+test("terms solved in the daily puzzle join the concept collection", () => {
+  const g = daily(initialGame());
+  const terms = dailyQuestions("2026-09-21").map((q) => q.id);
+  const collection = unlockedQuestions(g).map((q) => q.id);
+  assert.ok(terms.every((id) => collection.includes(id)));
+  assert.ok(terms.every((id) => knownTerms(g).some((q) => q.id === id)));
+  assert.equal(unlockedQuestions(initialGame()).length, 0);
 });

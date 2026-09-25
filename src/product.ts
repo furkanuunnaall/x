@@ -129,8 +129,11 @@ export const characters = [
   },
 ] as const;
 export const productOf = (g: Game): Product => g.product ?? initialProduct();
+/** Terms solved in any daily puzzle; they count toward the collection like bölüm terms. */
+export const dailySolvedIds = (g: Game) =>
+  Object.values(productOf(g).dailyPuzzles).flatMap((s) => s.solved);
 export function knownTerms(g: Game) {
-  const ids = new Set<string>();
+  const ids = new Set<string>(dailySolvedIds(g));
   for (const f of files)
     if (g.results.some((r) => r.file === f.id))
       f.questions.forEach((q) => ids.add(q.id));

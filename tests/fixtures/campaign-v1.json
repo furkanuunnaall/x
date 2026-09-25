@@ -57,7 +57,7 @@
   {
     "id": 2,
     "kind": "normal",
-    "title": "Yeni Deliller",
+    "title": "Üst Mahkemeye",
     "questions": [
       {
         "id": "q7",
@@ -112,7 +112,7 @@
   {
     "id": 3,
     "kind": "normal",
-    "title": "Derin İnceleme",
+    "title": "Güvence Kasası",
     "questions": [
       {
         "id": "q13",
@@ -167,7 +167,7 @@
   {
     "id": 4,
     "kind": "normal",
-    "title": "İz Sürme",
+    "title": "Aile Meclisi",
     "questions": [
       {
         "id": "q19",
@@ -277,7 +277,7 @@
   {
     "id": 6,
     "kind": "normal",
-    "title": "İlk İz",
+    "title": "Adliye Koridoru",
     "questions": [
       {
         "id": "v1q1",
@@ -332,7 +332,7 @@
   {
     "id": 7,
     "kind": "normal",
-    "title": "Yeni Deliller",
+    "title": "Kanıt Peşinde",
     "questions": [
       {
         "id": "v1q7",
@@ -387,7 +387,7 @@
   {
     "id": 8,
     "kind": "normal",
-    "title": "Derin İnceleme",
+    "title": "Barış Masası",
     "questions": [
       {
         "id": "v1q13",
@@ -442,7 +442,7 @@
   {
     "id": 9,
     "kind": "normal",
-    "title": "İz Sürme",
+    "title": "Arazi Kaydı",
     "questions": [
       {
         "id": "v1q19",
@@ -576,7 +576,7 @@
   {
     "id": 11,
     "kind": "normal",
-    "title": "İlk İz",
+    "title": "Kişinin Hakları",
     "questions": [
       {
         "id": "v1q31",
@@ -631,7 +631,7 @@
   {
     "id": 12,
     "kind": "normal",
-    "title": "Yeni Deliller",
+    "title": "Yuva Kurmak",
     "questions": [
       {
         "id": "v1q37",
@@ -686,7 +686,7 @@
   {
     "id": 13,
     "kind": "normal",
-    "title": "Derin İnceleme",
+    "title": "İlk Taahhüt",
     "questions": [
       {
         "id": "v1q43",
@@ -741,7 +741,7 @@
   {
     "id": 14,
     "kind": "normal",
-    "title": "İz Sürme",
+    "title": "İrade Sakatlığı",
     "questions": [
       {
         "id": "v1q49",
@@ -796,7 +796,7 @@
   {
     "id": 15,
     "kind": "reward",
-    "title": "Mühür Noktası",
+    "title": "Hesap Kapanışı",
     "questions": [
       {
         "id": "v1q55",
@@ -851,7 +851,7 @@
   {
     "id": 16,
     "kind": "normal",
-    "title": "İlk İz",
+    "title": "Suçun İzinde",
     "questions": [
       {
         "id": "v1q61",
@@ -906,7 +906,7 @@
   {
     "id": 17,
     "kind": "normal",
-    "title": "Yeni Deliller",
+    "title": "Savcılık Kapısı",
     "questions": [
       {
         "id": "v1q67",
@@ -961,7 +961,7 @@
   {
     "id": 18,
     "kind": "normal",
-    "title": "Derin İnceleme",
+    "title": "Karakol Gecesi",
     "questions": [
       {
         "id": "v1q73",
@@ -1016,7 +1016,7 @@
   {
     "id": 19,
     "kind": "normal",
-    "title": "İz Sürme",
+    "title": "Son Kelime",
     "questions": [
       {
         "id": "v1q79",
@@ -1150,7 +1150,7 @@
   {
     "id": 21,
     "kind": "normal",
-    "title": "İlk İz",
+    "title": "İkinci Celse",
     "questions": [
       {
         "id": "v1q2",
@@ -1205,7 +1205,7 @@
   {
     "id": 22,
     "kind": "normal",
-    "title": "Yeni Deliller",
+    "title": "Doğru Mahkeme",
     "questions": [
       {
         "id": "v1q8",
@@ -1260,7 +1260,7 @@
   {
     "id": 23,
     "kind": "normal",
-    "title": "Derin İnceleme",
+    "title": "Tarafsız Bakış",
     "questions": [
       {
         "id": "v1q14",
@@ -1315,7 +1315,7 @@
   {
     "id": 24,
     "kind": "normal",
-    "title": "İz Sürme",
+    "title": "Ayni Haklar",
     "questions": [
       {
         "id": "v1q20",
@@ -1370,7 +1370,7 @@
   {
     "id": 25,
     "kind": "reward",
-    "title": "Mühür Noktası",
+    "title": "Sınır Taşları",
     "questions": [
       {
         "id": "v1q26",
@@ -1425,7 +1425,7 @@
   {
     "id": 26,
     "kind": "normal",
-    "title": "İlk İz",
+    "title": "Kişiden Aileye",
     "questions": [
       {
         "id": "v1q32",
@@ -1480,7 +1480,7 @@
   {
     "id": 27,
     "kind": "normal",
-    "title": "Yeni Deliller",
+    "title": "Veraset Defteri",
     "questions": [
       {
         "id": "v1q38",
@@ -1535,7 +1535,7 @@
   {
     "id": 28,
     "kind": "normal",
-    "title": "Derin İnceleme",
+    "title": "Akdin Kurulması",
     "questions": [
       {
         "id": "v1q44",
@@ -1590,7 +1590,7 @@
   {
     "id": 29,
     "kind": "normal",
-    "title": "İz Sürme",
+    "title": "Gizli Kusur",
     "questions": [
       {
         "id": "v1q50",

@@ -331,6 +331,7 @@ export function Shell({
   compact,
   scroll = false,
   scrollRef,
+  dim = 0,
 }: {
   children: React.ReactNode;
   header?: React.ReactNode;
@@ -338,6 +339,8 @@ export function Shell({
   compact?: boolean;
   scroll?: boolean;
   scrollRef?: React.RefObject<ScrollView | null>;
+  /** Extra darkening over the background art, 0–1, so busy content stands out. */
+  dim?: number;
 }) {
   const { error, retry } = useGame();
   const errorBanner = error ? (
@@ -348,6 +351,12 @@ export function Shell({
   return (
     <SafeAreaView style={s.safe}>
       <Ambient />
+      {dim ? (
+        <View
+          pointerEvents="none"
+          style={[StyleSheet.absoluteFill, { backgroundColor: `rgba(0, 0, 0, ${dim})` }]}
+        />
+      ) : null}
       {header ? (
         <View
           style={[
@@ -384,7 +393,15 @@ export function Shell({
         <View
           style={[
             s.frame,
-            { padding: 16, backgroundColor: C.panel, borderRadius: 22 },
+            {
+              width: "94%",
+              padding: 14,
+              marginBottom: 10,
+              backgroundColor: "#131D31F2",
+              borderWidth: 1,
+              borderColor: "#2A3752",
+              borderRadius: 22,
+            },
           ]}
         >
           {footer}

@@ -221,25 +221,6 @@ export default function Profile({ navigation }: Props<"Profile">) {
               </View>
             ))}
           </GameCard>
-          <Pressable
-            accessibilityRole="button"
-            accessibilityLabel="Başarımlarını gör"
-            onPress={() => navigation.navigate("Achievements")}
-            style={v.achievement}
-          >
-            <View style={v.medal}>
-              <Text style={{ fontSize: 28, color: C.gold }}>✦</Text>
-            </View>
-            <View style={{ flex: 1, gap: 4 }}>
-              <Text style={[s.text, { fontWeight: "800" }]}>
-                Başarı koleksiyonun
-              </Text>
-              <Text style={s.small}>
-                {p.unlockedAchievements.length} / 7 rozet açıldı
-              </Text>
-            </View>
-            <Text style={v.chevron}>›</Text>
-          </Pressable>
         </>
       )}
       {!ranking && (
@@ -250,8 +231,6 @@ export default function Profile({ navigation }: Props<"Profile">) {
               [
                 ["AD SOYAD DÜZENLE", "Name", "✎"],
                 ["KARAKTERİ DEĞİŞTİR", "Character", "◉"],
-                ["BAŞARIMLAR", "Achievements", "✦"],
-                ["AYARLAR", "Settings", "⚙"],
               ] as const
             ).map(([title, route, icon], index) => (
               <Pressable
@@ -322,25 +301,6 @@ const v = StyleSheet.create({
     color: C.ink,
     textAlign: "center",
     letterSpacing: -0.6,
-  },
-  achievement: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 14,
-    backgroundColor: "#192C46",
-    borderWidth: 1,
-    borderColor: "#655D40",
-    borderRadius: 20,
-    padding: 16,
-    minHeight: 86,
-  },
-  medal: {
-    width: 48,
-    height: 48,
-    borderRadius: 16,
-    backgroundColor: "#3A3540",
-    alignItems: "center",
-    justifyContent: "center",
   },
   menu: {
     borderRadius: 20,

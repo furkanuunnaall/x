@@ -1,5 +1,6 @@
 import { files, questions } from "../content";
 import { Game, entry, normalize } from "../game";
+import { dailySolvedIds } from "../product";
 
 export type Mark = "correct" | "present" | "absent";
 export type DailyRound = { guesses: string[]; draft: string };
@@ -122,6 +123,7 @@ export function unlockedQuestions(g: Game) {
         .map((q) => q.id),
     ),
   );
+  for (const id of dailySolvedIds(g)) ids.add(id);
   return questions.filter((q) => ids.has(q.id));
 }
 export function achievements(g: Game, d: Discovery) {

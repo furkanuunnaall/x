@@ -13,6 +13,7 @@ import { useDiscovery } from "../discovery/store";
 import { dailyQuestions, newSession, productOf } from "../product";
 import { Button, C, GameCard, Label, Shell, TopBar, s } from "../ui";
 import { NativeLetterInput, showKeyboard } from "../NativeLetterInput";
+import { LetterPool } from "../LetterPool";
 import { Props } from "../navigation";
 import { useFeedback } from "../feedback";
 import { useReducedMotion } from "../motion";
@@ -46,6 +47,8 @@ export default function SessionScreen({
     30,
     Math.floor((available - (q.term.length - 1) * 4) / q.term.length),
   );
+  // The daily puzzle is typed by tapping a shuffled letter pool (7 tiles per row); replay uses the keyboard.
+  const tileSize = Math.min(46, Math.floor((available - 6 * 8) / 7));
   const [failed, setFailed] = useState(false);
   // Latest draft between renders, so fast typing never builds on a stale value.
   const live = useRef(draft);
@@ -59,7 +62,7 @@ export default function SessionScreen({
     else if (p.replay?.file !== file) dispatch({ type: "replay-start", file });
   }, [day, daily, file]);
   useEffect(() => {
-    if (!done) input.current?.focus();
+    if (!done && !daily) input.current?.focus();
   }, []);
   function check(answer = draft) {
     if (answer.length !== q.term.length || solved) return;
@@ -81,7 +84,7 @@ export default function SessionScreen({
   function choose(index: number) {
     setFailed(false);
     dispatch({ type: "session-select", puzzleDate: day, mode, index });
-    showKeyboard(input.current);
+    if (!daily) showKeyboard(input.current);
   }
   function type(value: string) {
     if (solved) return;
@@ -200,6 +203,7 @@ export default function SessionScreen({
                   <Pressable
                     accessibilityRole="button"
                     accessibilityLabel="Cevap kutuları, klavyeyi aç"
+                    disabled={daily}
                     onPress={() => showKeyboard(input.current)}
                     style={{
                       flexDirection: "row",
@@ -240,6 +244,16 @@ export default function SessionScreen({
                     Henüz değil. Bir kez daha dene.
                   </Text>
                 ) : null}
+                {daily ? (
+                  <LetterPool
+                    term={q.term}
+                    seed={q.id}
+                    draft={draft.split("")}
+                    size={tileSize}
+                    disabled={draft.length >= q.term.length}
+                    onLetter={(letter) => type(live.current + letter)}
+                  />
+                ) : null}
                 <View style={s.row}>
                   <View style={{ flex: 1 }}>
                     <Button
@@ -264,7 +278,7 @@ export default function SessionScreen({
           </>
         )}
       </View>
-      {done ? null : (
+      {done || daily ? null : (
         <NativeLetterInput
           ref={input}
           onLetters={(letters) =>

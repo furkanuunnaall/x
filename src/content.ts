@@ -231,6 +231,39 @@ export const questions: Question[] = rows.map(
 );
 const originalQuestions = [...questions];
 questions.push(...additionalQuestions);
+// Every bölüm has its own name, and none of them gives away an answer inside that bölüm.
+const fileTitles = [
+  "İlk İz",
+  "Üst Mahkemeye",
+  "Güvence Kasası",
+  "Aile Meclisi",
+  "Mühür Noktası",
+  "Adliye Koridoru",
+  "Kanıt Peşinde",
+  "Barış Masası",
+  "Arazi Kaydı",
+  "", // final
+  "Kişinin Hakları",
+  "Yuva Kurmak",
+  "İlk Taahhüt",
+  "İrade Sakatlığı",
+  "Hesap Kapanışı",
+  "Suçun İzinde",
+  "Savcılık Kapısı",
+  "Karakol Gecesi",
+  "Son Kelime",
+  "", // final
+  "İkinci Celse",
+  "Doğru Mahkeme",
+  "Tarafsız Bakış",
+  "Ayni Haklar",
+  "Sınır Taşları",
+  "Kişiden Aileye",
+  "Veraset Defteri",
+  "Akdin Kurulması",
+  "Gizli Kusur",
+  "", // final
+];
 export const files = Array.from({ length: 30 }, (_, i) => {
   const id = i + 1,
     final = id % 10 === 0;
@@ -247,13 +280,7 @@ export const files = Array.from({ length: 30 }, (_, i) => {
         : ("normal" as const),
     title: final
       ? `Final Bölümü ${id / 10}`
-      : [
-          "İlk İz",
-          "Yeni Deliller",
-          "Derin İnceleme",
-          "İz Sürme",
-          "Mühür Noktası",
-        ][i % 5],
+      : fileTitles[i],
     questions:
       i < 5
         ? originalQuestions.slice(i * 6, i * 6 + 6)

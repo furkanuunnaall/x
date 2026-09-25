@@ -56,6 +56,8 @@ export default function Home({ navigation }: Props<"Home">) {
   const current = files[g.file - 1];
   const count = current.questions.filter((q) => entry(g, q.id).solved).length;
   const result = g.results.find((r) => r.file === g.file);
+  // "BAŞLA" until the first word of the bölüm is solved, then "DEVAM ET".
+  const caption = result ? "SONUCU GÖR" : count > 0 ? "DEVAM ET" : "BAŞLA";
   const dailyDone = p.dailyPuzzleClaims.includes(day);
   const insets = useSafeAreaInsets();
   // The home screen does not scroll, so it scales down to the height left after notches.
@@ -136,10 +138,9 @@ export default function Home({ navigation }: Props<"Home">) {
                 onPress={() => navigation.navigate("Achievements")}
               />
             </View>
-            <Pressable
-              accessibilityRole="button"
-              accessibilityLabel={`Bölüm ${g.file}, ${current.title}. Haritayı aç`}
-              onPress={() => navigation.navigate("Map")}
+            <View
+              accessible
+              accessibilityLabel={`Bölüm ${g.file}, ${current.title}`}
               style={h.journey}
             >
               <LinearGradient
@@ -160,9 +161,8 @@ export default function Home({ navigation }: Props<"Home">) {
                   {g.file}
                 </Text>
                 <Text style={h.fileTitle}>{current.title}</Text>
-                <Text style={h.mapLink}>YOLCULUĞUN ›</Text>
               </LinearGradient>
-            </Pressable>
+            </View>
             <View style={[h.rail, tight && { gap: 8 }]}>
               <Shortcut
                 title="KAVRAMLAR"
@@ -175,7 +175,6 @@ export default function Home({ navigation }: Props<"Home">) {
               <Shortcut
                 title="HARİTA"
                 icon={<MapTrifoldIcon size={32} weight="regular" color="#FFE09A" />}
-                detail={`${g.results.filter((r) => r.sealed).length}/${files.length}`}
                 label="Bölüm haritasını aç"
                 onPress={() => navigation.navigate("Map")}
               />
@@ -192,7 +191,7 @@ export default function Home({ navigation }: Props<"Home">) {
             </View>
             <Pressable
               accessibilityRole="button"
-              accessibilityLabel="Bölüme devam et"
+              accessibilityLabel={`Bölüm ${g.file}: ${caption.toLocaleLowerCase("tr-TR")}`}
               onPress={go}
               style={({ pressed }) => [
                 h.playButton,
@@ -207,7 +206,7 @@ export default function Home({ navigation }: Props<"Home">) {
                 style={[h.playGradient, tight && { paddingVertical: 8 }]}
               >
                 <Text style={h.playCaption}>
-                  {result ? "SONUCU GÖR" : "DEVAM ET"}
+                  {caption}
                 </Text>
                 <Text style={[h.playText, tight && { fontSize: 23 }]}>
                   BÖLÜM {g.file} ›
@@ -534,13 +533,6 @@ const h = StyleSheet.create({
     textAlign: "center",
     fontSize: 15,
     fontWeight: "600",
-  },
-  mapLink: {
-    color: "#DDCFB3",
-    fontSize: 9,
-    letterSpacing: 1,
-    marginTop: 6,
-    fontWeight: "700",
   },
   playArea: { gap: 12, width: "100%", maxWidth: 400, alignSelf: "center" },
   progress: { alignSelf: "center", width: "68%", gap: 7 },
