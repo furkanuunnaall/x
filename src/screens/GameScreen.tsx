@@ -105,6 +105,8 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     setCursor(index);
     setFeedback("");
     setFailed(false);
+    // A completed word is checked right away; Enter is no longer needed.
+    if (updated.every(Boolean)) submit(updated);
   }
   function remove() {
     const updated = [...live.current.draft];
@@ -192,6 +194,15 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     ),
   );
   const availableWidth = boardWidth - 58;
+  // The active row grows ~10%: it takes extra height from the other rows so the board keeps
+  // its size, and its tiles scale up only as far as the row width allows.
+  const extra = Math.round(rowHeight * 0.12);
+  const grow = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    if (reduced) return grow.setValue(1);
+    grow.setValue(0);
+    Animated.spring(grow, { toValue: 1, friction: 6, useNativeDriver: true }).start();
+  }, [selected, reduced]);
   const missing = draft.map((_, i) => i).filter((i) => !e.letters[i]);
   const letterPrice = productOf(g).freeLetters > 0 ? 0 : costs.letter;
   const wordPrice = costs.word;
@@ -248,6 +259,12 @@ export default function GameScreen({ navigation }: Props<"Game">) {
             (availableWidth - (item.term.length - 1) * tileGap) /
               item.term.length,
           );
+          const height = current
+            ? rowHeight + extra
+            : rowHeight - extra / (qs.length - 1);
+          const tileSize = Math.min(tileWidth, rowHeight - 6);
+          const used = item.term.length * tileSize + (item.term.length - 1) * tileGap;
+          const scale = Math.min(1.1, availableWidth / used, (rowHeight + extra - 4) / tileSize);
           return (
             <Animated.View
               key={item.id}
@@ -264,7 +281,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                 onPress={() => choose(item.id)}
                 style={[
                   s.wordRow,
-                  { height: rowHeight },
+                  { height },
                   current && s.activeRow,
                   cell.solved && s.doneRow,
                 ]}
@@ -279,7 +296,22 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                 >
                   {cell.solved ? "✓" : row + 1}
                 </Text>
-                <View style={[s.tiles, { gap: tileGap }]}>
+                <Animated.View
+                  style={[
+                    s.tiles,
+                    { gap: tileGap },
+                    current && {
+                      transform: [
+                        {
+                          scale: grow.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [1, scale],
+                          }),
+                        },
+                      ],
+                    },
+                  ]}
+                >
                   {letters.map((letter, i) => (
                     <Pressable
                       accessibilityRole="button"
@@ -297,10 +329,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                       key={i}
                       style={[
                         s.tile,
-                        {
-                          width: Math.min(tileWidth, rowHeight - 6),
-                          height: Math.min(tileWidth, rowHeight - 6),
-                        },
+                        { width: tileSize, height: tileSize },
                         !!letter && s.filled,
                         cell.solved && s.doneTile,
                         current && i === active && !cell.solved && s.cursor,
@@ -319,7 +348,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                       </Text>
                     </Pressable>
                   ))}
-                </View>
+                </Animated.View>
               </Pressable>
             </Animated.View>
           );

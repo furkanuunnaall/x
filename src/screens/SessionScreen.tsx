@@ -281,9 +281,12 @@ export default function SessionScreen({
       {done || daily ? null : (
         <NativeLetterInput
           ref={input}
-          onLetters={(letters) =>
-            type((live.current + letters.join("")).slice(0, q.term.length))
-          }
+          onLetters={(letters) => {
+            const value = (live.current + letters.join("")).slice(0, q.term.length);
+            type(value);
+            // A completed word is checked right away; Enter is no longer needed.
+            if (value.length === q.term.length) check(value);
+          }}
           onDelete={() => live.current && type(live.current.slice(0, -1))}
           onSubmit={() => (solved ? next() : check())}
         />
