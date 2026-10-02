@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { Text } from "../AppText";
 import { useGame } from "../store";
-import { Button, C, Shell, s, GameCard } from "../ui";
-import { FileArt, Seal } from "../art";
+import { Button, Shell, GameCard, useS } from "../ui";
+import { FileArt, SealCoin } from "../art";
+import { useTheme } from "../themeMode";
 const slides = [
   [
     "Hukuk kelimelerini çöz.",
@@ -13,6 +14,8 @@ const slides = [
   ["Kendini geliştir.", "Günlük görevler, seriler ve başarımlarla ilerle."],
 ];
 export default function OnboardingScreen() {
+  const { C } = useTheme();
+  const s = useS();
   const [index, setIndex] = useState(0);
   const { dispatch } = useGame();
   return (
@@ -92,7 +95,7 @@ export default function OnboardingScreen() {
                 </Text>
               </>
             ) : (
-              <Seal size={110} value={index === 1 ? "★" : "✦"} />
+              <SealCoin size={110} />
             )}
           </GameCard>
         </View>

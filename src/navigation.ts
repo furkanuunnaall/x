@@ -8,6 +8,7 @@ export type Routes = {
   Tasks: undefined;
   Achievements: undefined;
   Settings: undefined;
+  About: undefined;
   FinalIntro: undefined;
   Milestone: { file: number };
   Practice: { file: number };

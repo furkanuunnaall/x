@@ -4,6 +4,7 @@ import {
   Pressable,
   StyleSheet,
   View,
+  useWindowDimensions,
 } from "react-native";
 import { Text } from "../AppText";
 import { LinearGradient } from "expo-linear-gradient";
@@ -11,8 +12,11 @@ import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
 import { productOf, canAccessDaily, DAILY_ARCHIVE_COST } from "../product";
 import { Props } from "../navigation";
-import { Button, C, CurrencyBadge, GameCard, Shell, TopBar, s } from "../ui";
+import { Button, CurrencyBadge, GameCard, Shell, TopBar, useS } from "../ui";
 import { dayKey } from "../game";
+import { useTheme } from "../themeMode";
+import { courtyard } from "../art";
+import { colors as N } from "../theme";
 const months = [
   "OCAK",
   "ŞUBAT",
@@ -28,10 +32,16 @@ const months = [
   "ARALIK",
 ];
 export default function DailyCalendarScreen({ navigation }: Props<"Daily">) {
+  const { C, sx, tg, light } = useTheme();
+  const s = useS();
+  const v = sx(vN);
   const { game, dispatch } = useGame(),
     p = productOf(game);
   const { day: today } = useDiscovery();
   const [selected, setSelected] = useState(today);
+  // Tall screens have room for the full banner; short ones keep the slim strip so nothing scrolls.
+  const { height } = useWindowDimensions();
+  const tall = height >= 740;
   const [month, setMonth] = useState(today.slice(0, 7));
   const [year, m] = month.split("-").map(Number);
   const first = new Date(year, m - 1, 1, 12),
@@ -96,16 +106,16 @@ export default function DailyCalendarScreen({ navigation }: Props<"Daily">) {
           </Pressable>
         </View>
         <ImageBackground
-          source={require("../../assets/courtyard.png")}
-          style={v.banner}
-          imageStyle={{ borderRadius: 16 }}
+          source={light ? courtyard.morning : courtyard.night}
+          style={[v.banner, tall && v.bannerTall]}
+          imageStyle={{ borderRadius: tall ? 16 : 12 }}
         >
           <LinearGradient
-            colors={["#14264222", "#12233CEE"]}
-            style={v.bannerShade}
+            colors={tg(["#14264222", "#12233CEE"])}
+            style={[v.bannerShade, tall && v.bannerShadeTall]}
           >
-            <Text style={v.bannerTitle}>HUKUK GÜNLÜĞÜ</Text>
-            <Text style={v.bannerDetail}>
+            <Text style={[v.bannerTitle, tall && { fontSize: 20 }]}>HUKUK GÜNLÜĞÜ</Text>
+            <Text style={[v.bannerDetail, tall && { fontSize: 12 }]}>
               Her gün yeni bir bulmaca. Üç yeni kavram.
             </Text>
           </LinearGradient>
@@ -195,27 +205,29 @@ export default function DailyCalendarScreen({ navigation }: Props<"Daily">) {
     </Shell>
   );
 }
-const v = StyleSheet.create({
+const vN = StyleSheet.create({
   monthHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
   },
-  month: { color: C.ink, fontSize: 21, fontWeight: "800", letterSpacing: 1 },
+  month: { color: N.ink, fontSize: 21, fontWeight: "800", letterSpacing: 1 },
   arrow: {
     width: 40,
     height: 36,
     alignItems: "center",
     justifyContent: "center",
   },
-  arrowText: { fontSize: 30, color: C.muted },
+  arrowText: { fontSize: 30, color: N.muted },
   banner: { height: 50, borderRadius: 12, overflow: "hidden" },
+  bannerTall: { height: 110, borderRadius: 16 },
   bannerShade: {
     flex: 1,
     justifyContent: "center",
     paddingHorizontal: 12,
     gap: 1,
   },
+  bannerShadeTall: { justifyContent: "flex-end", padding: 14, gap: 4 },
   bannerTitle: { color: "#FFF9EA", fontSize: 14, fontWeight: "800" },
   bannerDetail: { color: "#EEE2CE", fontSize: 11 },
   grid: { flexDirection: "row", flexWrap: "wrap" },
@@ -226,7 +238,7 @@ const v = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  weekday: { color: C.muted, fontWeight: "800", fontSize: 11 },
+  weekday: { color: N.muted, fontWeight: "800", fontSize: 11 },
   day: {
     width: "100%",
     height: 30,
@@ -237,18 +249,18 @@ const v = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  dayText: { color: C.ink, fontSize: 14, fontWeight: "800", lineHeight: 16 },
-  today: { borderColor: C.green },
-  selected: { backgroundColor: C.green, borderColor: C.green },
-  tinyDate: { fontSize: 8, lineHeight: 9, color: C.muted },
-  footer: { color: C.muted, fontSize: 12, textAlign: "center" },
+  dayText: { color: N.ink, fontSize: 14, fontWeight: "800", lineHeight: 16 },
+  today: { borderColor: N.green },
+  selected: { backgroundColor: N.green, borderColor: N.green },
+  tinyDate: { fontSize: 8, lineHeight: 9, color: N.muted },
+  footer: { color: N.muted, fontSize: 12, textAlign: "center" },
   selection: {
     flexDirection: "row",
     gap: 12,
     alignItems: "center",
     padding: 12,
   },
-  selectionTitle: { color: C.ink, fontSize: 15, fontWeight: "800" },
+  selectionTitle: { color: N.ink, fontSize: 15, fontWeight: "800" },
   dateBadge: {
     width: 50,
     borderRadius: 12,

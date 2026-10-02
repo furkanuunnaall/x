@@ -11,16 +11,19 @@ import { files } from "../content";
 import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
 import { dailyQuestions, newSession, productOf } from "../product";
-import { Button, C, GameCard, Label, Shell, TopBar, s } from "../ui";
+import { Button, GameCard, Label, Shell, TopBar, useS } from "../ui";
 import { NativeLetterInput, showKeyboard } from "../NativeLetterInput";
 import { LetterPool } from "../LetterPool";
 import { Props } from "../navigation";
 import { useFeedback } from "../feedback";
 import { useReducedMotion } from "../motion";
+import { useTheme } from "../themeMode";
 export default function SessionScreen({
   navigation,
   route,
 }: Props<"DailyPlay"> | Props<"Practice">) {
+  const { C } = useTheme();
+  const s = useS();
   const { game, dispatch } = useGame(),
     p = productOf(game);
   const { day: today } = useDiscovery();

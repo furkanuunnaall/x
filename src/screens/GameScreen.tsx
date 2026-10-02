@@ -31,11 +31,15 @@ import { useGame } from "../store";
 import { costs, entry, Hint, normalize, reward } from "../game";
 import { files } from "../content";
 import { Props } from "../navigation";
-import { Button, C, GameCard, CurrencyBadge } from "../ui";
+import { Button, GameCard, CurrencyBadge } from "../ui";
 import { radius, shadows } from "../theme";
 import { useReducedMotion } from "../motion";
+import { useTheme } from "../themeMode";
+import { colors as N } from "../theme";
 
 export default function GameScreen({ navigation }: Props<"Game">) {
+  const { C, sx, tc, light } = useTheme();
+  const s = sx(sN);
   const { game: g, dispatch, error, retry } = useGame();
   const qs = files[g.file - 1].questions;
   const selected = Math.max(
@@ -219,7 +223,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
       <Ambient />
       <View
         pointerEvents="none"
-        style={[StyleSheet.absoluteFill, { backgroundColor: "#071426DC" }]}
+        style={[StyleSheet.absoluteFill, { backgroundColor: tc("#071426DC") }]}
       />
       <View style={s.header}>
         <Pressable
@@ -331,6 +335,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                         s.tile,
                         { width: tileSize, height: tileSize },
                         !!letter && s.filled,
+                        light && !!letter && !cell.solved && dayFilled,
                         cell.solved && s.doneTile,
                         current && i === active && !cell.solved && s.cursor,
                         current && failed && { borderColor: C.red },
@@ -340,7 +345,8 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                         maxFontSizeMultiplier={1.2}
                         style={[
                           s.letter,
-                          cell.solved && { color: "#79DDB6" },
+                          light && !!letter && !cell.solved && { color: "#2A2418" },
+                          cell.solved && { color: tc("#79DDB6", "text") },
                           { fontSize: Math.min(20, tileWidth * 0.65) },
                         ]}
                       >
@@ -556,6 +562,8 @@ function QuestionArrow({
   disabled: boolean;
   onPress: () => void;
 }) {
+  const { sx, tc } = useTheme();
+  const s = sx(sN);
   return (
     <Pressable
       accessibilityRole="button"
@@ -570,12 +578,14 @@ function QuestionArrow({
         pressed && { transform: [{ scale: 0.92 }] },
       ]}
     >
-      <Glyph size={16} weight="bold" color="#F8E7B6" />
+      <Glyph size={16} weight="bold" color={tc("#F8E7B6", "text")} />
     </Pressable>
   );
 }
-const s = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: C.bg },
+// By day a filled tile is warm parchment with a gold edge, so it reads apart from the white blanks.
+const dayFilled = { backgroundColor: "#F3E2B8", borderColor: "#C9A04A" };
+const sN = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: N.bg },
   header: {
     width: "100%",
     maxWidth: 560,
@@ -593,13 +603,13 @@ const s = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 15,
-    backgroundColor: C.panel,
+    backgroundColor: N.panel,
     alignItems: "center",
     justifyContent: "center",
   },
-  backText: { color: C.ink, fontSize: 32 },
-  title: { color: C.ink, fontSize: 19, fontWeight: "800" },
-  progressText: { color: C.muted, fontSize: 14 },
+  backText: { color: N.ink, fontSize: 32 },
+  title: { color: N.ink, fontSize: 19, fontWeight: "800" },
+  progressText: { color: N.muted, fontSize: 14 },
   board: {
     width: "100%",
     maxWidth: 560,
@@ -618,9 +628,9 @@ const s = StyleSheet.create({
     gap: 6,
   },
   activeRow: {
-    borderColor: C.gold,
+    borderColor: N.gold,
     backgroundColor: "#CFAB4B14",
-    shadowColor: C.gold,
+    shadowColor: N.gold,
     shadowOpacity: 0.25,
     shadowRadius: 8,
     shadowOffset: { width: 0, height: 0 },
@@ -639,10 +649,10 @@ const s = StyleSheet.create({
   filled: { backgroundColor: "#FFFBF2", borderColor: "#E7DECC" },
   doneTile: { backgroundColor: "#193D36", borderColor: "#397961" },
   cursor: {
-    borderColor: C.gold,
+    borderColor: N.gold,
     borderWidth: 2,
     backgroundColor: "#465267",
-    shadowColor: C.gold,
+    shadowColor: N.gold,
     shadowOpacity: 0.35,
     shadowRadius: 7,
     shadowOffset: { width: 0, height: 0 },
@@ -684,7 +694,7 @@ const s = StyleSheet.create({
   },
   eyebrow: {
     flexShrink: 1,
-    color: C.gold,
+    color: N.gold,
     fontSize: 12,
     fontWeight: "800",
     letterSpacing: 1,
@@ -702,7 +712,7 @@ const s = StyleSheet.create({
     borderColor: "#2F8F68",
   },
   solvedTerm: {
-    color: C.ink,
+    color: N.ink,
     fontSize: 28,
     fontWeight: "800",
     letterSpacing: 1,
@@ -716,8 +726,8 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#CFAB4B66",
   },
-  rewardText: { color: C.gold, fontSize: 13, fontWeight: "800" },
-  explanation: { color: C.muted, fontSize: 15, lineHeight: 22 },
+  rewardText: { color: N.gold, fontSize: 13, fontWeight: "800" },
+  explanation: { color: N.muted, fontSize: 15, lineHeight: 22 },
   boosters: { flexDirection: "row", gap: 8 },
   booster: {
     flex: 1,
@@ -749,19 +759,19 @@ const s = StyleSheet.create({
     justifyContent: "center",
     gap: 3,
   },
-  boosterTitle: { color: C.ink, fontWeight: "800", fontSize: 12 },
-  boosterPrice: { color: C.gold, fontSize: 12, fontWeight: "700" },
+  boosterTitle: { color: N.ink, fontWeight: "800", fontSize: 12 },
+  boosterPrice: { color: N.gold, fontSize: 12, fontWeight: "700" },
   actions: { flexDirection: "row", alignItems: "center", gap: 10 },
   delete: {
     minWidth: 90,
     minHeight: 52,
     borderRadius: 26,
-    backgroundColor: C.panel,
+    backgroundColor: N.panel,
     alignItems: "center",
     justifyContent: "center",
   },
-  feedback: { color: C.muted, fontSize: 14, textAlign: "center" },
-  error: { color: C.red },
+  feedback: { color: N.muted, fontSize: 14, textAlign: "center" },
+  error: { color: N.red },
   overlay: { flex: 1, backgroundColor: "#0009", justifyContent: "flex-end" },
   sheet: {
     width: "100%",
@@ -769,7 +779,7 @@ const s = StyleSheet.create({
     alignSelf: "center",
     padding: 24,
     gap: 16,
-    backgroundColor: C.panel,
+    backgroundColor: N.panel,
     borderTopLeftRadius: 26,
     borderTopRightRadius: 26,
   },

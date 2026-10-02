@@ -83,8 +83,11 @@ const sine = Easing.inOut(Easing.sin);
 // Memoized: Home stays mounted under the game screen and re-renders on every keystroke.
 export const LivingBackground = React.memo(function LivingBackground({
   source,
+  morning = false,
 }: {
   source: ImageSourcePropType;
+  /** Day scene: the lamps are off and the clouds turn white. */
+  morning?: boolean;
 }) {
   const reduced = useReducedMotion();
   const window = useWindowDimensions();
@@ -138,13 +141,20 @@ export const LivingBackground = React.memo(function LivingBackground({
         />
         {reduced ? null : (
           <>
-            {clouds.map((cloud, i) => (
-              <Cloud key={`c${i}`} id={`cloud${i}`} {...place(cloud)} light={cloud} travel={cloud.travel * scale} duration={cloud.duration} />
-            ))}
-            <Reflection id="reflection" {...place(reflection)} light={reflection} />
-            {lamps.map((lamp, i) => (
-              <Lamp key={`l${i}`} id={`lamp${i}`} index={i} {...place(lamp)} light={lamp} />
-            ))}
+            {clouds.map((cloud, i) => {
+              const sky = morning ? { ...cloud, color: "#FFFFFF", peak: cloud.peak * 2.2 } : cloud;
+              return (
+                <Cloud key={`c${i}${morning}`} id={`cloud${i}${morning ? "d" : "n"}`} {...place(sky)} light={sky} travel={cloud.travel * scale} duration={cloud.duration} />
+              );
+            })}
+            {morning ? null : (
+              <>
+                <Reflection id="reflection" {...place(reflection)} light={reflection} />
+                {lamps.map((lamp, i) => (
+                  <Lamp key={`l${i}`} id={`lamp${i}`} index={i} {...place(lamp)} light={lamp} />
+                ))}
+              </>
+            )}
           </>
         )}
       </Animated.View>

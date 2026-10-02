@@ -5,6 +5,7 @@ import {
   ImageBackground,
 } from "react-native";
 import { logoFont, Text } from "./AppText";
+import { useTheme } from "./themeMode";
 import Svg, { Circle, Defs, LinearGradient as SvgGradient, Path, Stop } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { colors as C } from "./theme";
@@ -16,14 +17,22 @@ const coinRidges = Array.from({ length: 48 }, (_, i) => {
   return `M${(32 + 24.5 * c).toFixed(2)} ${(32 + 24.5 * s).toFixed(2)}L${(32 + 27 * c).toFixed(2)} ${(32 + 27 * s).toFixed(2)}`;
 }).join("");
 /** The Mühür currency: a milled gold coin with an engraved Cinzel M. */
-export function SealCoin({ size = 24 }: { size?: number }) {
+export function SealCoin({
+  size = 24,
+  value = "M",
+}: {
+  size?: number;
+  /** Engraved mark; screens use it for a rank number or a result tick. */
+  value?: string;
+}) {
   // Gradient ids must be unique: on web a hidden screen's <svg> would otherwise own them.
   const id = React.useId().replace(/:/g, "");
   const letter = {
     position: "absolute" as const,
     width: size,
     textAlign: "center" as const,
-    fontFamily: logoFont,
+    fontFamily: /^[A-Z0-9]+$/.test(value) ? logoFont : undefined,
+    fontWeight: "900" as const,
     fontSize: size * 0.38,
     lineHeight: size * 0.46,
   };
@@ -60,8 +69,8 @@ export function SealCoin({ size = 24 }: { size?: number }) {
           fill="none"
         />
       </Svg>
-      <Text style={[letter, { color: "#FFF3C899", marginTop: size * 0.03 }]}>M</Text>
-      <Text style={[letter, { color: "#6B4A12" }]}>M</Text>
+      <Text style={[letter, { color: "#FFF3C899", marginTop: size * 0.03 }]}>{value}</Text>
+      <Text style={[letter, { color: "#6B4A12" }]}>{value}</Text>
     </View>
   );
 }
@@ -182,21 +191,31 @@ export function FileArt() {
         ))}
       </LinearGradient>
       <View style={{ position: "absolute", right: 0, bottom: 0 }}>
-        <Seal size={47} />
+        <SealCoin size={47} />
       </View>
     </View>
   );
 }
+export const courtyard = {
+  night: require("../assets/courtyard.png"),
+  morning: require("../assets/courtyard-morning.jpg"),
+};
 export function Ambient() {
+  const { light } = useTheme();
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFill}>
       <ImageBackground
-        source={require("../assets/courtyard.png")}
+        source={light ? courtyard.morning : courtyard.night}
         resizeMode="cover"
         style={StyleSheet.absoluteFill}
       />
+      {/* A veil keeps text readable: deep navy at night, warm paper by day. */}
       <LinearGradient
-        colors={["#07142BAA", "#0B1933D9", "#081326F2"]}
+        colors={
+          light
+            ? ["#FBF6EACC", "#F6EEDFE6", "#F1E7D3F5"]
+            : ["#07142BAA", "#0B1933D9", "#081326F2"]
+        }
         style={StyleSheet.absoluteFill}
       />
     </View>

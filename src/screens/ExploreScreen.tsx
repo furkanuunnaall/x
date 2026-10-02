@@ -17,19 +17,14 @@ import {
 import { DiscoveryStatus } from "../discovery/ui";
 import { normalize } from "../game";
 import { files, questions } from "../content";
-import {
-  Button,
-  C,
-  GameCard,
-  Label,
-  ProgressBar,
-  Shell,
-  TopBar,
-  s,
-} from "../ui";
-import { Seal } from "../art";
+import { Button, GameCard, Label, ProgressBar, Shell, TopBar, useS } from "../ui";
 import { Props } from "../navigation";
+import { useTheme } from "../themeMode";
+import { colors as N } from "../theme";
 export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
+  const { C, sx, tc } = useTheme();
+  const s = useS();
+  const e = sx(eN);
   const { game } = useGame();
   const { data, ready, dispatch } = useDiscovery();
   const [category, setCategory] = useState("Tümü");
@@ -79,7 +74,7 @@ export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
               paddingHorizontal: 16,
               justifyContent: "center",
               borderRadius: 14,
-              backgroundColor: category === c ? "#3A3540" : C.panel,
+              backgroundColor: category === c ? tc("#3A3540") : C.panel,
               borderWidth: 1,
               borderColor: category === c ? C.gold : C.line,
             }}
@@ -172,9 +167,9 @@ export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
     </Shell>
   );
 }
-const e = StyleSheet.create({
+const eN = StyleSheet.create({
   daily: { gap: 18, borderColor: "#756744" },
-  title: { color: C.ink, fontSize: 19, fontWeight: "800" },
+  title: { color: N.ink, fontSize: 19, fontWeight: "800" },
   tabs: {
     flexDirection: "row",
     backgroundColor: "#1D2C45",
@@ -184,9 +179,9 @@ const e = StyleSheet.create({
   },
   tab: { flex: 1, padding: 14, alignItems: "center", borderRadius: 11 },
   active: { backgroundColor: "#314159" },
-  tabText: { color: C.muted, fontSize: 16, fontWeight: "700" },
+  tabText: { color: N.muted, fontSize: 16, fontWeight: "700" },
   search: {
-    color: C.ink,
+    color: N.ink,
     backgroundColor: "#192A44",
     borderColor: "#3D4E6C",
     borderWidth: 1,
@@ -213,7 +208,7 @@ const e = StyleSheet.create({
     alignItems: "center",
   },
   badgeDone: { borderColor: "#C7A54C", backgroundColor: "#392C35" },
-  badgeIcon: { color: C.muted, fontSize: 26, fontWeight: "800" },
+  badgeIcon: { color: N.muted, fontSize: 26, fontWeight: "800" },
   stamps: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
   stamp: {
     padding: 12,

@@ -1,6 +1,6 @@
 import { Avatar } from "../character";
 import { productOf, knownTerms, playerName } from "../product";
-import { Seal } from "../art";
+import { SealCoin } from "../art";
 import React, { useState } from "react";
 import {
   Pressable,
@@ -11,20 +11,13 @@ import { Text } from "../AppText";
 import { useGame } from "../store";
 import { dailyNow } from "../game";
 import { Props } from "../navigation";
-import {
-  Button,
-  GameCard,
-  Label,
-  Shell,
-  TopBar,
-  C,
-  s,
-  XPTrack,
-  StatCard,
-  CurrencyBadge,
-  Stars,
-} from "../ui";
+import { Button, GameCard, Label, Shell, TopBar, XPTrack, StatCard, CurrencyBadge, Stars, useS } from "../ui";
+import { useTheme } from "../themeMode";
+import { colors as N } from "../theme";
 export default function Profile({ navigation }: Props<"Profile">) {
+  const { C, sx, tc } = useTheme();
+  const s = useS();
+  const v = sx(vN);
   const { game: g } = useGame();
   const p = productOf(g);
   const [ranking, setRanking] = useState(false);
@@ -82,14 +75,14 @@ export default function Profile({ navigation }: Props<"Profile">) {
                       <Text style={{ color: C.gold, fontSize: 22 }}>
                         {i === 0 ? "♛" : `#${i + 1}`}
                       </Text>
-                      <Seal size={i === 0 ? 72 : 56} value={String(i + 1)} />
+                      <SealCoin size={i === 0 ? 72 : 56} value={String(i + 1)} />
                       <View
                         style={{
                           alignSelf: "stretch",
                           minHeight: i === 0 ? 160 : 132,
                           borderTopLeftRadius: 20,
                           borderTopRightRadius: 20,
-                          backgroundColor: i === 0 ? "#3C3540" : C.panel,
+                          backgroundColor: i === 0 ? tc("#3C3540") : C.panel,
                           padding: 10,
                           alignItems: "center",
                           justifyContent: "space-between",
@@ -157,7 +150,7 @@ export default function Profile({ navigation }: Props<"Profile">) {
             <GameCard
               style={{ gap: 18, alignItems: "center", paddingVertical: 30 }}
             >
-              <Seal size={80} value="★" />
+              <SealCoin size={80} />
               <Text style={s.hero}>Kürsü seni bekliyor.</Text>
               <Text style={[s.muted, { textAlign: "center" }]}>
                 İlk bölümünü tamamladığında kişisel sıralaman burada oluşacak.
@@ -257,7 +250,7 @@ export default function Profile({ navigation }: Props<"Profile">) {
   );
 }
 
-const v = StyleSheet.create({
+const vN = StyleSheet.create({
   identity: { gap: 20, borderColor: "#766641", paddingVertical: 22 },
   identityTop: {
     flexDirection: "row",
@@ -266,7 +259,7 @@ const v = StyleSheet.create({
     alignItems: "center",
   },
   level: {
-    color: C.gold,
+    color: N.gold,
     fontSize: 11,
     fontWeight: "800",
     backgroundColor: "#3A3540",
@@ -276,7 +269,7 @@ const v = StyleSheet.create({
   portrait: {
     alignSelf: "center",
     borderWidth: 2,
-    borderColor: C.gold,
+    borderColor: N.gold,
     padding: 5,
     borderRadius: 80,
   },
@@ -298,14 +291,14 @@ const v = StyleSheet.create({
     fontSize: 28,
     lineHeight: 35,
     fontWeight: "800",
-    color: C.ink,
+    color: N.ink,
     textAlign: "center",
     letterSpacing: -0.6,
   },
   menu: {
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: C.line,
+    borderColor: N.line,
     backgroundColor: "#14243D",
     overflow: "hidden",
   },
@@ -317,13 +310,13 @@ const v = StyleSheet.create({
     gap: 14,
   },
   separator: { borderTopWidth: 1, borderColor: "#39465C" },
-  menuIcon: { color: C.gold, fontSize: 21, width: 25, textAlign: "center" },
+  menuIcon: { color: N.gold, fontSize: 21, width: 25, textAlign: "center" },
   menuTitle: {
     flex: 1,
-    color: C.ink,
+    color: N.ink,
     fontSize: 13,
     fontWeight: "700",
     letterSpacing: 0.4,
   },
-  chevron: { color: C.muted, fontSize: 27 },
+  chevron: { color: N.muted, fontSize: 27 },
 });

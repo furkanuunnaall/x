@@ -15,8 +15,10 @@ import {
 } from "phosphor-react-native";
 import { useGame } from "../store";
 import { badges, productOf } from "../product";
-import { C, GameCard, Label, ProgressBar, Shell, TopBar, s } from "../ui";
+import { GameCard, Label, ProgressBar, Shell, TopBar, useS } from "../ui";
 import { Props } from "../navigation";
+import { useTheme } from "../themeMode";
+import { colors as N } from "../theme";
 const icons: Record<string, Icon> = {
   first: FlagIcon,
   sharp: LightningIcon,
@@ -29,6 +31,9 @@ const icons: Record<string, Icon> = {
 export default function AchievementsScreen({
   navigation,
 }: Props<"Achievements">) {
+  const { C, sx } = useTheme();
+  const s = useS();
+  const a = sx(aN);
   const { game } = useGame(),
     p = productOf(game),
     list = badges(game);
@@ -105,6 +110,8 @@ function Emblem({
   unlocked: boolean;
   size: number;
 }) {
+  const { C, sx } = useTheme();
+  const a = sx(aN);
   const Glyph = icons[id] ?? StarIcon;
   const box = { width: size, height: size, borderRadius: size / 2 };
   return (
@@ -131,10 +138,10 @@ function Emblem({
     </View>
   );
 }
-const a = StyleSheet.create({
+const aN = StyleSheet.create({
   detail: { gap: 10, padding: 16 },
   detailRow: { flexDirection: "row", gap: 14, alignItems: "center" },
-  detailTitle: { color: C.ink, fontSize: 18, fontWeight: "800" },
+  detailTitle: { color: N.ink, fontSize: 18, fontWeight: "800" },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -150,30 +157,30 @@ const a = StyleSheet.create({
     borderWidth: 1,
     borderColor: "transparent",
   },
-  activeTile: { borderColor: C.gold, backgroundColor: "#CFAB4B14" },
+  activeTile: { borderColor: N.gold, backgroundColor: "#CFAB4B14" },
   emblem: {
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1.5,
   },
-  lockedEmblem: { backgroundColor: C.raised, borderColor: C.line },
+  lockedEmblem: { backgroundColor: N.raised, borderColor: N.line },
   lock: {
     position: "absolute",
     right: -2,
     bottom: -2,
     borderRadius: 99,
-    backgroundColor: C.panel,
+    backgroundColor: N.panel,
     borderWidth: 1,
-    borderColor: C.line,
+    borderColor: N.line,
     alignItems: "center",
     justifyContent: "center",
   },
   tileTitle: {
-    color: C.ink,
+    color: N.ink,
     fontSize: 11,
     fontWeight: "700",
     textAlign: "center",
     minHeight: 28,
   },
-  tileState: { color: C.muted, fontSize: 11, fontWeight: "800" },
+  tileState: { color: N.muted, fontSize: 11, fontWeight: "800" },
 });

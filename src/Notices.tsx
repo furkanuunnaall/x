@@ -7,9 +7,12 @@ import {
 import { Text } from "./AppText";
 import { useGame } from "./store";
 import { productOf } from "./product";
-import { Button, C, GameCard, Label, s } from "./ui";
-import { Seal } from "./art";
+import { Button, GameCard, Label, useS } from "./ui";
+import { SealCoin } from "./art";
+import { useTheme } from "./themeMode";
 export default function Notices() {
+  const { C, tc } = useTheme();
+  const s = useS();
   const { game, dispatch } = useGame(),
     p = productOf(game),
     n = p.notices[0];
@@ -57,7 +60,7 @@ export default function Notices() {
       <View
         style={{
           flex: 1,
-          backgroundColor: "#030917DD",
+          backgroundColor: tc("#030917DD"),
           justifyContent: "center",
           padding: 24,
         }}
@@ -72,7 +75,7 @@ export default function Notices() {
             alignSelf: "center",
           }}
         >
-          <Seal size={100} value="✦" />
+          <SealCoin size={100} />
           <Label>SEVİYE ATLADIN</Label>
           <Text style={s.hero}>{n.title}</Text>
           <Text style={s.gold}>+{n.amount} Mühür eklendi</Text>

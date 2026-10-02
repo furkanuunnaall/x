@@ -21,15 +21,9 @@ import { Text } from "../AppText";
 import { files } from "../content";
 import { useGame } from "../store";
 import { useReducedMotion } from "../motion";
-import {
-  Button,
-  C,
-  CurrencyBadge,
-  Label,
-  Shell,
-  Stars,
-  TopBar,
-} from "../ui";
+import { Button, CurrencyBadge, Label, Shell, Stars, TopBar } from "../ui";
+import { useTheme } from "../themeMode";
+import { colors as N } from "../theme";
 
 const TEAL = "#2FB39A";
 const ROAD = "#18233A";
@@ -47,6 +41,8 @@ export default function LevelMapScreen({
   onPlay: (file?: number) => void;
   onReward?: (file: number) => void;
 }) {
+  const { C, sx, light } = useTheme();
+  const m = sx(mN);
   const { game: g } = useGame();
   const [selectedFile, setSelectedFile] = useState(g.file);
   const positioned = useRef(false);
@@ -184,10 +180,10 @@ export default function LevelMapScreen({
           style={StyleSheet.absoluteFill}
           pointerEvents="none"
         >
-          <Path d={road} stroke="#0D1526" strokeWidth={38} fill="none" strokeLinecap="round" />
-          <Path d={road} stroke={ROAD} strokeWidth={30} fill="none" strokeLinecap="round" />
+          <Path d={road} stroke={light ? "#E3D3B2" : "#0D1526"} strokeWidth={38} fill="none" strokeLinecap="round" />
+          <Path d={road} stroke={light ? "#F3E9D6" : ROAD} strokeWidth={30} fill="none" strokeLinecap="round" />
           {[
-            [ahead, "#05080F"],
+            [ahead, light ? "#BFAE8E" : "#05080F"],
             [completed, TEAL],
           ].map(([d, color]) =>
             d ? (
@@ -273,6 +269,8 @@ function useLoop(duration: number) {
 }
 
 function HerePill() {
+  const { sx } = useTheme();
+  const m = sx(mN);
   const bob = useLoop(900);
   return (
     <Animated.View
@@ -292,6 +290,8 @@ function HerePill() {
 
 // The two gold rings breathe in turn, so the playable bölüm keeps drawing the eye.
 function Halos() {
+  const { sx } = useTheme();
+  const m = sx(mN);
   const pulse = useLoop(1100);
   const ring = (size: number, from: number, to: number, grow: number) => (
     <Animated.View
@@ -342,10 +342,12 @@ function MapNode({
   y: number;
   onPress?: () => void;
 }) {
+  const { C, sx, tc, tg } = useTheme();
+  const m = sx(mN);
   const final = kind === "final";
   const size = final ? 84 : state === "current" ? 88 : state === "done" ? 60 : 54;
-  const tone = state === "done" ? TEAL : state === "current" ? C.gold : "#2A3752";
-  const muted = "#5F6B85";
+  const tone = state === "done" ? TEAL : state === "current" ? C.gold : tc("#2A3752");
+  const muted = tc("#5F6B85", "text");
   const tag =
     kind === "final" ? "◆ FİNAL BÖLÜMÜ" : kind === "reward" ? "▣ ÖDÜL BÖLÜMÜ" : null;
   const label = `Bölüm ${id}, ${title}, ${
@@ -362,7 +364,7 @@ function MapNode({
   if (final)
     body = (
       <LinearGradient
-        colors={["#26324A", "#141C2C"]}
+        colors={tg(["#26324A", "#141C2C"])}
         style={[m.finalTile, { borderColor: tone, borderWidth: state === "locked" ? 1 : 2 }]}
       >
         <BankIcon size={28} weight="regular" color={state === "locked" ? muted : C.gold} />
@@ -396,7 +398,7 @@ function MapNode({
             width: size,
             height: size,
             borderRadius: size / 2,
-            backgroundColor: "#0E2B2E",
+            backgroundColor: tc("#0E2B2E"),
             borderColor: selected ? C.gold : TEAL,
             borderWidth: selected ? 3 : 2,
           },
@@ -411,7 +413,7 @@ function MapNode({
       <View
         style={[
           m.circle,
-          { width: size, height: size, borderRadius: size / 2, backgroundColor: "#141C2C", borderColor: "#253149" },
+          { width: size, height: size, borderRadius: size / 2, backgroundColor: tc("#141C2C"), borderColor: tc("#253149") },
         ]}
       >
         {kind === "reward" ? (
@@ -489,7 +491,7 @@ function MapNode({
   );
 }
 
-const m = StyleSheet.create({
+const mN = StyleSheet.create({
   summary: {
     flexDirection: "row",
     alignItems: "center",
@@ -510,7 +512,7 @@ const m = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  summaryText: { color: C.ink, fontSize: 13, fontWeight: "700" },
+  summaryText: { color: N.ink, fontSize: 13, fontWeight: "700" },
   summaryPill: {
     flexDirection: "row",
     alignItems: "baseline",
@@ -519,8 +521,8 @@ const m = StyleSheet.create({
     borderRadius: 99,
     backgroundColor: "#0B1426",
   },
-  summaryCount: { color: C.gold, fontSize: 17, fontWeight: "800" },
-  summaryTotal: { color: C.muted, fontSize: 12, fontWeight: "700" },
+  summaryCount: { color: N.gold, fontSize: 17, fontWeight: "800" },
+  summaryTotal: { color: N.muted, fontSize: 12, fontWeight: "700" },
   node: { position: "absolute", alignItems: "center", justifyContent: "center" },
   caption: { position: "absolute", top: 0, bottom: 0, justifyContent: "center", gap: 4 },
   circle: { alignItems: "center", justifyContent: "center", borderWidth: 1 },
@@ -546,7 +548,7 @@ const m = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  currentNumber: { color: C.gold, fontSize: 30, fontWeight: "800", lineHeight: 32 },
+  currentNumber: { color: N.gold, fontSize: 30, fontWeight: "800", lineHeight: 32 },
   here: { position: "absolute", top: -46, alignItems: "center", zIndex: 2 },
   // Speech-bubble tip pointing down at the bölüm.
   hereTip: {
@@ -582,11 +584,11 @@ const m = StyleSheet.create({
     borderColor: "#2A3752",
   },
   titleDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: TEAL },
-  titlePillText: { color: C.ink, fontSize: 15, fontWeight: "800" },
-  subline: { color: C.muted, fontSize: 11, fontWeight: "700" },
+  titlePillText: { color: N.ink, fontSize: 15, fontWeight: "800" },
+  subline: { color: N.muted, fontSize: 11, fontWeight: "700" },
   doneTitle: { color: "#C9D0DC", fontSize: 11, fontWeight: "700" },
   lockedText: { color: "#6B7693", fontSize: 11, fontWeight: "700" },
-  tag: { color: C.gold, fontSize: 10, fontWeight: "800", letterSpacing: 0.6 },
+  tag: { color: N.gold, fontSize: 10, fontWeight: "800", letterSpacing: 0.6 },
   finalTile: {
     width: 84,
     height: 84,
@@ -595,7 +597,7 @@ const m = StyleSheet.create({
     justifyContent: "center",
     gap: 4,
   },
-  finalLabel: { color: C.ink, fontSize: 10, fontWeight: "800", letterSpacing: 0.8 },
+  finalLabel: { color: N.ink, fontSize: 10, fontWeight: "800", letterSpacing: 0.8 },
   volume: {
     position: "absolute",
     left: 0,
@@ -615,12 +617,12 @@ const m = StyleSheet.create({
     borderRadius: 99,
     borderWidth: 1,
     borderColor: "#8A7842",
-    backgroundColor: C.panel,
+    backgroundColor: N.panel,
   },
-  volumeTitle: { color: C.gold, fontSize: 14, fontWeight: "800", letterSpacing: 2 },
-  volumeCount: { color: C.muted, fontSize: 12, fontWeight: "700" },
+  volumeTitle: { color: N.gold, fontSize: 14, fontWeight: "800", letterSpacing: 2 },
+  volumeCount: { color: N.muted, fontSize: 12, fontWeight: "700" },
   footRow: { flexDirection: "row", alignItems: "center", gap: 10 },
   footDot: { width: 10, height: 10, borderRadius: 5 },
-  footTitle: { color: C.ink, fontSize: 15, fontWeight: "800" },
-  footMuted: { color: C.muted, fontSize: 13, fontWeight: "600" },
+  footTitle: { color: N.ink, fontSize: 15, fontWeight: "800" },
+  footMuted: { color: N.muted, fontSize: 13, fontWeight: "600" },
 });

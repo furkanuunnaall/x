@@ -1,17 +1,22 @@
 import React, { useState } from "react";
 import {
   Modal,
+  Pressable,
   Switch,
   View,
 } from "react-native";
+import { CaretRightIcon, CircleHalfIcon, InfoIcon, MoonIcon, SunIcon } from "phosphor-react-native";
 import { Text } from "../AppText";
 import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
-import { productOf, Settings } from "../product";
-import { Button, C, GameCard, Label, Shell, TopBar, s } from "../ui";
+import { productOf, ThemeMode } from "../product";
+import { Button, GameCard, Label, Shell, TopBar, useS } from "../ui";
 import { Props } from "../navigation";
 import { useFeedback } from "../feedback";
+import { useTheme } from "../themeMode";
 export default function SettingsScreen({ navigation }: Props<"Settings">) {
+  const { C, tc } = useTheme();
+  const s = useS();
   const { game, dispatch, reset } = useGame(),
     discovery = useDiscovery(),
     p = productOf(game),
@@ -31,20 +36,74 @@ export default function SettingsScreen({ navigation }: Props<"Settings">) {
   }
   return (
     <Shell header={<TopBar title="Ayarlar" back={() => navigation.goBack()} />}>
-      <GameCard style={{ gap: 24 }}>
+      <GameCard style={{ gap: 10, padding: 16 }}>
+        <Label>GÖRÜNÜM</Label>
+        <View
+          accessibilityRole="radiogroup"
+          style={{
+            flexDirection: "row",
+            gap: 4,
+            padding: 4,
+            borderRadius: 14,
+            backgroundColor: C.raised,
+          }}
+        >
+          {(
+            [
+              ["dark", "Gece", MoonIcon],
+              ["light", "Gündüz", SunIcon],
+              ["auto", "Otomatik", CircleHalfIcon],
+            ] as const
+          ).map(([mode, label, Icon]) => {
+            const on = p.settings.theme === mode;
+            return (
+              <Pressable
+                key={mode}
+                accessibilityRole="radio"
+                accessibilityLabel={`Tema: ${label}`}
+                accessibilityState={{ checked: on }}
+                onPress={() =>
+                  dispatch({ type: "setting", key: "theme", value: mode as ThemeMode })
+                }
+                style={{
+                  flex: 1,
+                  minHeight: 44,
+                  borderRadius: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                  backgroundColor: on ? C.panel : "transparent",
+                  borderWidth: on ? 1 : 0,
+                  borderColor: C.gold,
+                }}
+              >
+                <Icon size={16} weight={on ? "fill" : "regular"} color={on ? C.gold : C.muted} />
+                <Text style={[s.small, { fontWeight: "800", color: on ? C.ink : C.muted }]}>
+                  {label}
+                </Text>
+              </Pressable>
+            );
+          })}
+        </View>
+        <Text style={s.small}>
+          Otomatik: 07:00–19:00 arası gündüz, sonrası gece.
+        </Text>
+      </GameCard>
+      <GameCard style={{ gap: 20 }}>
         {(
           [
             ["sound", "Ses efektleri"],
             ["vibration", "Titreşim"],
             ["reduceMotion", "Animasyonları azalt"],
-          ] as [keyof Settings, string][]
+          ] as ["sound" | "vibration" | "reduceMotion", string][]
         ).map(([key, label]) => (
           <View key={key} style={s.between}>
             <Text style={[s.text, { flex: 1 }]}>{label}</Text>
             <Switch
               accessibilityLabel={label}
               value={p.settings[key]}
-              trackColor={{ false: C.raised, true: "#79692F" }}
+              trackColor={{ false: C.raised, true: tc("#79692F") }}
               thumbColor={p.settings[key] ? C.gold : C.muted}
               onValueChange={(value) =>
                 dispatch({ type: "setting", key, value })
@@ -58,16 +117,18 @@ export default function SettingsScreen({ navigation }: Props<"Settings">) {
         title="SES VE TİTREŞİMİ DENE"
         onPress={() => test(true)}
       />
-      <GameCard style={{ gap: 12 }}>
-        <Label>HAKKINDA · MÜHÜR V1</Label>
-        <Text style={s.text}>
-          Hukuk kavramlarıyla oynanan bağımsız bir kelime oyunu.
-        </Text>
-        <Text style={s.muted}>
-          Kurgusal karakterler, 30 bölüm ve günlük keşifler. İlerleme bu cihazda
-          saklanır. İçerik oyun amaçlı kısa tanımlardan oluşur.
-        </Text>
-      </GameCard>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel="Hakkında"
+        onPress={() => navigation.navigate("About")}
+        style={({ pressed }) => pressed && { opacity: 0.75 }}
+      >
+        <GameCard style={{ flexDirection: "row", alignItems: "center", gap: 12, padding: 16 }}>
+          <InfoIcon size={24} weight="regular" color={C.gold} />
+          <Text style={[s.text, { flex: 1, fontWeight: "800" }]}>Hakkında</Text>
+          <CaretRightIcon size={18} weight="bold" color={C.muted} />
+        </GameCard>
+      </Pressable>
       <Button
         secondary
         title="OYUN VERİSİNİ SIFIRLA"
@@ -86,7 +147,7 @@ export default function SettingsScreen({ navigation }: Props<"Settings">) {
         <View
           style={{
             flex: 1,
-            backgroundColor: "#030917DD",
+            backgroundColor: tc("#030917DD"),
             justifyContent: "center",
             padding: 24,
           }}

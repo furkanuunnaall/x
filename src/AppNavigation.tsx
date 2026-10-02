@@ -5,16 +5,21 @@ import {
   View,
 } from "react-native";
 import { logoFont, Text } from "./AppText";
-import { NavigationContainer, DarkTheme } from "@react-navigation/native";
+import {
+  NavigationContainer,
+  DarkTheme,
+  DefaultTheme,
+} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGame } from "./store";
 import { productOf } from "./product";
-import { Button, C, s } from "./ui";
+import { Button, useS } from "./ui";
 import { Routes } from "./navigation";
 import Home from "./screens/Home";
 import GameScreen from "./screens/GameScreen";
 import ResultScreen from "./screens/ResultScreen";
+import AboutScreen from "./screens/AboutScreen";
 import Profile from "./screens/Profile";
 import ExploreScreen from "./screens/ExploreScreen";
 import OnboardingScreen from "./screens/OnboardingScreen";
@@ -29,8 +34,11 @@ import MilestoneScreen from "./screens/MilestoneScreen";
 import SettingsScreen from "./screens/SettingsScreen";
 import NameScreen from "./screens/NameScreen";
 import Notices from "./Notices";
+import { useTheme } from "./themeMode";
 const Stack = createNativeStackNavigator<Routes>();
 export default function AppNavigation() {
+  const { C, light } = useTheme();
+  const s = useS();
   const { game, ready, error, retry } = useGame(),
     p = productOf(game);
   if (!ready)
@@ -69,8 +77,11 @@ export default function AppNavigation() {
   return (
     <NavigationContainer
       theme={{
-        ...DarkTheme,
-        colors: { ...DarkTheme.colors, background: C.bg },
+        ...(light ? DefaultTheme : DarkTheme),
+        colors: {
+          ...(light ? DefaultTheme : DarkTheme).colors,
+          background: C.bg,
+        },
       }}
     >
       <View style={{ flex: 1 }}>
@@ -115,6 +126,7 @@ export default function AppNavigation() {
                 component={AchievementsScreen}
               />
               <Stack.Screen name="Settings" component={SettingsScreen} />
+              <Stack.Screen name="About" component={AboutScreen} />
               <Stack.Screen name="FinalIntro" component={FinalIntroScreen} />
               <Stack.Screen name="Milestone" component={MilestoneScreen} />
             </Stack.Group>

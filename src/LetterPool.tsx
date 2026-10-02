@@ -2,7 +2,9 @@ import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Text } from "./AppText";
 import { poolTiles } from "./poolTiles";
-import { colors as C, radius } from "./theme";
+import { radius } from "./theme";
+import { useTheme } from "./themeMode";
+import { colors as N } from "./theme";
 
 /** Shuffled answer letters plus three decoys; tapping a tile appends its letter. */
 export function LetterPool({
@@ -20,6 +22,8 @@ export function LetterPool({
   disabled?: boolean;
   onLetter: (letter: string) => void;
 }) {
+  const { C, sx } = useTheme();
+  const styles = sx(stylesN);
   return (
     <View accessibilityLabel="Harf havuzu" style={styles.pool}>
       {poolTiles(term, seed, draft).map((tile) => {
@@ -57,7 +61,7 @@ export function LetterPool({
   );
 }
 
-const styles = StyleSheet.create({
+const stylesN = StyleSheet.create({
   pool: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -65,14 +69,14 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   tile: {
-    backgroundColor: C.raised,
+    backgroundColor: N.raised,
     borderRadius: radius.sm,
     borderBottomWidth: 3,
     borderColor: "#111C32",
     alignItems: "center",
     justifyContent: "center",
   },
-  used: { backgroundColor: C.bg, opacity: 0.35 },
-  pressed: { backgroundColor: C.gold, transform: [{ scale: 0.95 }] },
-  letter: { color: C.ink, fontWeight: "800" },
+  used: { backgroundColor: N.bg, opacity: 0.35 },
+  pressed: { backgroundColor: N.gold, transform: [{ scale: 0.95 }] },
+  letter: { color: N.ink, fontWeight: "800" },
 });

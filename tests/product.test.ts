@@ -16,6 +16,7 @@ import {
   knownTerms,
   playerLevel,
   productOf,
+  stampBoard,
 } from "../src/product";
 const date = new Date(2026, 8, 21, 12);
 function solve(g: Game, id: string, term: string, at = date) {
@@ -255,4 +256,50 @@ test("terms solved in the daily puzzle join the concept collection", () => {
   assert.ok(terms.every((id) => collection.includes(id)));
   assert.ok(terms.every((id) => knownTerms(g).some((q) => q.id === id)));
   assert.equal(unlockedQuestions(initialGame()).length, 0);
+});
+test("theme setting defaults to night, persists, and rejects unknown modes", () => {
+  let g = initialGame();
+  assert.equal(productOf(g).settings.theme, "dark");
+  g = reducer(g, { type: "setting", key: "theme", value: "auto" });
+  g = parseSave(JSON.stringify(g));
+  assert.equal(productOf(g).settings.theme, "auto");
+  const legacy = initialGame();
+  legacy.product!.settings = { sound: true, vibration: true, reduceMotion: false } as any;
+  assert.equal(productOf(parseSave(JSON.stringify(legacy))).settings.theme, "dark");
+  legacy.product!.settings = { ...legacy.product!.settings, theme: "sepia" } as any;
+  assert.throws(() => parseSave(JSON.stringify(legacy)));
+});
+
+test("streak screens are remembered once per day and old saves get defaults", () => {
+  let g = initialGame();
+  assert.equal(productOf(g).streakSeen, null);
+  g = reducer(g, { type: "streak-seen", kind: "kept", day: "2026-10-02" });
+  g = reducer(g, { type: "streak-seen", kind: "lost", day: "2026-09-28" });
+  g = parseSave(JSON.stringify(g));
+  assert.equal(productOf(g).streakSeen, "2026-10-02");
+  assert.equal(productOf(g).streakLossSeen, "2026-09-28");
+  const legacy = initialGame();
+  delete (legacy.product as any).streakSeen;
+  assert.equal(productOf(parseSave(JSON.stringify(legacy))).streakSeen, null);
+  legacy.product!.streakLossSeen = "dün" as any;
+  assert.throws(() => parseSave(JSON.stringify(legacy)));
+});
+
+test("daily envelopes: one pick per day, fixed board, jackpot always present", () => {
+  let g = initialGame();
+  const before = g.seals;
+  const date = new Date(2026, 9, 2, 10);
+  const board = stampBoard("2026-10-02");
+  assert.deepEqual([...board].sort((a, b) => a - b), [15, 15, 15, 20, 25, 25, 40, 60, 100]);
+  assert.deepEqual(stampBoard("2026-10-02"), board);
+  assert.notDeepEqual(stampBoard("2026-10-03"), board);
+  g = reducer(g, { type: "daily-stamp", index: 4, date });
+  assert.equal(g.seals, before + board[4]);
+  assert.deepEqual(productOf(g).dailyStamp, { day: "2026-10-02", index: 4, amount: board[4] });
+  assert.equal(reducer(g, { type: "daily-stamp", index: 0, date }).seals, before + board[4]);
+  assert.equal(reducer(initialGame(), { type: "daily-stamp", index: 9, date }).seals, before);
+  g = parseSave(JSON.stringify(g));
+  assert.equal(productOf(g).dailyStamp?.index, 4);
+  g.product!.dailyStamp = { day: "2026-10-02", index: 4, amount: 999 };
+  assert.throws(() => parseSave(JSON.stringify(g)));
 });

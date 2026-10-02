@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Pressable,
@@ -23,14 +23,18 @@ import {
 } from "phosphor-react-native";
 import { useGame } from "../store";
 import { dailyNow, dayKey, entry } from "../game";
+import { StreakModal } from "../StreakModal";
+import { DailyStampModal, StampButton } from "../DailyStamp";
 import { useReducedMotion } from "../motion";
 import { files } from "../content";
 import { Props } from "../navigation";
 import { C as Palette, CurrencyBadge, ProgressBar } from "../homeUi";
 import { LivingBackground } from "../LivingBackground";
+import { courtyard } from "../art";
 import { useDiscovery } from "../discovery/store";
 import { Avatar } from "../character";
 import { productOf, newTaskDay, playerName } from "../product";
+import { useTheme } from "../themeMode";
 
 const C = { ...Palette, ink: "#FFF8EA", muted: "#D9D3C7", gold: "#F6CE50" };
 const months = [
@@ -48,7 +52,9 @@ const months = [
   "ARALIK",
 ];
 export default function Home({ navigation }: Props<"Home">) {
-  const { game: g, error, retry } = useGame();
+  const { sx, tc, tg, light } = useTheme();
+  const h = sx(hN);
+  const { game: g, error, retry, dispatch } = useGame();
   const { day } = useDiscovery();
   const { height, width, fontScale } = useWindowDimensions();
   const p = productOf(g),
@@ -68,12 +74,34 @@ export default function Home({ navigation }: Props<"Home">) {
     navigation.navigate(
       result ? "Result" : g.file % 10 === 0 ? "FinalIntro" : "Game",
     );
+  // A streak that ended before yesterday is announced once, on the first visit after it broke.
+  const lost = g.daily > 0 && g.lastDay !== null && dailyNow(g) === 0 && p.streakLossSeen !== g.lastDay;
+  // Tapping İSTİKRAR opens the same screen on demand.
+  const [streakOpen, setStreakOpen] = useState(false);
+  const [stampOpen, setStampOpen] = useState(false);
   return (
     <View style={h.screen}>
-      <LivingBackground source={require("../../assets/courtyard.png")} />
+      {lost || streakOpen ? (
+        <StreakModal
+          game={g}
+          onClose={() => {
+            setStreakOpen(false);
+            if (lost) dispatch({ type: "streak-seen", kind: "lost", day: g.lastDay! });
+          }}
+        />
+      ) : null}
+      {stampOpen ? <DailyStampModal onClose={() => setStampOpen(false)} /> : null}
+      <LivingBackground
+        source={light ? courtyard.morning : courtyard.night}
+        morning={light}
+      />
       <LinearGradient
         pointerEvents="none"
-        colors={["#08132977", "#10244322", "#08122599", "#081225F5"]}
+        colors={
+          light
+            ? ["#FFFFFF00", "#FFFFFF00", "#FFF8EC1A", "#FFF8ECB3"]
+            : ["#08132977", "#10244322", "#08122599", "#081225F5"]
+        }
         locations={[0, 0.35, 0.65, 1]}
         style={StyleSheet.absoluteFill}
       />
@@ -87,7 +115,12 @@ export default function Home({ navigation }: Props<"Home">) {
         >
           <View style={h.top}>
             <CurrencyBadge amount={g.seals} />
-            <Streak days={dailyNow(g)} lit={g.lastDay === dayKey()} />
+            <StampButton onPress={() => setStampOpen(true)} />
+            <Streak
+              days={dailyNow(g)}
+              lit={g.lastDay === dayKey()}
+              onPress={() => setStreakOpen(true)}
+            />
           </View>
           {error ? (
             <Pressable accessibilityRole="button" onPress={retry}>
@@ -126,14 +159,14 @@ export default function Home({ navigation }: Props<"Home">) {
             <View style={[h.rail, tight && { gap: 8 }]}>
               <Shortcut
                 title="GÜNLÜK GÖREVLER"
-                icon={<TargetIcon size={32} weight="regular" color="#FFE09A" />}
+                icon={<TargetIcon size={32} weight="regular" color={tc("#FFE09A", "text")} />}
                 detail={`${tasks.claimed.length}/3`}
                 label="Günlük görevleri aç"
                 onPress={() => navigation.navigate("Tasks")}
               />
               <Shortcut
                 title="ROZETLER"
-                icon={<MedalIcon size={32} weight="regular" color="#FFE09A" />}
+                icon={<MedalIcon size={32} weight="regular" color={tc("#FFE09A", "text")} />}
                 label="Başarımları aç"
                 onPress={() => navigation.navigate("Achievements")}
               />
@@ -144,7 +177,7 @@ export default function Home({ navigation }: Props<"Home">) {
               style={h.journey}
             >
               <LinearGradient
-                colors={["#D2B77233", "#102448CC", "#142445DD"]}
+                colors={tg(["#D2B77233", "#102448CC", "#142445DD"])}
                 style={[
                   h.orbit,
                   compact && { minHeight: 176, paddingVertical: 14 },
@@ -166,7 +199,7 @@ export default function Home({ navigation }: Props<"Home">) {
             <View style={[h.rail, tight && { gap: 8 }]}>
               <Shortcut
                 title="KAVRAMLAR"
-                icon={<BookOpenTextIcon size={32} weight="regular" color="#FFE09A" />}
+                icon={<BookOpenTextIcon size={32} weight="regular" color={tc("#FFE09A", "text")} />}
                 label="Kavram koleksiyonunu aç"
                 onPress={() =>
                   navigation.navigate("Explore", { tab: "collection" })
@@ -174,15 +207,15 @@ export default function Home({ navigation }: Props<"Home">) {
               />
               <Shortcut
                 title="HARİTA"
-                icon={<MapTrifoldIcon size={32} weight="regular" color="#FFE09A" />}
+                icon={<MapTrifoldIcon size={32} weight="regular" color={tc("#FFE09A", "text")} />}
                 label="Bölüm haritasını aç"
                 onPress={() => navigation.navigate("Map")}
               />
             </View>
           </View>
           <View style={h.playArea}>
-            <View style={h.progress}>
-              <Text style={h.progressText}>
+            <View style={[h.progress, light && dayProgress]}>
+              <Text style={[h.progressText, light && dayProgressText]}>
                 {result
                   ? "BÖLÜM TAMAMLANDI"
                   : `${count} / ${current.questions.length} KAVRAM ÇÖZÜLDÜ`}
@@ -193,25 +226,33 @@ export default function Home({ navigation }: Props<"Home">) {
               accessibilityRole="button"
               accessibilityLabel={`Bölüm ${g.file}: ${caption.toLocaleLowerCase("tr-TR")}`}
               onPress={go}
-              style={({ pressed }) => [
-                h.playButton,
-                pressed && {
-                  transform: [{ translateY: 3 }],
-                  borderBottomWidth: 2,
-                },
-              ]}
+              style={hN.playButton}
             >
-              <LinearGradient
-                colors={["#14A874", "#08805A", "#05593F"]}
-                style={[h.playGradient, tight && { paddingVertical: 8 }]}
-              >
-                <Text style={h.playCaption}>
-                  {caption}
-                </Text>
-                <Text style={[h.playText, tight && { fontSize: 23 }]}>
-                  BÖLÜM {g.file} ›
-                </Text>
-              </LinearGradient>
+              {({ pressed }) => (
+                <>
+                  {/* The 3D edge is its own layer: iOS draws uneven border widths on rounded corners badly. */}
+                  <View style={[hN.playBase, light && dayPlayBase]} />
+                  <View
+                    style={[
+                      hN.playFace,
+                      // By day the dark green rim gives way to a cream edge on a gold base.
+                      light && dayPlayFace,
+                      pressed && { transform: [{ translateY: 4 }] },
+                    ]}
+                  >
+                    <LinearGradient
+                      colors={["#14A874", "#08805A", "#05593F"]}
+                      style={[h.playGradient, tight && { paddingVertical: 8 }]}
+                    >
+                      {/* The emerald button looks the same in both themes, so its text keeps night colours. */}
+                      <Text style={hN.playCaption}>{caption}</Text>
+                      <Text style={[hN.playText, tight && { fontSize: 23 }]}>
+                        BÖLÜM {g.file} ›
+                      </Text>
+                    </LinearGradient>
+                  </View>
+                </>
+              )}
             </Pressable>
             <Pressable
               accessibilityRole="button"
@@ -273,7 +314,7 @@ export default function Home({ navigation }: Props<"Home">) {
                 pressed && { transform: [{ scale: 0.94 }] },
               ]}
             >
-              <GearSixIcon size={24} weight="regular" color={C.ink} />
+              <GearSixIcon size={24} weight="regular" color={tc(C.ink, "text")} />
             </Pressable>
           </View>
         </View>
@@ -282,7 +323,9 @@ export default function Home({ navigation }: Props<"Home">) {
   );
 }
 // Unlit until a bölüm is finished today; until then an hourglass shows the day is still open.
-function Streak({ days, lit }: { days: number; lit: boolean }) {
+function Streak({ days, lit, onPress }: { days: number; lit: boolean; onPress: () => void }) {
+  const { sx, tc } = useTheme();
+  const h = sx(hN);
   const reduced = useReducedMotion();
   const pulse = useRef(new Animated.Value(0)).current;
   useEffect(() => {
@@ -310,10 +353,11 @@ function Streak({ days, lit }: { days: number; lit: boolean }) {
     outputRange: [1, lit ? 1.08 : 1.15],
   });
   return (
-    <View
-      accessible
-      accessibilityLabel={`${days} günlük istikrar, ${lit ? "bugün tamamlandı" : "bugün henüz bölüm bitirmedin"}`}
-      style={[h.streak, lit && h.streakLit]}
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${days} günlük istikrar, ${lit ? "bugün tamamlandı" : "bugün henüz bölüm bitirmedin"}. Ayrıntıları aç`}
+      onPress={onPress}
+      style={({ pressed }) => [h.streak, lit && h.streakLit, pressed && { opacity: 0.75 }]}
     >
       <Animated.View
         style={[
@@ -323,12 +367,12 @@ function Streak({ days, lit }: { days: number; lit: boolean }) {
       >
         <FlameIcon size={22} weight="fill" color={lit ? "#FF9F43" : "#7D8AA3"} />
       </Animated.View>
-      <Text style={[h.streakValue, !lit && { color: "#C9D0DC" }]}>{days}</Text>
+      <Text style={[h.streakValue, !lit && { color: tc("#C9D0DC", "text") }]}>{days}</Text>
       {lit ? null : (
         <HourglassMediumIcon size={16} weight="fill" color="#FFB86B" />
       )}
-      <Text style={[h.streakLabel, lit && { color: "#FFC98A" }]}>İSTİKRAR</Text>
-    </View>
+      <Text style={[h.streakLabel, lit && { color: tc("#FFC98A", "text") }]}>İSTİKRAR</Text>
+    </Pressable>
   );
 }
 function Shortcut({
@@ -344,6 +388,8 @@ function Shortcut({
   label: string;
   onPress: () => void;
 }) {
+  const { sx, tg, tc } = useTheme();
+  const h = sx(hN);
   return (
     <Pressable
       accessibilityRole="button"
@@ -358,7 +404,7 @@ function Shortcut({
           gradient view's children to its rounded bounds. */}
       <View>
         <LinearGradient
-          colors={["#526888", "#20314C", "#10213B"]}
+          colors={tg(["#526888", "#20314C", "#10213B"])}
           style={h.shortcutOrb}
         >
           {typeof icon === "string" ? (
@@ -379,7 +425,24 @@ function Shortcut({
     </Pressable>
   );
 }
-const h = StyleSheet.create({
+const dayPlayFace = { borderColor: "#FFF4D6" };
+const dayPlayBase = { backgroundColor: "#C9A04A", shadowColor: "#B98A2E", shadowOpacity: 0.35 };
+// By day the progress caption sits in a cream glass pill so it reads over the bright courtyard.
+const dayProgress = {
+  backgroundColor: "#FFF8ECE0",
+  borderWidth: 1,
+  borderColor: "#C9A04A",
+  borderRadius: 999,
+  paddingHorizontal: 16,
+  paddingVertical: 8,
+  shadowColor: "#5A4630",
+  shadowOpacity: 0.18,
+  shadowRadius: 8,
+  shadowOffset: { width: 0, height: 3 },
+  elevation: 3,
+};
+const dayProgressText = { fontSize: 11, fontWeight: "800" as const };
+const hN = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#0B1830" },
   content: {
     flex: 1,
@@ -543,16 +606,27 @@ const h = StyleSheet.create({
     letterSpacing: 1,
     fontWeight: "700",
   },
-  playButton: {
+  playButton: { paddingBottom: 5 },
+  playBase: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 6,
+    bottom: 0,
     borderRadius: 40,
-    borderWidth: 2,
-    borderBottomWidth: 6,
-    borderColor: "#023826",
-    overflow: "hidden",
+    backgroundColor: "#023826",
     shadowColor: "#EAB640",
     shadowRadius: 18,
     shadowOpacity: 0.3,
     shadowOffset: { width: 0, height: 4 },
+    elevation: 6,
+  },
+  playFace: {
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: "#023826",
+    overflow: "hidden",
+    elevation: 7,
   },
   playGradient: {
     paddingVertical: 13,

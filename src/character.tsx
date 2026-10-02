@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, ImageSourcePropType, View } from "react-native";
-import { C } from "./ui";
 import { Gender, Role } from "./product";
+import { useTheme } from "./themeMode";
 const portraits = {
   Kadın: require("../assets/characters/woman.png"),
   Erkek: require("../assets/characters/man.png"),
@@ -11,7 +11,7 @@ export function Avatar({
   role,
   size = 64,
   source,
-  borderColor = C.gold,
+  borderColor,
 }: {
   gender: Gender | null;
   role: Role | null;
@@ -19,6 +19,8 @@ export function Avatar({
   source?: ImageSourcePropType;
   borderColor?: string;
 }) {
+  const { C } = useTheme();
+  borderColor ??= C.gold;
   return (
     <View
       style={{

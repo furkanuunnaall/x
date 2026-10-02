@@ -1,14 +1,21 @@
-import { Seal } from "../art";
+import { SealCoin } from "../art";
 import React, { useRef, useEffect } from "react";
 import { Animated, StyleSheet, View } from "react-native";
 import { Text } from "../AppText";
 import { useGame } from "../store";
 import { productOf } from "../product";
+import { dayKey } from "../game";
+import { StreakModal } from "../StreakModal";
 import { files } from "../content";
 import { Props } from "../navigation";
-import { Button, GameCard, Label, Shell, Stars, TopBar, C, s } from "../ui";
+import { Button, GameCard, Label, Shell, Stars, TopBar, useS } from "../ui";
 import { Reveal, useReducedMotion } from "../motion";
+import { useTheme } from "../themeMode";
+import { colors as N } from "../theme";
 export default function ResultScreen({ navigation }: Props<"Result">) {
+  const { C, sx } = useTheme();
+  const s = useS();
+  const v = sx(vN);
   const { game: g, dispatch } = useGame();
   const stamp = useRef(new Animated.Value(1)).current;
   const reduced = useReducedMotion();
@@ -54,6 +61,13 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
   return (
     <Shell>
       <View style={v.body}>
+        {/* The first bölüm finished today extends the streak; celebrate it once. */}
+        {g.lastDay === dayKey() && productOf(g).streakSeen !== g.lastDay ? (
+          <StreakModal
+            game={g}
+            onClose={() => dispatch({ type: "streak-seen", kind: "kept", day: g.lastDay! })}
+          />
+        ) : null}
         <TopBar
           title={`${final ? "Final Bölümü" : "Bölüm"} ${String(g.file).padStart(2, "0")}`}
           back={() => navigation.popTo("Home")}
@@ -61,7 +75,7 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
         <Reveal>
           <View style={v.hero}>
             <Animated.View style={[v.stamp, { transform: [{ scale: stamp }] }]}>
-              <Seal size={62} value={final ? "◆" : r.sealed ? "✓" : "M"} />
+              <SealCoin size={62} value={final ? "◆" : r.sealed ? "✓" : "M"} />
             </Animated.View>
             <Label>
               {r.sealed ? "MÜHRÜNÜ BIRAKTIN" : "BÜTÜN KAVRAMLAR ÇÖZÜLDÜ"}
@@ -125,21 +139,21 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
     </Shell>
   );
 }
-const v = StyleSheet.create({
+const vN = StyleSheet.create({
   body: { gap: 12 },
   hero: { alignItems: "center", gap: 8, paddingVertical: 4 },
   stamp: {
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: C.panel,
+    backgroundColor: N.panel,
     borderWidth: 2,
-    borderColor: C.gold,
+    borderColor: N.gold,
     justifyContent: "center",
     alignItems: "center",
   },
   title: {
-    color: C.ink,
+    color: N.ink,
     fontSize: 24,
     fontWeight: "800",
     textAlign: "center",
@@ -152,7 +166,7 @@ const v = StyleSheet.create({
     rowGap: 12,
   },
   stat: { width: "33.33%", alignItems: "center", gap: 2 },
-  statValue: { color: C.ink, fontSize: 19, fontWeight: "800" },
-  statLabel: { color: C.muted, fontSize: 11 },
+  statValue: { color: N.ink, fontSize: 19, fontWeight: "800" },
+  statLabel: { color: N.muted, fontSize: 11 },
   row: { flexDirection: "row", gap: 10 },
 });

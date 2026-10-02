@@ -4,18 +4,14 @@ import { Text } from "../AppText";
 import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
 import { newTaskDay, productOf, taskDefinitions, taskValues } from "../product";
-import {
-  Button,
-  C,
-  GameCard,
-  Label,
-  ProgressBar,
-  Shell,
-  TopBar,
-  s,
-} from "../ui";
+import { Button, GameCard, Label, ProgressBar, Shell, TopBar, useS } from "../ui";
 import { Props } from "../navigation";
+import { useTheme } from "../themeMode";
+import { colors as N } from "../theme";
 export default function TasksScreen({ navigation }: Props<"Tasks">) {
+  const { C, sx } = useTheme();
+  const s = useS();
+  const k = sx(kN);
   const { game, dispatch } = useGame(),
     { day } = useDiscovery(),
     t = productOf(game).dailyTasks[day] ?? newTaskDay(),
@@ -77,8 +73,8 @@ export default function TasksScreen({ navigation }: Props<"Tasks">) {
     </Shell>
   );
 }
-const k = StyleSheet.create({
-  title: { color: C.ink, fontSize: 24, fontWeight: "800" },
+const kN = StyleSheet.create({
+  title: { color: N.ink, fontSize: 24, fontWeight: "800" },
   task: {
     flexDirection: "row",
     alignItems: "center",
@@ -86,7 +82,7 @@ const k = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 16,
   },
-  taskTitle: { color: C.ink, fontSize: 15, fontWeight: "700", flexShrink: 1 },
-  count: { color: C.gold, fontSize: 14, fontWeight: "800" },
-  bonus: { color: C.ink, fontSize: 22, fontWeight: "800" },
+  taskTitle: { color: N.ink, fontSize: 15, fontWeight: "700", flexShrink: 1 },
+  count: { color: N.gold, fontSize: 14, fontWeight: "800" },
+  bonus: { color: N.ink, fontSize: 22, fontWeight: "800" },
 });

@@ -3,13 +3,15 @@ import { View } from "react-native";
 import { Text } from "../AppText";
 import { useGame } from "../store";
 import { productOf } from "../product";
-import { Button, GameCard, Label, Shell, TopBar, s } from "../ui";
-import { Seal } from "../art";
+import { Button, GameCard, Label, Shell, TopBar, useS } from "../ui";
+import { SealCoin } from "../art";
 import { Props } from "../navigation";
+import { useTheme } from "../themeMode";
 export default function MilestoneScreen({
   navigation,
   route,
 }: Props<"Milestone">) {
+  const s = useS();
   const { game, dispatch } = useGame(),
     file = route.params.file,
     eligible = game.results.some((r) => r.file === file) && file % 5 === 0,
@@ -19,7 +21,7 @@ export default function MilestoneScreen({
       <View style={{ gap: 10 }}>
         <TopBar title="Kilometre taşı" back={() => navigation.goBack()} />
         <View style={{ alignItems: "center", paddingVertical: 6 }}>
-          <Seal size={88} value="✦" />
+          <SealCoin size={88} />
         </View>
         <Label>BÖLÜM {file} TAMAMLANDI</Label>
         <Text style={[s.hero, { fontSize: 26, lineHeight: 32 }]}>

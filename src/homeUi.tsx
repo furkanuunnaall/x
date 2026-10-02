@@ -6,8 +6,11 @@ import {
 import { Text } from "./AppText";
 import { SealCoin } from "./art";
 import { colors as C, spacing, radius, typography, shadows } from "./homeTheme";
+import { useTheme } from "./themeMode";
 export { C };
 export function CurrencyBadge({ amount }: { amount: number }) {
+  const { sx } = useTheme();
+  const s = sx(sN);
   return (
     <View accessibilityLabel={`${amount} Mühür`} style={s.currency}>
       <SealCoin size={26} />
@@ -23,6 +26,8 @@ export function ProgressBar({
   value: number;
   total?: number;
 }) {
+  const { sx } = useTheme();
+  const s = sx(sN);
   return (
     <View
       accessibilityRole="progressbar"
@@ -39,7 +44,7 @@ export function ProgressBar({
   );
 }
 
-const s = StyleSheet.create({
+const sN = StyleSheet.create({
   // Same dark glass pill as the streak badge, so the two top badges read as a pair.
   currency: {
     flexDirection: "row",

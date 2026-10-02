@@ -5,11 +5,16 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useGame } from "../store";
 import { characters, Gender, productOf, Role, playerName } from "../product";
 import { Avatar } from "../character";
-import { Button, C, Label, Shell, TopBar, s } from "../ui";
+import { Button, Label, Shell, TopBar, useS } from "../ui";
 import { Props } from "../navigation";
+import { useTheme } from "../themeMode";
+import { colors as N } from "../theme";
 export default function CharacterSelectionScreen({
   navigation,
 }: Props<"Character">) {
+  const { sx, tg } = useTheme();
+  const s = useS();
+  const v = sx(vN);
   const { game, dispatch } = useGame(),
     p = productOf(game);
   const [gender, setGender] = useState<Gender>(p.selectedGender ?? "Kadın");
@@ -57,7 +62,7 @@ export default function CharacterSelectionScreen({
           </View>
         </View>
         <LinearGradient
-          colors={["#25344B", "#1C2A40", "#14223A"]}
+          colors={tg(["#25344B", "#1C2A40", "#14223A"])}
           style={v.preview}
         >
           <View style={v.previewRow}>
@@ -72,9 +77,6 @@ export default function CharacterSelectionScreen({
               <Text style={v.name}>{playerName(game)}</Text>
               <Text style={v.detail}>{c.detail}</Text>
             </View>
-          </View>
-          <View style={v.previewFoot}>
-            <Text style={v.themeName}>{c.name} karakterinden ilhamla</Text>
           </View>
         </LinearGradient>
         <Button
@@ -102,6 +104,8 @@ function Choice({
   selected: boolean;
   onPress: () => void;
 }) {
+  const { C, sx } = useTheme();
+  const v = sx(vN);
   return (
     <Pressable
       accessibilityRole="radio"
@@ -123,7 +127,7 @@ function Choice({
     </Pressable>
   );
 }
-const v = StyleSheet.create({
+const vN = StyleSheet.create({
   body: { gap: 12 },
   section: { gap: 8 },
   sectionHeader: {
@@ -137,7 +141,7 @@ const v = StyleSheet.create({
     flex: 1,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: C.line,
+    borderColor: N.line,
     backgroundColor: "#1B2C46",
     alignItems: "center",
     justifyContent: "center",
@@ -145,14 +149,14 @@ const v = StyleSheet.create({
   },
   genderChoice: { minHeight: 46 },
   roleChoice: { minHeight: 66, gap: 4 },
-  selected: { borderColor: C.gold, backgroundColor: "#3A3540", borderWidth: 2 },
-  choiceText: { color: C.ink, fontSize: 15, fontWeight: "700" },
-  icon: { color: C.muted, fontSize: 22 },
+  selected: { borderColor: N.gold, backgroundColor: "#3A3540", borderWidth: 2 },
+  choiceText: { color: N.ink, fontSize: 15, fontWeight: "700" },
+  icon: { color: N.muted, fontSize: 22 },
   check: {
     position: "absolute",
     right: 9,
     top: 6,
-    color: C.gold,
+    color: N.gold,
     fontSize: 12,
     fontWeight: "800",
   },
@@ -160,8 +164,7 @@ const v = StyleSheet.create({
     borderRadius: 22,
     borderWidth: 1,
     borderColor: "#998047",
-    paddingTop: 16,
-    paddingHorizontal: 16,
+    padding: 16,
     gap: 10,
     overflow: "hidden",
   },
@@ -170,8 +173,8 @@ const v = StyleSheet.create({
     padding: 4,
     borderRadius: 60,
     borderWidth: 2,
-    borderColor: C.gold,
-    shadowColor: C.gold,
+    borderColor: N.gold,
+    shadowColor: N.gold,
     shadowRadius: 18,
     shadowOpacity: 0.18,
     shadowOffset: { width: 0, height: 0 },
@@ -191,17 +194,10 @@ const v = StyleSheet.create({
   },
   badgeText: { fontSize: 14, color: "#443215" },
   name: {
-    color: C.ink,
+    color: N.ink,
     fontSize: 20,
     fontWeight: "800",
     letterSpacing: -0.3,
   },
-  detail: { color: C.muted, fontSize: 13, lineHeight: 18 },
-  previewFoot: {
-    alignSelf: "stretch",
-    borderTopWidth: 1,
-    borderColor: "#D4C3A8",
-    paddingVertical: 10,
-  },
-  themeName: { fontSize: 12, color: C.muted, textAlign: "center" },
+  detail: { color: N.muted, fontSize: 13, lineHeight: 18 },
 });

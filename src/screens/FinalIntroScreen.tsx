@@ -2,17 +2,19 @@ import React from "react";
 import { View } from "react-native";
 import { Text } from "../AppText";
 import { useGame } from "../store";
-import { Button, GameCard, Label, Shell, TopBar, s } from "../ui";
-import { Seal } from "../art";
+import { Button, GameCard, Label, Shell, TopBar, useS } from "../ui";
+import { SealCoin } from "../art";
 import { Props } from "../navigation";
+import { useTheme } from "../themeMode";
 export default function FinalIntroScreen({ navigation }: Props<"FinalIntro">) {
+  const s = useS();
   const { game } = useGame();
   return (
     <Shell>
       <View style={{ gap: 10 }}>
         <TopBar title="Özel bölüm" back={() => navigation.goBack()} />
         <View style={{ alignItems: "center", paddingVertical: 6 }}>
-          <Seal size={92} value="◆" />
+          <SealCoin size={92} value="◆" />
         </View>
         <Label>FİNAL BÖLÜMÜ {String(game.file / 10).padStart(2, "0")}</Label>
         <Text style={[s.hero, { fontSize: 30, lineHeight: 36 }]}>

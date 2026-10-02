@@ -4,9 +4,10 @@ import {
 } from "react-native";
 import { Text } from "../AppText";
 import { Avatar } from "../character";
-import { Button, C, GameCard, Label, Shell, TopBar, s } from "../ui";
+import { Button, GameCard, Label, Shell, TopBar, useS } from "../ui";
 import { Props } from "../navigation";
 import { Gender, Role } from "../product";
+import { useTheme } from "../themeMode";
 const players: {
   name: string;
   gender: Gender;
@@ -59,6 +60,8 @@ const players: {
   },
 ];
 export default function LeagueScreen({ navigation }: Props<"League">) {
+  const { C, tc } = useTheme();
+  const s = useS();
   return (
     <Shell
       scroll
@@ -111,7 +114,7 @@ export default function LeagueScreen({ navigation }: Props<"League">) {
                   borderTopWidth: 2,
                   borderColor: color,
                   borderRadius: 22,
-                  backgroundColor: i === 0 ? "#3D3540" : "#182840",
+                  backgroundColor: tc(i === 0 ? "#3D3540" : "#182840"),
                 }}
               >
                 <Text

@@ -2,10 +2,13 @@ import { files, questions } from "./content";
 import { dayKey, normalize, type Game } from "./game";
 export type Gender = "Kadın" | "Erkek";
 export type Role = "Avukat" | "Hakim" | "Savcı";
+export type ThemeMode = "dark" | "light" | "auto";
+export const themeModes: ThemeMode[] = ["dark", "light", "auto"];
 export type Settings = {
   sound: boolean;
   vibration: boolean;
   reduceMotion: boolean;
+  theme: ThemeMode;
 };
 export type Session = {
   selected: number;
@@ -50,6 +53,12 @@ export type Product = {
   claimedPlayerLevel: number;
   notices: Notice[];
   replay: { file: number; session: Session } | null;
+  /** Day the "streak kept" screen was last shown. */
+  streakSeen: string | null;
+  /** lastDay of the broken streak whose "streak lost" screen was already shown. */
+  streakLossSeen: string | null;
+  /** Today's pick among the nine sealed envelopes: one per day. */
+  dailyStamp: { day: string; index: number; amount: number } | null;
 };
 export const playerLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 export const newSession = (): Session => ({
@@ -75,7 +84,7 @@ export const initialProduct = (): Product => ({
   selectedGender: null,
   selectedRole: null,
   selectedCharacter: null,
-  settings: { sound: true, vibration: true, reduceMotion: false },
+  settings: { sound: true, vibration: true, reduceMotion: false, theme: "dark" },
   dailyTasksDate: "",
   dailyTasks: {},
   lastDailyPuzzleDate: null,
@@ -89,6 +98,9 @@ export const initialProduct = (): Product => ({
   claimedPlayerLevel: 1,
   notices: [],
   replay: null,
+  streakSeen: null,
+  streakLossSeen: null,
+  dailyStamp: null,
 });
 export const characters = [
   {
@@ -128,6 +140,24 @@ export const characters = [
     detail: "Kararlılıkla iz sürer, bağlantıları ortaya çıkarır.",
   },
 ] as const;
+/** The nine envelope rewards; every day shuffles the same set, so the jackpot is always on the board. */
+export const stampRewards = [15, 15, 15, 20, 25, 25, 40, 60, 100] as const;
+/** Today's envelope order, fixed per day so reopening the screen cannot reshuffle it. */
+export function stampBoard(day: string): number[] {
+  let seed = [...day].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619), 2166136261);
+  const rand = () => {
+    seed = (seed + 0x6d2b79f5) | 0;
+    let r = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+  const board: number[] = [...stampRewards];
+  for (let i = board.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [board[i], board[j]] = [board[j], board[i]];
+  }
+  return board;
+}
 export const productOf = (g: Game): Product => g.product ?? initialProduct();
 /** Terms solved in any daily puzzle; they count toward the collection like bölüm terms. */
 export const dailySolvedIds = (g: Game) =>
@@ -219,7 +249,10 @@ export function migrateProduct(g: Game): Product {
     if (!Number.isSafeInteger(n) || n < 0) throw Error("Geçersiz V1 sayaç");
   if (
     typeof next.hasCompletedOnboarding !== "boolean" ||
-    Object.values(next.settings).some((v) => typeof v !== "boolean")
+    [next.settings.sound, next.settings.vibration, next.settings.reduceMotion].some(
+      (v) => typeof v !== "boolean",
+    ) ||
+    !themeModes.includes(next.settings.theme)
   )
     throw Error("Geçersiz ayar");
   if (
@@ -266,9 +299,28 @@ export function migrateProduct(g: Game): Product {
   }
   next.dailyPuzzleClaims.forEach(validateDay);
   next.unlockedDailyDates.forEach(validateDay);
-  for (const day of [next.lastDailyPuzzleDate, next.dailyPuzzleCompletedDate])
+  for (const day of [
+    next.lastDailyPuzzleDate,
+    next.dailyPuzzleCompletedDate,
+    next.streakSeen,
+    next.streakLossSeen,
+  ])
     if (day !== null) validateDay(day);
   if (next.dailyTasksDate) validateDay(next.dailyTasksDate);
+  if (
+    next.dailyStamp !== null &&
+    (!next.dailyStamp ||
+      typeof next.dailyStamp.day !== "string" ||
+      !Number.isInteger(next.dailyStamp.index) ||
+      next.dailyStamp.index < 0 ||
+      next.dailyStamp.index > 8)
+  )
+    throw Error("Geçersiz mühür ödülü");
+  if (next.dailyStamp) {
+    validateDay(next.dailyStamp.day);
+    if (stampBoard(next.dailyStamp.day)[next.dailyStamp.index] !== next.dailyStamp.amount)
+      throw Error("Geçersiz mühür ödülü");
+  }
   if (
     Array.isArray(next.dailyPuzzles) ||
     Array.isArray(next.dailyTasks) ||
@@ -372,8 +424,15 @@ export type ProductAction =
   | { type: "player-name"; firstName: string; lastName: string }
   | { type: "onboard" }
   | { type: "character"; gender: Gender; role: Role }
-  | { type: "setting"; key: keyof Settings; value: boolean }
+  | {
+      type: "setting";
+      key: "sound" | "vibration" | "reduceMotion";
+      value: boolean;
+    }
+  | { type: "setting"; key: "theme"; value: ThemeMode }
   | { type: "notice-dismiss"; id: string }
+  | { type: "streak-seen"; kind: "kept" | "lost"; day: string }
+  | { type: "daily-stamp"; index: number; date?: Date }
   | { type: "milestone"; file: number }
   | { type: "task-claim"; index: number; date?: Date }
   | { type: "task-bonus"; date?: Date }
@@ -430,6 +489,14 @@ export function applyProduct(g: Game, a: ProductAction): Game {
   }
   if (a.type === "setting")
     return update({ settings: { ...p.settings, [a.key]: a.value } });
+  if (a.type === "daily-stamp") {
+    if (p.dailyStamp?.day === day || !Number.isInteger(a.index) || a.index < 0 || a.index > 8)
+      return g;
+    const amount = stampBoard(day)[a.index];
+    return update({ dailyStamp: { day, index: a.index, amount } }, 0, amount);
+  }
+  if (a.type === "streak-seen")
+    return update(a.kind === "kept" ? { streakSeen: a.day } : { streakLossSeen: a.day });
   if (a.type === "notice-dismiss")
     return update({ notices: p.notices.filter((n) => n.id !== a.id) });
   if (a.type === "milestone") {

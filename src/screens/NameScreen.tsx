@@ -3,9 +3,11 @@ import { Keyboard, Platform, StyleSheet, TextInput, View } from "react-native";
 import { Text } from "../AppText";
 import { useGame } from "../store";
 import { cleanName, productOf, validName } from "../product";
-import { Button, C, Label, Shell, TopBar, s } from "../ui";
-import { Seal } from "../art";
+import { Button, Label, Shell, TopBar, useS } from "../ui";
+import { SealCoin } from "../art";
 import { Props } from "../navigation";
+import { useTheme } from "../themeMode";
+import { colors as N } from "../theme";
 
 // The screen does not scroll, so the intro hides while typing to keep the form above the keyboard.
 function useKeyboardOpen() {
@@ -24,6 +26,9 @@ function useKeyboardOpen() {
 }
 
 export default function NameScreen({ navigation }: Props<"Name">) {
+  const { sx, tc } = useTheme();
+  const s = useS();
+  const v = sx(vN);
   const { game, dispatch } = useGame(),
     p = productOf(game),
     editing = !!(p.firstName && p.lastName);
@@ -55,7 +60,7 @@ export default function NameScreen({ navigation }: Props<"Name">) {
         {keyboardOpen ? null : (
           <View style={v.hero}>
             <View style={v.halo}>
-              <Seal size={58} />
+              <SealCoin size={58} />
             </View>
             <Label>{editing ? "OYUNCU PROFİLİN" : "HER BÖLÜM BİR KEŞİF"}</Label>
             <Text style={v.heading}>
@@ -73,7 +78,7 @@ export default function NameScreen({ navigation }: Props<"Name">) {
             value={first}
             onChangeText={setFirst}
             placeholder="Adın"
-            placeholderTextColor="#8290AD"
+            placeholderTextColor={tc("#8290AD", "text")}
             autoCapitalize="words"
             autoCorrect={false}
             textContentType="givenName"
@@ -91,7 +96,7 @@ export default function NameScreen({ navigation }: Props<"Name">) {
             value={last}
             onChangeText={setLast}
             placeholder="Soyadın"
-            placeholderTextColor="#8290AD"
+            placeholderTextColor={tc("#8290AD", "text")}
             autoCapitalize="words"
             autoCorrect={false}
             textContentType="familyName"
@@ -115,7 +120,7 @@ export default function NameScreen({ navigation }: Props<"Name">) {
     </Shell>
   );
 }
-const v = StyleSheet.create({
+const vN = StyleSheet.create({
   body: { gap: 12 },
   steps: {
     flexDirection: "row",
@@ -123,14 +128,14 @@ const v = StyleSheet.create({
     gap: 14,
     paddingVertical: 4,
   },
-  step: { color: C.muted, fontSize: 11, fontWeight: "700", letterSpacing: 1 },
+  step: { color: N.muted, fontSize: 11, fontWeight: "700", letterSpacing: 1 },
   activeStep: {
-    color: C.gold,
+    color: N.gold,
     fontSize: 11,
     fontWeight: "800",
     letterSpacing: 1,
   },
-  stepLine: { flex: 1, height: 1, backgroundColor: C.line },
+  stepLine: { flex: 1, height: 1, backgroundColor: N.line },
   hero: { alignItems: "center", gap: 8, paddingVertical: 4 },
   halo: {
     width: 86,
@@ -144,7 +149,7 @@ const v = StyleSheet.create({
     marginBottom: 4,
   },
   heading: {
-    color: C.ink,
+    color: N.ink,
     fontSize: 26,
     lineHeight: 32,
     fontWeight: "800",
@@ -152,7 +157,7 @@ const v = StyleSheet.create({
     letterSpacing: -0.6,
   },
   description: {
-    color: C.muted,
+    color: N.muted,
     fontSize: 14,
     lineHeight: 20,
     textAlign: "center",
@@ -160,7 +165,7 @@ const v = StyleSheet.create({
   },
   form: { gap: 6 },
   label: {
-    color: C.muted,
+    color: N.muted,
     fontSize: 12,
     fontWeight: "800",
     letterSpacing: 1.4,
@@ -169,13 +174,13 @@ const v = StyleSheet.create({
   input: {
     minHeight: 50,
     borderWidth: 1,
-    borderColor: C.line,
+    borderColor: N.line,
     borderRadius: 14,
     paddingHorizontal: 16,
     paddingVertical: 10,
-    color: C.ink,
+    color: N.ink,
     fontSize: 18,
     backgroundColor: "#1B2C46",
   },
-  focused: { borderColor: C.gold, backgroundColor: "#24344C" },
+  focused: { borderColor: N.gold, backgroundColor: "#24344C" },
 });

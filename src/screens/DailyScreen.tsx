@@ -17,10 +17,15 @@ import {
   scoreGuess,
 } from "../discovery/model";
 import { DiscoveryStatus, markColors } from "../discovery/ui";
-import { Button, C, GameCard, Label, Shell, TopBar, s } from "../ui";
+import { Button, GameCard, Label, Shell, TopBar, useS } from "../ui";
 import { Props } from "../navigation";
 import { useReducedMotion } from "../motion";
+import { useTheme } from "../themeMode";
+import { colors as N } from "../theme";
 export default function DailyScreen({ navigation }: Props<"Daily">) {
+  const { C, sx } = useTheme();
+  const s = useS();
+  const d = sx(dN);
   const { data, day, ready, dispatch } = useDiscovery();
   const q = dailyQuestion(day),
     round = roundFor(data, day),
@@ -232,25 +237,25 @@ export default function DailyScreen({ navigation }: Props<"Daily">) {
     </Shell>
   );
 }
-const d = StyleSheet.create({
+const dN = StyleSheet.create({
   hero: { gap: 12, borderColor: "#64755C" },
   row: { flexDirection: "row", gap: 4, justifyContent: "center" },
   slot: {
     flex: 1,
     maxWidth: 53,
     minHeight: 57,
-    backgroundColor: C.raised,
+    backgroundColor: N.raised,
     borderRadius: 9,
     justifyContent: "center",
     alignItems: "center",
   },
-  letter: { color: C.ink, fontSize: 22, fontWeight: "800" },
-  miniMark: { color: C.ink, fontSize: 10 },
+  letter: { color: N.ink, fontSize: 22, fontWeight: "800" },
+  miniMark: { color: N.ink, fontSize: 10 },
   legend: { flexDirection: "row", flexWrap: "wrap", gap: 12 },
   legendItem: { flexDirection: "row", alignItems: "center", gap: 5 },
-  mark: { color: C.ink, borderRadius: 5, padding: 5, fontWeight: "700" },
+  mark: { color: N.ink, borderRadius: 5, padding: 5, fontWeight: "700" },
   stamp: {
-    borderColor: C.green,
+    borderColor: N.green,
     borderWidth: 1,
     borderRadius: 12,
     padding: 16,
@@ -258,7 +263,7 @@ const d = StyleSheet.create({
     backgroundColor: "#173E37",
   },
   stampText: {
-    color: C.green,
+    color: N.green,
     fontSize: 17,
     fontWeight: "800",
     letterSpacing: 1,
