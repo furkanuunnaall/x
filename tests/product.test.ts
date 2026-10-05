@@ -7,6 +7,7 @@ import {
   entry,
   Game,
   coreReducer,
+  normalize,
 } from "../src/game";
 import { files, questions } from "../src/content";
 import { unlockedQuestions } from "../src/discovery/model";
@@ -47,10 +48,11 @@ test("legacy saves preserve draft, balances and results; new defaults do not awa
   delete old.product;
   old.xp = 2410;
   old.seals = 73;
-  old.run.entries.q1 = {
+  const first = files[0].questions[0];
+  old.run.entries[first.id] = {
     solved: false,
-    letters: { 0: "F" },
-    draft: ["F", "E"],
+    letters: { 0: first.term[0] },
+    draft: [first.term[0], first.term[1]],
     extra: false,
   };
   const loaded = parseSave(JSON.stringify(old));
@@ -73,26 +75,46 @@ test("onboarding, character and settings roundtrip without changing economy", ()
   assert.equal(g.seals, 100);
   assert.equal(g.xp, 0);
 });
-test("30 real files, three finals, 100+ unique concepts, legacy first five files stable", () => {
-  assert.equal(files.length, 30);
-  assert.ok(questions.length >= 100);
+test("80 bölüm in ten-bölüm volumes, four to six terms, nine-term finals, no answer in its own title", () => {
+  assert.equal(files.length, 80);
   assert.equal(new Set(questions.map((q) => q.term)).size, questions.length);
+  assert.equal(new Set(questions.map((q) => q.id)).size, questions.length);
   for (const f of files) {
-    assert.equal(f.questions.length, f.id % 10 === 0 ? 9 : 6);
-    assert.equal(
-      new Set(f.questions.map((q) => q.id)).size,
-      f.questions.length,
-    );
-    if (f.id <= 5)
-      assert.deepEqual(
-        f.questions.map((q) => q.id),
-        Array.from({ length: 6 }, (_, i) => `q${(f.id - 1) * 6 + i + 1}`),
-      );
+    if (f.id % 10 === 0) assert.equal(f.questions.length, 9);
+    else assert.ok(f.questions.length >= 4 && f.questions.length <= 6, `bölüm ${f.id}`);
+    assert.equal(new Set(f.questions.map((q) => q.id)).size, f.questions.length);
+    for (const q of f.questions) {
+      assert.ok(q.term.length <= 10, q.term);
+      assert.ok(!normalize(f.title).includes(q.term), `${f.title}: ${q.term}`);
+      assert.ok(!normalize(q.clue).includes(q.term), q.term);
+      assert.ok(!normalize(q.explanation).includes(q.term), q.term);
+      for (const other of f.questions)
+        assert.ok(other === q || !other.term.includes(q.term), `${q.term} / ${other.term}`);
+    }
   }
   assert.deepEqual(
     files.filter((f) => f.kind === "final").map((f) => f.id),
-    [10, 20, 30],
+    [10, 20, 30, 40, 50, 60, 70, 80],
   );
+  // Volumes get harder, and a term returns only rarely (in finals).
+  const avg = (v: number) =>
+    files.slice(v * 10, v * 10 + 10).flatMap((f) => f.questions)
+      .reduce((sum, q, _, all) => sum + q.difficulty / all.length, 0);
+  for (let v = 1; v < 8; v++) assert.ok(avg(v) >= avg(v - 1), `volume ${v + 1}`);
+  // Inside volumes 2-8 the climb is easy → medium → hard; volume 1 stays easy.
+  const level = (f: (typeof files)[number]) =>
+    f.questions.reduce((sum, q) => sum + q.difficulty / f.questions.length, 0);
+  for (const f of files.slice(0, 10)) assert.ok(Math.abs(level(f) - 1) < 1e-9, `bölüm ${f.id}`);
+  for (let v = 1; v < 8; v++) {
+    const vol = files.slice(v * 10, v * 10 + 10).map(level);
+    for (let i = 1; i < 10; i++) assert.ok(vol[i] >= vol[i - 1] - 1e-9, `bölüm ${v * 10 + i + 1}`);
+    assert.ok(Math.abs(vol[9] - 3) < 1e-9, `final ${v * 10 + 10}`);
+  }
+  const uses = new Map<string, number>();
+  for (const q of files.flatMap((f) => f.questions)) uses.set(q.id, (uses.get(q.id) ?? 0) + 1);
+  const repeated = [...uses.values()].filter((n) => n > 1).length;
+  assert.ok(repeated > 0 && repeated <= 40, `${repeated} repeated terms`);
+  assert.ok([...uses.values()].every((n) => n <= 2));
 });
 test("normal awards remain identical to core rules, level-up is a separate once-only grant", () => {
   let g = initialGame();
@@ -108,8 +130,9 @@ test("normal awards remain identical to core rules, level-up is a separate once-
   g = reducer(reducer(g, { type: "seal" }), { type: "next" });
   const q = files[1].questions[0];
   g = solve(g, q.id, q.term);
-  const before = g;
-  g = solve(g, files[1].questions[1].id, files[1].questions[1].term);
+  // Just below level 2, so the next answer crosses it without finishing the bölüm.
+  const before = { ...g, xp: 990 };
+  g = solve(before, files[1].questions[1].id, files[1].questions[1].term);
   assert.equal(g.seals - before.seals, 30);
   assert.equal(playerLevel(g.xp), 2);
   const balance = g.seals;
@@ -137,7 +160,8 @@ test("daily 3-concept reward is atomic, once per date, repeat-safe, and does not
   assert.equal(g.seals, 140);
 });
 test("daily tasks reflect today's actions, claims and 3/3 bonus cannot duplicate, next day starts empty", () => {
-  let g = finish(initialGame());
+  // Two short bölüm: enough for the five-concept task.
+  let g = finish(reducer(reducer(finish(initialGame()), { type: "seal" }), { type: "next" }));
   let base = g.seals;
   for (let index = 0; index < 3; index++)
     g = reducer(g, { type: "task-claim", index, date });
@@ -197,15 +221,15 @@ test("final awards and final achievement persist once; replay never changes earn
   assert.deepEqual(g.results, before.results);
   assert.deepEqual(g.run, before.run);
 });
-test("all 30 files end safely; distinct concept badges are achievable, notices do not duplicate", () => {
+test("all bölüm end safely; distinct concept badges are achievable, notices do not duplicate", () => {
   let g = initialGame();
-  for (let i = 1; i <= 30; i++) {
+  for (let i = 1; i <= files.length; i++) {
     g = finish(g, new Date(2026, 8, i, 12));
     g = reducer(g, { type: "seal" });
-    if (i < 30) g = reducer(g, { type: "next" });
+    if (i < files.length) g = reducer(g, { type: "next" });
   }
-  assert.equal(g.file, 30);
-  assert.equal(g.results.length, 30);
+  assert.equal(g.file, files.length);
+  assert.equal(g.results.length, files.length);
   assert.ok(knownTerms(g).length >= 100);
   assert.ok(productOf(g).unlockedAchievements.includes("hundred"));
   assert.ok(productOf(g).unlockedAchievements.includes("streak"));

@@ -85,7 +85,7 @@ test("collection exposes only solved campaign terms including previous files", (
   }
   g = reducer(g, { type: "seal" });
   g = reducer(g, { type: "next" });
-  assert.equal(unlockedQuestions(g).length, 6);
+  assert.equal(unlockedQuestions(g).length, files[0].questions.length);
   assert.equal(
     unlockedQuestions(g).some((q) => files[1].questions.includes(q)),
     false,

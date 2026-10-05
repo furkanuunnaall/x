@@ -344,7 +344,7 @@ const rows = [
   ],
   [
     "KANUN",
-    "Yasama organınca kanuni usulle kabul edilen genel düzenleme.",
+    "Yasama organınca anayasada öngörülen usulle kabul edilen genel düzenleme.",
     "Anayasa",
   ],
   [

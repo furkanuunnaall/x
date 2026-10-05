@@ -21,6 +21,9 @@ function solve(
   for (const key of term) g = reducer(g, { type: "key", id, key });
   return reducer(g, { type: "submit", id, date });
 }
+// The first two terms of bölüm 1, and its first term long enough for index-based checks.
+const [A, B] = files[0].questions;
+const L = files[0].questions.find((q) => q.term.length >= 6)!;
 function finish(g: Game, date = new Date(2026, 8, 21)) {
   for (const q of files[g.file - 1].questions) g = solve(g, q.id, q.term, date);
   return g;
@@ -37,33 +40,34 @@ test("XP schedule, one reward per answer, wrong resets combo without exposing so
     [1, 2, 3, 4, 5, 6].map(reward),
     [100, 110, 120, 130, 150, 150],
   );
-  let g = solve(initialGame(), "q1", "FERAGAT");
+  let g = solve(initialGame(), A.id, A.term);
   assert.equal(g.xp, 100);
-  assert.equal(reducer(g, { type: "submit", id: "q1" }), g);
-  g = solve(g, "q2", "A".repeat(questions[1].term.length));
+  assert.equal(reducer(g, { type: "submit", id: A.id }), g);
+  g = solve(g, B.id, "Ç".repeat(B.term.length));
   assert.equal(g.combo, 0);
   assert.equal(g.run.mistakes, 1);
-  assert.equal(entry(g, "q2").draft.join(""), "");
+  assert.equal(entry(g, B.id).draft.join(""), "");
   assert.equal(g.solved, 1);
 });
 test("hints charge once, preserve revealed letters and reject insufficient funds", () => {
-  let g = reducer(initialGame(), { type: "hint", id: "q1", hint: "first" });
+  let g = reducer(initialGame(), { type: "hint", id: A.id, hint: "first" });
   assert.equal(g.seals, 70);
-  assert.equal(reducer(g, { type: "hint", id: "q1", hint: "first" }), g);
-  g = reducer(g, { type: "delete", id: "q1" });
-  assert.equal(entry(g, "q1").draft[0], "F");
-  g = reducer(g, { type: "hint", id: "q1", hint: "extra" });
+  assert.equal(reducer(g, { type: "hint", id: A.id, hint: "first" }), g);
+  g = reducer(g, { type: "delete", id: A.id });
+  assert.equal(entry(g, A.id).draft[0], A.term[0]);
+  g = reducer(g, { type: "hint", id: A.id, hint: "extra" });
   assert.equal(g.seals, 30);
-  assert.equal(reducer(g, { type: "hint", id: "q1", hint: "extra" }), g);
-  g = reducer(g, { type: "hint", id: "q1", hint: "letter" });
+  assert.equal(reducer(g, { type: "hint", id: A.id, hint: "extra" }), g);
+  g = reducer(g, { type: "hint", id: A.id, hint: "letter" });
   assert.equal(g.seals, 10);
-  assert.equal(entry(g, "q1").letters[1], "E");
-  assert.equal(reducer(g, { type: "hint", id: "q1", hint: "letter" }), g);
+  assert.equal(entry(g, A.id).letters[1], A.term[1]);
+  assert.equal(reducer(g, { type: "hint", id: A.id, hint: "letter" }), g);
 });
 test("completion, sealing and next file cannot duplicate rewards", () => {
   let g = finish(initialGame());
+  const n = files[0].questions.length;
   assert.equal(g.results[0].stars, 3);
-  assert.equal(g.xp, 760);
+  assert.equal(g.xp, Array.from({ length: n }, (_, i) => reward(i + 1)).reduce((a, b) => a + b));
   assert.equal(g.seals, 150);
   assert.equal(reducer(g, { type: "next" }), g);
   g = reducer(g, { type: "seal" });
@@ -71,7 +75,7 @@ test("completion, sealing and next file cannot duplicate rewards", () => {
   g = reducer(g, { type: "next" });
   assert.equal(g.file, 2);
   assert.equal(g.run.xp, 0);
-  assert.equal(g.combo, 6);
+  assert.equal(g.combo, n);
   assert.equal(reducer(g, { type: "next" }), g);
 });
 test("daily streak same day, next day, missed day and expired display", () => {
@@ -94,8 +98,8 @@ test("star boundaries", () => {
   assert.equal(stars(3, 0), 1);
 });
 test("save roundtrip preserves draft, hint, rewards and pending completion", () => {
-  let g = reducer(initialGame(), { type: "hint", id: "q1", hint: "first" });
-  g = reducer(g, { type: "key", id: "q1", key: "E" });
+  let g = reducer(initialGame(), { type: "hint", id: A.id, hint: "first" });
+  g = reducer(g, { type: "key", id: A.id, key: A.term[1] });
   assert.deepEqual(parseSave(JSON.stringify(g)), g);
   const completed = finish(initialGame());
   assert.deepEqual(parseSave(JSON.stringify(completed)), completed);
@@ -110,7 +114,10 @@ test("legacy first five files keep base rewards and unlock the new sixth file", 
     g = reducer(g, { type: "next" });
   }
   assert.equal(g.file, 6);
-  assert.equal(g.solved, 30);
+  assert.equal(
+    g.solved,
+    files.slice(0, 5).reduce((sum, f) => sum + f.questions.length, 0),
+  );
   assert.equal(g.results.length, 5);
   assert.equal(
     g.results.reduce((sum, r) => sum + r.seals, 0),
@@ -121,61 +128,65 @@ test("legacy first five files keep base rewards and unlock the new sixth file", 
 });
 
 test("edit a chosen box without changing other letters; revealed letters remain locked", () => {
-  let g = initialGame();
-  for (const key of "XERAGAT") g = reducer(g, { type: "key", id: "q1", key });
-  g = reducer(g, { type: "key", id: "q1", key: "F", index: 0 });
-  assert.equal(entry(g, "q1").draft.join(""), "FERAGAT");
-  g = reducer(g, { type: "hint", id: "q1", hint: "first" });
+  let g = reducer(initialGame(), { type: "select", id: L.id });
+  for (const key of "Ç" + L.term.slice(1)) g = reducer(g, { type: "key", id: L.id, key });
+  g = reducer(g, { type: "key", id: L.id, key: L.term[0], index: 0 });
+  assert.equal(entry(g, L.id).draft.join(""), L.term);
+  g = reducer(g, { type: "hint", id: L.id, hint: "first" });
   const before = g;
   assert.equal(
-    reducer(g, { type: "key", id: "q1", key: "X", index: 0 }),
+    reducer(g, { type: "key", id: L.id, key: "Ç", index: 0 }),
     before,
   );
   assert.equal(
-    reducer(g, { type: "key", id: "q1", key: "X", index: 99 }),
+    reducer(g, { type: "key", id: L.id, key: "Ç", index: 99 }),
     before,
   );
-  g = reducer(g, { type: "clear", id: "q1" });
-  assert.equal(entry(g, "q1").draft.join(""), "F");
+  g = reducer(g, { type: "clear", id: L.id });
+  assert.equal(entry(g, L.id).draft.join(""), L.term[0]);
 });
 test("question selection and independent drafts survive restore", () => {
-  let g = reducer(initialGame(), { type: "key", id: "q1", key: "F" });
-  g = reducer(g, { type: "select", id: "q2" });
-  g = reducer(g, { type: "key", id: "q2", key: "Z" });
+  let g = reducer(initialGame(), { type: "key", id: A.id, key: A.term[0] });
+  g = reducer(g, { type: "select", id: B.id });
+  g = reducer(g, { type: "key", id: B.id, key: B.term[0] });
   g = parseSave(JSON.stringify(g));
-  assert.equal(g.selected, "q2");
-  assert.equal(entry(g, "q1").draft[0], "F");
-  assert.equal(entry(g, "q2").draft[0], "Z");
+  assert.equal(g.selected, B.id);
+  assert.equal(entry(g, A.id).draft[0], A.term[0]);
+  assert.equal(entry(g, B.id).draft[0], B.term[0]);
 });
 test("file best streak is separate from lifetime streak", () => {
   let g = finish(initialGame());
   g = reducer(reducer(g, { type: "seal" }), { type: "next" });
   g = finish(g);
-  assert.equal(g.best, 12);
-  assert.equal(g.results[1].best, 6);
-  assert.equal(g.results[1].xp, 900);
+  const [n1, n2] = [files[0].questions.length, files[1].questions.length];
+  assert.equal(g.best, n1 + n2);
+  assert.equal(g.results[1].best, n2);
+  assert.equal(
+    g.results[1].xp,
+    Array.from({ length: n2 }, (_, i) => reward(n1 + i + 1)).reduce((a, b) => a + b),
+  );
 });
 test("specific letter hint charges once and does not accept invalid indices", () => {
   let g = reducer(initialGame(), {
     type: "hint",
-    id: "q1",
+    id: L.id,
     hint: "letter",
     index: 4,
   });
-  assert.equal(entry(g, "q1").letters[4], "G");
+  assert.equal(entry(g, L.id).letters[4], L.term[4]);
   assert.equal(g.seals, 80);
   assert.equal(
-    reducer(g, { type: "hint", id: "q1", hint: "letter", index: 4 }),
+    reducer(g, { type: "hint", id: L.id, hint: "letter", index: 4 }),
     g,
   );
   assert.equal(
-    reducer(g, { type: "hint", id: "q1", hint: "letter", index: 500 }),
+    reducer(g, { type: "hint", id: L.id, hint: "letter", index: 500 }),
     g,
   );
 });
 test("incomplete submissions do not count as mistakes or earn XP", () => {
-  const g = reducer(initialGame(), { type: "key", id: "q1", key: "F" });
-  assert.equal(reducer(g, { type: "submit", id: "q1" }), g);
+  const g = reducer(initialGame(), { type: "key", id: A.id, key: A.term[0] });
+  assert.equal(reducer(g, { type: "submit", id: A.id }), g);
 });
 test("malformed stored results and letter data are rejected", () => {
   assert.throws(() => parseSave("null"));
@@ -189,7 +200,7 @@ test("malformed stored results and letter data are rejected", () => {
         run: {
           ...initialGame().run,
           entries: {
-            q1: { solved: false, extra: false, letters: { 0: "X" }, draft: [] },
+            [A.id]: { solved: false, extra: false, letters: { 0: "Ç" }, draft: [] },
           },
         },
       }),

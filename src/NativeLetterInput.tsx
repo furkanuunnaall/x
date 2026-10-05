@@ -1,16 +1,23 @@
 import React, { useRef } from "react";
-import { Keyboard, StyleSheet, TextInput } from "react-native";
+import { Keyboard, Platform, StyleSheet, TextInput } from "react-native";
 
 const turkishLetter = /^[A-ZÇĞİÖŞÜ]$/;
 const maxBuffer = 24;
 
 export function showKeyboard(input: TextInput | null) {
   if (!input) return;
-  if (!input.isFocused()) return input.focus();
-  if (Keyboard.isVisible()) return;
-  // A focused input whose keyboard was dismissed (e.g. Android back) ignores focus(); refocus it.
-  input.blur();
-  setTimeout(() => input.focus(), 50);
+  if (input.isFocused() && Keyboard.isVisible()) return;
+  if (!input.isFocused()) input.focus();
+  // The web has no keyboard events to check against; a focused field is enough there.
+  if (Platform.OS === "web") return;
+  // A focused input whose keyboard was dismissed (Android back, a modal, the app going to the
+  // background) ignores focus(). iOS also drops a focus() that lands while the keyboard is
+  // still sliding away, so check again a moment later and force a clean refocus if needed.
+  setTimeout(() => {
+    if (input.isFocused() && Keyboard.isVisible()) return;
+    input.blur();
+    setTimeout(() => input.focus(), 50);
+  }, 250);
 }
 
 export function NativeLetterInput({

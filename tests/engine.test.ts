@@ -248,18 +248,19 @@ test("generation fails explicitly on impossible or invalid requests instead of h
 test("campaign remains byte-equivalent in JSON and engine reads do not modify reducer or saves", () => {
   const fixture = JSON.parse(
     readFileSync(
-      new URL("./fixtures/campaign-v1.json", import.meta.url),
+      new URL("./fixtures/campaign-v2.json", import.meta.url),
       "utf8",
     ),
   );
   assert.deepEqual(files, fixture);
   let game = initialGame();
-  for (const key of "FERAGAT")
-    game = reducer(game, { type: "key", id: "q1", key });
-  game = reducer(game, { type: "submit", id: "q1" });
+  const first = files[0].questions[0];
+  for (const key of first.term)
+    game = reducer(game, { type: "key", id: first.id, key });
+  game = reducer(game, { type: "submit", id: first.id });
   const before = JSON.stringify(game),
     p = getCurrentPuzzleProgress(game);
-  assert.ok(p.solvedWordIds.includes("q1"));
+  assert.ok(p.solvedWordIds.includes(first.id));
   assert.equal(p.complete, false);
   assert.equal(game.xp, 100);
   assert.equal(JSON.stringify(game), before);

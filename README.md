@@ -1,6 +1,6 @@
 # MÜHÜR — offline V1
 
-Expo managed / React Native / TypeScript ile iOS ve Android için hukuk kelime oyunu. 30 bölüm, 119 farklı kavram; üç final bölümü, günlük bulmaca/görevler, karakterler, koleksiyon ve başarımlar.
+Expo managed / React Native / TypeScript ile iOS ve Android için hukuk kelime oyunu. 80 bölüm (onar bölümlük 8 cilt, kolaydan zora), 474 kavram; sekiz final bölümü, günlük bulmaca/görevler, karakterler, koleksiyon ve başarımlar.
 
 **[V1 ekranları, navigation, ekonomi ve kayıt modeli](V1-NOTES.md)**
 

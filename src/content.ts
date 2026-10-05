@@ -1,4 +1,7 @@
 import { additionalQuestions } from "./additionalContent";
+import { easyRows } from "./campaignWords";
+import { hardRows } from "./campaignWordsHard";
+import { campaignPlan, termDifficulty } from "./campaignPlan";
 export type Question = {
   id: string;
   term: string;
@@ -157,7 +160,7 @@ const rows: [string, string, string, Question["difficulty"], string][] = [
   ],
   [
     "MİRAS",
-    "Bir kişinin ölümüyle geride bıraktığı ve mirasçılarına geçen malvarlığı ilişkileri.",
+    "Bir kişinin ölümüyle geride bıraktığı ve yasal ya da atanmış varislerine geçen malvarlığı ilişkileri.",
     "Haklarla birlikte devredilebilen borçlar da geçebilir.",
     1,
     "Miras",
@@ -219,58 +222,37 @@ const rows: [string, string, string, Question["difficulty"], string][] = [
     "Usul",
   ],
 ];
-export const questions: Question[] = rows.map(
-  ([term, clue, explanation, difficulty, category], i) => ({
+const legacy: Question[] = [
+  ...rows.map(([term, clue, explanation, difficulty, category], i) => ({
     id: `q${i + 1}`,
     term,
     clue,
     explanation,
     difficulty,
     category,
+  })),
+  ...additionalQuestions,
+];
+const added: Question[] = [...easyRows, ...hardRows].map(
+  ([term, clue, explanation, category], i) => ({
+    id: `n${i + 1}`,
+    term,
+    clue,
+    explanation,
+    difficulty: termDifficulty[term] ?? 3,
+    category,
   }),
 );
-const originalQuestions = [...questions];
-questions.push(...additionalQuestions);
-// Every bölüm has its own name, and none of them gives away an answer inside that bölüm.
-const fileTitles = [
-  "İlk İz",
-  "Üst Mahkemeye",
-  "Güvence Kasası",
-  "Aile Meclisi",
-  "Mühür Noktası",
-  "Adliye Koridoru",
-  "Kanıt Peşinde",
-  "Barış Masası",
-  "Arazi Kaydı",
-  "", // final
-  "Kişinin Hakları",
-  "Yuva Kurmak",
-  "İlk Taahhüt",
-  "İrade Sakatlığı",
-  "Hesap Kapanışı",
-  "Suçun İzinde",
-  "Savcılık Kapısı",
-  "Karakol Gecesi",
-  "Son Kelime",
-  "", // final
-  "İkinci Celse",
-  "Doğru Mahkeme",
-  "Tarafsız Bakış",
-  "Ayni Haklar",
-  "Sınır Taşları",
-  "Kişiden Aileye",
-  "Veraset Defteri",
-  "Akdin Kurulması",
-  "Gizli Kusur",
-  "", // final
-];
-export const files = Array.from({ length: 30 }, (_, i) => {
+// The game's concepts are exactly the terms some bölüm uses; written terms that no bölüm uses
+// stay in reserve, so every concept in the collection can be unlocked.
+const planned = new Set(campaignPlan.flatMap((p) => p.terms));
+export const questions: Question[] = [...legacy, ...added]
+  .filter((q) => planned.has(q.term))
+  .map((q) => ({ ...q, difficulty: termDifficulty[q.term] ?? q.difficulty }));
+const byTerm = new Map(questions.map((q) => [q.term, q]));
+export const files = campaignPlan.map((plan, i) => {
   const id = i + 1,
     final = id % 10 === 0;
-  const offset = (i - 5) * 6;
-  const pool = final
-    ? additionalQuestions.filter((q) => q.difficulty >= 2)
-    : additionalQuestions;
   return {
     id,
     kind: final
@@ -278,15 +260,11 @@ export const files = Array.from({ length: 30 }, (_, i) => {
       : id % 5 === 0
         ? ("reward" as const)
         : ("normal" as const),
-    title: final
-      ? `Final Bölümü ${id / 10}`
-      : fileTitles[i],
-    questions:
-      i < 5
-        ? originalQuestions.slice(i * 6, i * 6 + 6)
-        : Array.from(
-            { length: final ? 9 : 6 },
-            (_, j) => pool[(offset + j) % pool.length],
-          ),
+    title: plan.title ?? `Final Bölümü ${id / 10}`,
+    questions: plan.terms.map((term) => {
+      const q = byTerm.get(term);
+      if (!q) throw new Error(`Bölüm ${id}: unknown term ${term}`);
+      return q;
+    }),
   };
 });

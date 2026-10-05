@@ -173,7 +173,7 @@ export function achievements(g: Game, d: Discovery) {
       id: "all",
       icon: "M",
       title: "Bölüm ustası",
-      detail: "30 kavramın tamamını çöz.",
+      detail: "Bütün kavramları koleksiyonuna kat.",
       value: unlockedQuestions(g).length,
       total: questions.length,
     },

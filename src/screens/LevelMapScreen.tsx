@@ -29,6 +29,9 @@ const TEAL = "#2FB39A";
 const ROAD = "#18233A";
 // Horizontal lanes the road winds through, as fractions of the map width.
 const LANES = [0.5, 0.76, 0.5, 0.24];
+// Height of each road canvas; see the banded Svg below.
+const BAND = 1600;
+const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
 type State = "done" | "current" | "locked";
 
@@ -174,31 +177,42 @@ export default function LevelMapScreen({
         }}
         style={{ height, width: "100%" }}
       >
-        <Svg
-          width={width}
-          height={height}
-          style={StyleSheet.absoluteFill}
-          pointerEvents="none"
-        >
-          <Path d={road} stroke={light ? "#E3D3B2" : "#0D1526"} strokeWidth={38} fill="none" strokeLinecap="round" />
-          <Path d={road} stroke={light ? "#F3E9D6" : ROAD} strokeWidth={30} fill="none" strokeLinecap="round" />
-          {[
-            [ahead, light ? "#BFAE8E" : "#05080F"],
-            [completed, TEAL],
-          ].map(([d, color]) =>
-            d ? (
-              <Path
-                key={color}
-                d={d}
-                stroke={color}
-                strokeWidth={5}
-                strokeDasharray="14 10"
-                strokeLinecap="round"
-                fill="none"
-              />
-            ) : null,
-          )}
-        </Svg>
+        {/* The road is drawn in bands: one canvas the height of 80 bölüm would be a huge bitmap
+            on phones. Each band shows its slice of the same continuous paths. */}
+        {Array.from({ length: Math.ceil(height / BAND) }, (_, band) => {
+          const top = band * BAND,
+            h = Math.min(BAND, height - top);
+          return (
+            <Svg
+              key={band}
+              width={width}
+              height={h}
+              viewBox={`0 ${top} ${width} ${h}`}
+              preserveAspectRatio="none"
+              style={{ position: "absolute", left: 0, top }}
+              pointerEvents="none"
+            >
+              <Path d={road} stroke={light ? "#E3D3B2" : "#0D1526"} strokeWidth={38} fill="none" strokeLinecap="round" />
+              <Path d={road} stroke={light ? "#F3E9D6" : ROAD} strokeWidth={30} fill="none" strokeLinecap="round" />
+              {[
+                [ahead, light ? "#BFAE8E" : "#05080F"],
+                [completed, TEAL],
+              ].map(([d, color]) =>
+                d ? (
+                  <Path
+                    key={color}
+                    d={d}
+                    stroke={color}
+                    strokeWidth={5}
+                    strokeDasharray="14 10"
+                    strokeLinecap="round"
+                    fill="none"
+                  />
+                ) : null,
+              )}
+            </Svg>
+          );
+        })}
         {volumes.map(({ number, y: top }) => {
           const start = (number - 1) * 10;
           const done = g.results.filter(
@@ -213,7 +227,7 @@ export default function LevelMapScreen({
                   <LockSimpleIcon size={14} weight="fill" color={C.muted} />
                 ) : null}
                 <Text style={[m.volumeTitle, locked && { color: C.muted }]}>
-                  CİLT {["I", "II", "III"][number - 1]}
+                  CİLT {ROMAN[number - 1] ?? number}
                 </Text>
                 <Text style={m.volumeCount}>{done}/10 bölüm</Text>
               </View>

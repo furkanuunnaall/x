@@ -107,7 +107,7 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
           <Button title="SONRAKİ BÖLÜM →" onPress={nextFile} />
         ) : (
           <Text style={s.note}>
-            30 bölümün tamamı çözüldü. Yolculuğun arşivde!
+            {files.length} bölümün tamamı çözüldü. Yolculuğun arşivde!
           </Text>
         )}
         <View style={v.row}>

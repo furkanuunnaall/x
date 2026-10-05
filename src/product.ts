@@ -325,7 +325,7 @@ export function migrateProduct(g: Game): Product {
     Array.isArray(next.dailyPuzzles) ||
     Array.isArray(next.dailyTasks) ||
     next.claimedMilestones.some(
-      (n) => !Number.isInteger(n) || n < 5 || n > 30 || n % 5 !== 0,
+      (n) => !Number.isInteger(n) || n < 5 || n > files.length || n % 5 !== 0,
     ) ||
     next.unlockedAchievements.some((id) => !badges(g).some((b) => b.id === id))
   )
@@ -391,16 +391,15 @@ function validateSession(s: Session, qs: typeof questions) {
     )
       throw Error("Geçersiz taslak");
 }
+const dailyPools = ([1, 2, 3] as const).map((d) =>
+  questions.filter((q) => q.difficulty === d),
+);
 export function dailyQuestions(day: string) {
   const [y, m, d] = day.split("-").map(Number),
     seed = Math.floor(Date.UTC(y, m - 1, d) / 86400000);
-  return Array.from(
-    { length: 3 },
-    (_, i) =>
-      questions[
-        (((seed * 3 + i) % questions.length) + questions.length) %
-          questions.length
-      ],
+  // One easy, one medium and one hard concept; each pool advances one term per day.
+  return dailyPools.map(
+    (pool, i) => pool[(((seed + i * 7) % pool.length) + pool.length) % pool.length],
   );
 }
 export const taskDefinitions = [

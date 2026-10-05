@@ -2,12 +2,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { initialGame, reducer, entry, parseSave } from "../src/game";
 import { files } from "../src/content";
-test("normal files contain exactly six independent concepts and finals eight to ten", () => {
+test("normal files contain four to six independent concepts and finals eight to ten", () => {
   for (const file of files)
     assert.ok(
       file.id % 10 === 0
         ? file.questions.length >= 8 && file.questions.length <= 10
-        : file.questions.length === 6,
+        : file.questions.length >= 4 && file.questions.length <= 6,
     );
 });
 test("word reveal costs 60 once, keeps free letters, persists, and requires confirmation", () => {

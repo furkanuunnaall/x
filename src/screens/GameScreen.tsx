@@ -6,6 +6,7 @@ import { Ambient, SealCoin } from "../art";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
+  Keyboard,
   Modal,
   Pressable,
   StyleSheet,
@@ -15,7 +16,6 @@ import {
 } from "react-native";
 import { Text } from "../AppText";
 import {
-  BackspaceIcon,
   CaretLeftIcon,
   CaretRightIcon,
   GavelIcon,
@@ -55,7 +55,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     .split("")
     .map((_, i) => e.letters[i] ?? e.draft[i] ?? "");
   const [cursor, setCursor] = useState<number | null>(null);
-  const [sheet, setSheet] = useState<"hints" | "word" | null>(null);
+  const [sheet, setSheet] = useState<"extra" | "letter" | "word" | null>(null);
   const [feedback, setFeedback] = useState("");
   const [failed, setFailed] = useState(false);
   const [success, setSuccess] = useState<{
@@ -97,6 +97,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
   }
   function typeLetters(letters: string[]) {
     if (e.solved || live.current.active < 0) return;
+    checkAfterHint.current = false;
     const updated = [...live.current.draft];
     let index: number | null = live.current.active;
     for (const letter of letters) {
@@ -177,7 +178,15 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     setFailed(false);
     setFeedback("");
     setSheet(null);
+    checkAfterHint.current = hint !== "extra";
   }
+  // There is no confirm button: a word completed by a hint is checked as soon as it lands.
+  const checkAfterHint = useRef(false);
+  useEffect(() => {
+    if (!checkAfterHint.current) return;
+    checkAfterHint.current = false;
+    if (draft.every(Boolean)) submit();
+  }, [draft.join("")]);
   function next() {
     if (result) navigation.replace("Result");
     else {
@@ -215,11 +224,49 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     dispatch({ type: "hint", id: q.id, hint: "word" });
     setCursor(null);
     setFailed(false);
-    setFeedback("Kelime açıldı. Onayla ile devam et.");
+    setFeedback("");
     setSheet(null);
+    checkAfterHint.current = true;
+  }
+  // Every booster asks first; this is what each confirmation sheet says and does.
+  const confirm = {
+    extra: {
+      title: "İpucu al",
+      body: `Soruya ek bir açıklama ${costs.extra} Mühür karşılığında eklenir. Bir ipucu kullanımı sayılır.`,
+      action: `${costs.extra} MÜHÜR · İPUCU AL`,
+      disabled: e.extra || g.seals < costs.extra,
+      run: () => buy("extra"),
+    },
+    letter: {
+      title: "Harf aç",
+      body:
+        letterPrice === 0
+          ? `Rastgele bir harf ücretsiz açılır. ${productOf(g).freeLetters} ücretsiz hakkın var. Bir ipucu kullanımı sayılır.`
+          : `Rastgele bir harf ${letterPrice} Mühür karşılığında açılır. Bir ipucu kullanımı sayılır.`,
+      action: letterPrice === 0 ? "ÜCRETSİZ · HARF AÇ" : `${letterPrice} MÜHÜR · HARF AÇ`,
+      disabled: missing.length === 0 || g.seals < letterPrice,
+      run: () => buy("letter"),
+    },
+    word: {
+      title: "Kelimeyi aç",
+      body: `Kalan ${missing.length} harf ${wordPrice} Mühür karşılığında açılır. Bir ipucu kullanımı sayılır. Ücretsiz Harf Aç hakların korunur.`,
+      action: `${wordPrice} MÜHÜR · KELİMEYİ AÇ`,
+      disabled: g.seals < wordPrice,
+      run: openWord,
+    },
+  }[sheet ?? "word"];
+  // A tap that no row or button claims (empty space, the clue card) hides the keyboard;
+  // tapping a word row brings it back through showKeyboard.
+  function hideKeyboard() {
+    input.current?.blur();
+    Keyboard.dismiss();
   }
   return (
-    <SafeAreaView style={s.screen}>
+    <SafeAreaView
+      style={s.screen}
+      onStartShouldSetResponder={() => true}
+      onResponderRelease={hideKeyboard}
+    >
       <Ambient />
       <View
         pointerEvents="none"
@@ -347,7 +394,13 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                           s.letter,
                           light && !!letter && !cell.solved && { color: "#2A2418" },
                           cell.solved && { color: tc("#79DDB6", "text") },
-                          { fontSize: Math.min(20, tileWidth * 0.65) },
+                          // A full-width box: iOS can measure a lone narrow glyph like "I" a hair
+                          // too small and then drop it entirely instead of drawing it.
+                          {
+                            fontSize: Math.min(20, tileWidth * 0.65),
+                            alignSelf: "stretch",
+                            textAlign: "center",
+                          },
                         ]}
                       >
                         {letter}
@@ -439,7 +492,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                   title: "İpucu",
                   detail: `${costs.extra} Mühür`,
                   disabled: e.extra || g.seals < costs.extra,
-                  onPress: () => buy("extra"),
+                  onPress: () => setSheet("extra"),
                 },
                 {
                   icon: KeyIcon,
@@ -447,7 +500,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                   detail:
                     letterPrice === 0 ? "Ücretsiz" : `${letterPrice} Mühür`,
                   disabled: missing.length === 0 || g.seals < letterPrice,
-                  onPress: () => buy("letter"),
+                  onPress: () => setSheet("letter"),
                 },
                 {
                   icon: GavelIcon,
@@ -481,23 +534,6 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                 </Pressable>
               ))}
             </View>
-            <View style={s.actions}>
-              <Pressable
-                accessibilityRole="button"
-                accessibilityLabel="Son harfi sil"
-                onPress={remove}
-                style={s.delete}
-              >
-                <BackspaceIcon size={26} weight="bold" color={C.ink} />
-              </Pressable>
-              <View style={{ flex: 1 }}>
-                <Button
-                  title="ONAYLA"
-                  disabled={draft.some((c) => !c)}
-                  onPress={() => submit()}
-                />
-              </View>
-            </View>
             {feedback ? (
               <Text
                 accessibilityLiveRegion="polite"
@@ -516,7 +552,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
         onSubmit={() => (e.solved ? next() : submit())}
       />
       <Modal
-        visible={sheet === "word"}
+        visible={sheet !== null}
         transparent
         animationType={reduced ? "none" : "slide"}
         onRequestClose={() => setSheet(null)}
@@ -533,15 +569,12 @@ export default function GameScreen({ navigation }: Props<"Game">) {
             style={s.sheet}
             accessibilityViewIsModal
           >
-            <Text style={s.solvedTerm}>Kelimeyi aç</Text>
-            <Text style={s.explanation}>
-              Kalan {missing.length} harf {wordPrice} Mühür karşılığında açılır.
-              Bir ipucu kullanımı sayılır. Ücretsiz Harf Aç hakların korunur.
-            </Text>
+            <Text style={s.solvedTerm}>{confirm.title}</Text>
+            <Text style={s.explanation}>{confirm.body}</Text>
             <Button
-              title={`${wordPrice} MÜHÜR · KELİMEYİ AÇ`}
-              disabled={g.seals < wordPrice}
-              onPress={openWord}
+              title={confirm.action}
+              disabled={confirm.disabled}
+              onPress={confirm.run}
             />
             <Button secondary title="VAZGEÇ" onPress={() => setSheet(null)} />
           </SafeAreaView>
@@ -761,15 +794,6 @@ const sN = StyleSheet.create({
   },
   boosterTitle: { color: N.ink, fontWeight: "800", fontSize: 12 },
   boosterPrice: { color: N.gold, fontSize: 12, fontWeight: "700" },
-  actions: { flexDirection: "row", alignItems: "center", gap: 10 },
-  delete: {
-    minWidth: 90,
-    minHeight: 52,
-    borderRadius: 26,
-    backgroundColor: N.panel,
-    alignItems: "center",
-    justifyContent: "center",
-  },
   feedback: { color: N.muted, fontSize: 14, textAlign: "center" },
   error: { color: N.red },
   overlay: { flex: 1, backgroundColor: "#0009", justifyContent: "flex-end" },

@@ -31,7 +31,7 @@ export default function AboutScreen({ navigation }: Props<"About">) {
   const { C } = useTheme();
   const s = useS();
   return (
-    <Shell header={<TopBar title="Hakkında" back={() => navigation.goBack()} />}>
+    <Shell scroll header={<TopBar title="Hakkında" back={() => navigation.goBack()} />}>
       <View style={{ alignItems: "center", gap: 6, paddingVertical: 8 }}>
         <SealCoin size={72} />
         <Text style={{ fontFamily: logoFont, fontSize: 30, color: C.ink, marginTop: 6 }}>
