@@ -10,6 +10,8 @@ export type Discovery = {
   favorites: string[];
   /** Struggle score per question id: wrong answers and jokers add up, review rounds lower it. */
   struggles: Record<string, number>;
+  /** First-try correct answers in review rounds since the term's last struggle. */
+  learned: Record<string, number>;
 };
 export const DISCOVERY_KEY = "@muhur/discovery-v1";
 export const emptyDiscovery = (): Discovery => ({
@@ -17,9 +19,18 @@ export const emptyDiscovery = (): Discovery => ({
   days: {},
   favorites: [],
   struggles: {},
+  learned: {},
 });
 /** What each struggle adds to a term's score. */
-export const strugglePoints = { wrong: 1, letter: 1, extra: 1, word: 3, reveal: 1, reviewed: -2 };
+export const strugglePoints = {
+  wrong: 1,
+  letter: 1,
+  extra: 1,
+  word: 3,
+  reveal: 1,
+};
+/** A hard term leaves the list after this many first-try correct answers in review rounds. */
+export const LEARN_AFTER = 2;
 /** A term joins "Zor kelimelerim" at this score. */
 export const HARD_SCORE = 2;
 /** Terms per review round. */
@@ -28,7 +39,11 @@ export const REVIEW_SIZE = 5;
 export function hardWords(g: Game, d: Discovery) {
   return unlockedQuestions(g)
     .filter((q) => (d.struggles[q.id] ?? 0) >= HARD_SCORE)
-    .sort((a, b) => d.struggles[b.id] - d.struggles[a.id] || a.term.localeCompare(b.term, "tr"));
+    .sort(
+      (a, b) =>
+        d.struggles[b.id] - d.struggles[a.id] ||
+        a.term.localeCompare(b.term, "tr"),
+    );
 }
 const dailyPool = questions
   .slice(0, 30)
@@ -62,6 +77,7 @@ export const dailySolved = (d: Discovery, day: string) =>
 export type DiscoveryAction =
   | { type: "favorite"; id: string }
   | { type: "struggle"; id: string; points: number }
+  | { type: "reviewed"; id: string }
   | { type: "draft"; day: string; value: string }
   | { type: "guess"; day: string };
 export function discoveryReducer(d: Discovery, a: DiscoveryAction): Discovery {
@@ -75,12 +91,27 @@ export function discoveryReducer(d: Discovery, a: DiscoveryAction): Discovery {
     };
   }
   if (a.type === "struggle") {
-    if (!questions.some((q) => q.id === a.id) || !Number.isInteger(a.points)) return d;
+    if (!questions.some((q) => q.id === a.id) || !Number.isInteger(a.points))
+      return d;
     const score = Math.max(0, (d.struggles[a.id] ?? 0) + a.points);
     if (score === (d.struggles[a.id] ?? 0)) return d;
     const struggles = { ...d.struggles, [a.id]: score };
     if (!score) delete struggles[a.id];
-    return { ...d, struggles };
+    // A new struggle starts the count of correct review answers again.
+    const learned = { ...d.learned };
+    delete learned[a.id];
+    return { ...d, struggles, learned };
+  }
+  if (a.type === "reviewed") {
+    if (!d.struggles[a.id]) return d;
+    const count = (d.learned[a.id] ?? 0) + 1;
+    const struggles = { ...d.struggles };
+    const learned = { ...d.learned, [a.id]: count };
+    if (count >= LEARN_AFTER) {
+      delete struggles[a.id];
+      delete learned[a.id];
+    }
+    return { ...d, struggles, learned };
   }
   if (dailySolved(d, a.day)) return d;
   const round = roundFor(d, a.day);
@@ -103,6 +134,7 @@ export function parseDiscovery(raw: string): Discovery {
   const d = JSON.parse(raw) as Discovery;
   // Saves from before the review list have no scores yet.
   if (d && d.struggles === undefined) d.struggles = {};
+  if (d && d.learned === undefined) d.learned = {};
   if (
     !d ||
     d.version !== 1 ||
@@ -115,7 +147,17 @@ export function parseDiscovery(raw: string): Discovery {
     typeof d.struggles !== "object" ||
     Array.isArray(d.struggles) ||
     Object.entries(d.struggles).some(
-      ([id, n]) => !questions.some((q) => q.id === id) || !Number.isSafeInteger(n) || n < 1,
+      ([id, n]) =>
+        !questions.some((q) => q.id === id) ||
+        !Number.isSafeInteger(n) ||
+        n < 1,
+    ) ||
+    !d.learned ||
+    typeof d.learned !== "object" ||
+    Array.isArray(d.learned) ||
+    Object.entries(d.learned).some(
+      ([id, n]) =>
+        !d.struggles[id] || !Number.isInteger(n) || n < 1 || n >= LEARN_AFTER,
     )
   )
     throw Error("Geçersiz keşif kaydı");

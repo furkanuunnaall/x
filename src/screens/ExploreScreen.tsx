@@ -9,6 +9,7 @@ import {
   achievements,
   dailySolved,
   hardWords,
+  LEARN_AFTER,
   REVIEW_SIZE,
   unlockedQuestions,
 } from "../discovery/model";
@@ -248,7 +249,8 @@ export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
                       ) : null}
                       {hardView ? (
                         <Text style={[s.small, { color: C.gold }]}>
-                          Zorlanma puanı: {data.struggles[q.id]}
+                          Zorlanma puanı: {data.struggles[q.id]} · Tekrarda
+                          bilinen: {data.learned[q.id] ?? 0}/{LEARN_AFTER}
                         </Text>
                       ) : null}
                     </>

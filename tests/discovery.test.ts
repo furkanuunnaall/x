@@ -170,13 +170,23 @@ test("struggle scores build the hard-word list, never go below zero and stay off
   add(c.id, strugglePoints.word);
   // Hardest first; c is not solved yet, so it never shows (no spoilers).
   assert.deepEqual(hardWords(g, d).map((q) => q.id), [b.id, a.id]);
-  add(a.id, strugglePoints.reviewed);
-  add(a.id, strugglePoints.reviewed);
+  // Two first-try review answers take a term off the list; a new struggle in between resets.
+  const review = (id: string) => (d = discoveryReducer(d, { type: "reviewed", id }));
+  review(a.id);
+  assert.equal(d.learned[a.id], 1);
+  assert.equal(d.struggles[a.id], 2);
+  add(a.id, strugglePoints.wrong);
+  assert.equal(d.learned[a.id], undefined);
+  review(a.id);
+  review(a.id);
   assert.equal(d.struggles[a.id], undefined);
+  assert.equal(d.learned[a.id], undefined);
+  review(b.id);
   assert.equal(discoveryReducer(d, { type: "struggle", id: "nope", points: 1 }), d);
   assert.deepEqual(parseDiscovery(JSON.stringify(d)), d);
   // A save from before the list loads with no scores.
   const old = { version: 1, days: {}, favorites: [] };
   assert.deepEqual(parseDiscovery(JSON.stringify(old)).struggles, {});
+  assert.deepEqual(parseDiscovery(JSON.stringify(old)).learned, {});
   assert.throws(() => parseDiscovery(JSON.stringify({ ...d, struggles: { [a.id]: -1 } })));
 });

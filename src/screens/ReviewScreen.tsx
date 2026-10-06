@@ -5,7 +5,7 @@ import { Text } from "../AppText";
 import { questions } from "../content";
 import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
-import { hardWords, REVIEW_SIZE, strugglePoints } from "../discovery/model";
+import { hardWords, LEARN_AFTER, REVIEW_SIZE, strugglePoints } from "../discovery/model";
 import { Button, GameCard, Label, Shell, TopBar, useS } from "../ui";
 import { NativeLetterInput, showKeyboard } from "../NativeLetterInput";
 import { Props } from "../navigation";
@@ -22,8 +22,8 @@ const outcomeText: Record<Outcome, string> = {
 
 /**
  * A short, reward-free round over "Zor kelimelerim": no jokers, only "show the answer".
- * A term answered right on the first try loses struggle points and slowly leaves the list;
- * wrong tries and shown answers add points. The round itself is not saved.
+ * A term leaves the list after two first-try correct answers (across rounds); a wrong try or
+ * a shown answer adds struggle points and starts that count again. The round is not saved.
  */
 export default function ReviewScreen({ navigation }: Props<"Review">) {
   const { C } = useTheme();
@@ -71,7 +71,7 @@ export default function ReviewScreen({ navigation }: Props<"Review">) {
     setFailed(!correct);
     if (correct) {
       announce(`Doğru: ${q.term}`);
-      if (tries === 0) struggle(strugglePoints.reviewed);
+      if (tries === 0) dispatch({ type: "reviewed", id: q.id });
       finish(tries === 0 ? "first" : "later");
       return;
     }
@@ -134,7 +134,7 @@ export default function ReviewScreen({ navigation }: Props<"Review">) {
             {first}/{ids.length} kavram ilk denemede doğru
           </Text>
           <Text style={[s.muted, { textAlign: "center" }]}>
-            İlk denemede bildiğin kavramlar listeden yavaş yavaş çıkar.
+            Bir kavramı tekrar turlarında {LEARN_AFTER} kez ilk denemede bilince listeden çıkar.
           </Text>
         </GameCard>
         {ids.map((id, i) => {
@@ -149,7 +149,11 @@ export default function ReviewScreen({ navigation }: Props<"Review">) {
                     { fontWeight: "800", color: outcomes[i] === "first" ? C.green : C.muted },
                   ]}
                 >
-                  {outcomeText[outcomes[i]]}
+                  {outcomes[i] !== "first"
+                    ? outcomeText[outcomes[i]]
+                    : data.struggles[id]
+                      ? `${outcomeText.first} · ${data.learned[id] ?? 0}/${LEARN_AFTER}`
+                      : "Listeden çıktı"}
                 </Text>
               </View>
               <Text style={s.muted}>{item.explanation}</Text>
