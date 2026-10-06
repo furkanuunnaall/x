@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Animated, ImageBackground, Modal, Pressable, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useLayout } from "./layout";
 import Svg, { Circle, Defs, LinearGradient as SvgGradient, Path, RadialGradient, Stop } from "react-native-svg";
 import { CheckIcon, XIcon } from "phosphor-react-native";
 import { Text, logoFont } from "./AppText";
@@ -143,6 +144,7 @@ export function StreakModal({ game: g, onClose }: { game: Game; onClose: () => v
   const { light } = useTheme();
   const reduced = useReducedMotion();
   const insets = useSafeAreaInsets();
+  const layout = useLayout();
   const kind = streakKind(g);
   const kept = kind === "kept",
     alive = kept || kind === "pending",
@@ -214,13 +216,15 @@ export function StreakModal({ game: g, onClose }: { game: Game; onClose: () => v
           >
             {kept ? <Glow color={light ? "#FFB86B" : "#FF9F43"} /> : null}
             <View style={kind === "pending" && { opacity: 0.6 }}>
-              <FlameEmblem lit={alive} cracked={lost} size={118} />
+              <FlameEmblem lit={alive} cracked={lost} size={layout.fit(118, 92, 140)} />
             </View>
           </Animated.View>
           <Text style={[x.label, { color: alive ? (light ? "#B4561F" : "#FFC98A") : muted }]}>
             {lost ? "İSTİKRAR BOZULDU" : "İSTİKRAR"}
           </Text>
-          <Text style={[x.count, { color: ink }]}>{alive ? streak : 0} Gün</Text>
+          <Text style={[x.count, { color: ink, fontSize: layout.fit(52, 44, 60) }]}>
+            {alive ? streak : 0} Gün
+          </Text>
           {lost ? (
             <Text style={[x.previous, { color: muted }]}>Önceki serin: {streak} gün</Text>
           ) : null}

@@ -15,7 +15,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0B1229"
-      }
+      },
+      "permissions": [
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -40,6 +43,12 @@
           "backgroundColor": "#0B1229"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "7c6333dd-2a20-4a01-9ae8-4b79c8810799"
+      }
+    },
+    "owner": "furkanunal"
   }
 }

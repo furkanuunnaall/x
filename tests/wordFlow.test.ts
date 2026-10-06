@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { nextBlank, adjacentUnsolved } from "../src/wordFlow";
+import { nextBlank, adjacentUnsolved, scrambled } from "../src/wordFlow";
 import { initialGame, reducer, entry, parseSave } from "../src/game";
 import { files } from "../src/content";
 
@@ -28,4 +28,14 @@ test("last-letter submission keeps hints, rewards exactly once, and survives per
   assert.equal(g.seals, 70);
   assert.deepEqual(reducer(g, { type: "submit", id: q.id }), g);
   assert.deepEqual(parseSave(JSON.stringify(g)), g);
+});
+
+test("İpucu letter pool holds exactly the term's letters, never in answer order, and is stable", () => {
+  for (const f of files)
+    for (const q of f.questions) {
+      const pool = scrambled(q.term, q.id);
+      assert.deepEqual([...pool].sort(), [...q.term].sort());
+      if (new Set(q.term).size > 1) assert.notEqual(pool.join(""), q.term, q.term);
+      assert.deepEqual(pool, scrambled(q.term, q.id));
+    }
 });

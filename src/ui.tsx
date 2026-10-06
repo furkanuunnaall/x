@@ -15,6 +15,7 @@ import { useGame } from "./store";
 import { colors, spacing, radius, typography, shadows } from "./theme";
 import { useTheme } from "./themeMode";
 import { colors as N } from "./theme";
+import { levelNames, type Level } from "./content";
 export function useS() {
   return useTheme().sx(sN);
 }
@@ -84,6 +85,8 @@ export function Button({
         style={[StyleSheet.absoluteFill, { borderRadius: 28 }]}
       />
       <Text
+        numberOfLines={1}
+        adjustsFontSizeToFit
         style={[
           s.buttonText,
           small && { fontSize: 12, letterSpacing: 0.4 },
@@ -98,6 +101,33 @@ export function Button({
 export const PrimaryButton = Button;
 export function SecondaryButton(props: React.ComponentProps<typeof Button>) {
   return <Button {...props} secondary />;
+}
+// Green, gold and red, readable on both the night and the day backgrounds.
+const levelColors: Record<Level, string> = { 1: "#2FB39A", 2: "#D9A23A", 3: "#E0604E" };
+/** KOLAY / ORTA / ZOR pill for a bölüm. */
+export function LevelBadge({ level, small }: { level: Level; small?: boolean }) {
+  const color = levelColors[level];
+  return (
+    <View
+      accessibilityLabel={`Zorluk: ${levelNames[level].toLocaleLowerCase("tr-TR")}`}
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 5,
+        paddingHorizontal: small ? 7 : 10,
+        paddingVertical: small ? 2 : 4,
+        borderRadius: 999,
+        borderWidth: 1,
+        borderColor: color,
+        backgroundColor: `${color}26`,
+      }}
+    >
+      <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: color }} />
+      <Text style={{ color, fontSize: small ? 9 : 11, fontWeight: "800", letterSpacing: 1 }}>
+        {levelNames[level]}
+      </Text>
+    </View>
+  );
 }
 export function Label({ children }: { children: React.ReactNode }) {
   const { sx } = useTheme();
@@ -137,7 +167,9 @@ export function TopBar({
           <Text style={{ color: C.ink, fontSize: 27 }}>‹</Text>
         </Pressable>
       ) : null}
-      <Text style={s.brand}>{title}</Text>
+      <Text numberOfLines={1} adjustsFontSizeToFit style={s.brand}>
+        {title}
+      </Text>
       {right}
     </View>
   );
@@ -358,6 +390,7 @@ export function Shell({
   footer,
   compact,
   scroll = false,
+  fixed = false,
   scrollRef,
   dim = 0,
 }: {
@@ -365,7 +398,10 @@ export function Shell({
   header?: React.ReactNode;
   footer?: React.ReactNode;
   compact?: boolean;
+  /** Content is a long list: always scrollable. */
   scroll?: boolean;
+  /** The screen scrolls by itself (an inner list), so the page must not. */
+  fixed?: boolean;
   scrollRef?: React.RefObject<ScrollView | null>;
   /** Extra darkening over the background art, 0–1, so busy content stands out. */
   dim?: number;
@@ -408,20 +444,29 @@ export function Shell({
           {header}
         </View>
       ) : null}
-      {scroll ? (
-        <ScrollView
-          ref={scrollRef}
-          keyboardShouldPersistTaps="handled"
-          contentContainerStyle={[s.page, compact && { paddingTop: 0 }]}
-        >
-          {errorBanner}
-          {children}
-        </ScrollView>
-      ) : (
+      {fixed ? (
         <View style={[s.page, s.fixedPage, compact && { paddingTop: 0 }]}>
           {errorBanner}
           {children}
         </View>
+      ) : (
+        // A page that fits stands still and fills the screen; one that does not (a short
+        // phone, large text) scrolls instead of being cut off.
+        <ScrollView
+          ref={scrollRef}
+          keyboardShouldPersistTaps="handled"
+          bounces={scroll}
+          alwaysBounceVertical={scroll}
+          overScrollMode={scroll ? "auto" : "never"}
+          contentContainerStyle={[
+            s.page,
+            !scroll && s.fitPage,
+            compact && { paddingTop: 0 },
+          ]}
+        >
+          {errorBanner}
+          {children}
+        </ScrollView>
       )}
       {footer ? (
         <View
@@ -459,6 +504,7 @@ export const sN = StyleSheet.create({
     gap: 20,
   },
   fixedPage: { flex: 1, overflow: "hidden", paddingBottom: 16 },
+  fitPage: { flexGrow: 1, paddingBottom: 16 },
   card: {
     backgroundColor: N.panel,
     borderRadius: radius.lg,

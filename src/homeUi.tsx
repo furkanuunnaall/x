@@ -2,6 +2,7 @@ import React from "react";
 import {
   View,
   StyleSheet,
+  type ViewStyle,
 } from "react-native";
 import { Text } from "./AppText";
 import { SealCoin } from "./art";
@@ -22,9 +23,13 @@ export function CurrencyBadge({ amount }: { amount: number }) {
 export function ProgressBar({
   value,
   total = 1000,
+  trackStyle,
+  fillStyle,
 }: {
   value: number;
   total?: number;
+  trackStyle?: ViewStyle;
+  fillStyle?: ViewStyle;
 }) {
   const { sx } = useTheme();
   const s = sx(sN);
@@ -32,11 +37,12 @@ export function ProgressBar({
     <View
       accessibilityRole="progressbar"
       accessibilityValue={{ min: 0, max: total, now: value }}
-      style={s.track}
+      style={[s.track, trackStyle]}
     >
       <View
         style={[
           s.fill,
+          fillStyle,
           { width: `${Math.min(100, Math.max(0, (value / total) * 100))}%` },
         ]}
       />

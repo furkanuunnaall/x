@@ -1,13 +1,14 @@
 import { NativeLetterInput, showKeyboard } from "../NativeLetterInput";
 import { productOf } from "../product";
 import { useFeedback } from "../feedback";
-import { adjacentUnsolved, nextBlank } from "../wordFlow";
+import { adjacentUnsolved, nextBlank, scrambled } from "../wordFlow";
 import { Ambient, SealCoin } from "../art";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Keyboard,
   Modal,
+  Platform,
   Pressable,
   StyleSheet,
   TextInput,
@@ -28,7 +29,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { useGame } from "../store";
-import { costs, entry, Hint, normalize, reward } from "../game";
+import { costs, entry, Hint, normalize } from "../game";
 import { files } from "../content";
 import { Props } from "../navigation";
 import { Button, GameCard, CurrencyBadge } from "../ui";
@@ -58,17 +59,13 @@ export default function GameScreen({ navigation }: Props<"Game">) {
   const [sheet, setSheet] = useState<"extra" | "letter" | "word" | null>(null);
   const [feedback, setFeedback] = useState("");
   const [failed, setFailed] = useState(false);
-  const [success, setSuccess] = useState<{
-    id: string;
-    xp: number;
-    combo: number;
-  } | null>(null);
   const shake = useRef(new Animated.Value(0)).current,
     pop = useRef(new Animated.Value(1)).current;
   const reduced = useReducedMotion();
   const feedbackEffect = useFeedback();
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
+  const keyboard = useKeyboardHeight();
   const [boardWidth, setBoardWidth] = useState(Math.min(width, 560));
   const active =
     cursor !== null && !e.letters[cursor] ? cursor : draft.findIndex((c) => !c);
@@ -85,6 +82,18 @@ export default function GameScreen({ navigation }: Props<"Game">) {
   useEffect(() => {
     if (!e.solved) input.current?.focus();
   }, []);
+  // A level-up window takes the keyboard away while it is open; bring it back once it closes.
+  const levelUp = productOf(g).notices.some((n) => n.kind === "level");
+  const hadLevelUp = useRef(false);
+  useEffect(() => {
+    if (levelUp) {
+      hadLevelUp.current = true;
+      input.current?.blur();
+    } else if (hadLevelUp.current) {
+      hadLevelUp.current = false;
+      if (!e.solved) showKeyboard(input.current);
+    }
+  }, [levelUp]);
   function choose(id: string) {
     if (entry(g, id).solved) return;
     dispatch({ type: "select", id });
@@ -92,8 +101,8 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     setSheet(null);
     setFailed(false);
     setFeedback("");
-    setSuccess(null);
-    showKeyboard(input.current);
+    // Moving on to the next word while the level-up window is open waits for it to close.
+    if (!levelUp) showKeyboard(input.current);
   }
   function typeLetters(letters: string[]) {
     if (e.solved || live.current.active < 0) return;
@@ -132,8 +141,6 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     feedbackEffect(correct);
     setFailed(!correct);
     setCursor(null);
-    if (correct)
-      setSuccess({ id: q.id, xp: reward(g.combo + 1), combo: g.combo + 1 });
     setFeedback(correct ? "" : "Henüz değil. Bir kez daha dene.");
     dispatch({ type: "submit", id: q.id });
     if (!reduced) {
@@ -187,6 +194,13 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     checkAfterHint.current = false;
     if (draft.every(Boolean)) submit();
   }, [draft.join("")]);
+  // A solved word moves straight on: the row turns green for a moment, then the next unsolved
+  // word opens, or the bölüm result once every word is found (explanations live there).
+  useEffect(() => {
+    if (!e.solved) return;
+    const timer = setTimeout(next, reduced ? 0 : 500);
+    return () => clearTimeout(timer);
+  }, [e.solved, q.id, !!result]);
   function next() {
     if (result) navigation.replace("Result");
     else {
@@ -197,14 +211,14 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     }
   }
 
-  // Keep the complete board outside the scrolling clue/keyboard area.
+  // The board, the header and the clue card must stay above the keyboard; on a short phone
+  // the rows give up height for it (the boosters reappear when the keyboard is closed).
   const usableHeight = height - insets.top - insets.bottom;
+  const free = height - insets.top - Math.max(insets.bottom, keyboard);
+  const boardBudget = Math.min(usableHeight * 0.38, free - (keyboard ? 200 : 290));
   const rowHeight = Math.max(
-    28,
-    Math.min(
-      44,
-      Math.floor((usableHeight * 0.38 - 12 - (qs.length - 1) * 3) / qs.length),
-    ),
+    26,
+    Math.min(46, Math.floor((boardBudget - 12 - (qs.length - 1) * 3) / qs.length)),
   );
   const availableWidth = boardWidth - 58;
   // The active row grows ~10%: it takes extra height from the other rows so the board keeps
@@ -232,7 +246,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
   const confirm = {
     extra: {
       title: "İpucu al",
-      body: `Soruya ek bir açıklama ${costs.extra} Mühür karşılığında eklenir. Bir ipucu kullanımı sayılır.`,
+      body: `Kelimenin harfleri karışık sırayla soru kartında gösterilir (${costs.extra} Mühür). Bir ipucu kullanımı sayılır.`,
       action: `${costs.extra} MÜHÜR · İPUCU AL`,
       disabled: e.extra || g.seals < costs.extra,
       run: () => buy("extra"),
@@ -397,7 +411,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                           // A full-width box: iOS can measure a lone narrow glyph like "I" a hair
                           // too small and then drop it entirely instead of drawing it.
                           {
-                            fontSize: Math.min(20, tileWidth * 0.65),
+                            fontSize: Math.min(20, tileSize * 0.7),
                             alignSelf: "stretch",
                             textAlign: "center",
                           },
@@ -461,29 +475,33 @@ export default function GameScreen({ navigation }: Props<"Game">) {
             {e.solved ? (
               <>
                 <Text style={s.solvedTerm}>{q.term}</Text>
-                {success?.id === q.id ? (
-                  <View style={s.rewardPill}>
-                    <Text style={s.rewardText}>
-                      +{success.xp} XP · {success.combo}’li seri
-                    </Text>
-                  </View>
-                ) : null}
-                <Text style={s.explanation}>{q.explanation}</Text>
               </>
             ) : (
               <>
                 <Text style={s.clue}>{q.clue}</Text>
-                {e.extra ? <Text style={s.extra}>{q.explanation}</Text> : null}
+                {e.extra ? (
+                  <View style={s.pool}>
+                    <Text style={s.poolLabel}>HARFLER</Text>
+                    <View
+                      accessibilityLabel={`Harfler: ${scrambled(q.term, q.id).join(" ")}`}
+                      style={s.poolTiles}
+                    >
+                      {scrambled(q.term, q.id).map((letter, i) => (
+                        <View key={i} style={s.poolTile}>
+                          <Text style={s.poolLetter}>{letter}</Text>
+                        </View>
+                      ))}
+                    </View>
+                    {q.explanation !== q.clue ? (
+                      <Text style={s.extra}>{q.explanation}</Text>
+                    ) : null}
+                  </View>
+                ) : null}
               </>
             )}
           </GameCard>
         </Animated.View>
-        {e.solved ? (
-          <Button
-            title={result ? "BÖLÜM SONUCUNU GÖR" : "DEVAM ET →"}
-            onPress={next}
-          />
-        ) : (
+        {e.solved ? null : (
           <>
             <View style={s.boosters}>
               {[
@@ -739,6 +757,21 @@ const sN = StyleSheet.create({
     fontWeight: "500",
   },
   extra: { color: "#C0CABF", fontSize: 14, lineHeight: 20 },
+  pool: { gap: 8, marginTop: 2 },
+  poolLabel: { color: N.gold, fontSize: 11, fontWeight: "800", letterSpacing: 1.5 },
+  poolTiles: { flexDirection: "row", flexWrap: "wrap", gap: 5 },
+  poolTile: {
+    minWidth: 28,
+    height: 30,
+    paddingHorizontal: 4,
+    borderRadius: 7,
+    backgroundColor: "#FFFBF2",
+    borderWidth: 1,
+    borderColor: "#E7DECC",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  poolLetter: { color: "#17243B", fontSize: 15, fontWeight: "800" },
   solvedCard: {
     backgroundColor: "#0E3A2D",
     borderWidth: 1,
@@ -750,16 +783,6 @@ const sN = StyleSheet.create({
     fontWeight: "800",
     letterSpacing: 1,
   },
-  rewardPill: {
-    alignSelf: "flex-start",
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 99,
-    backgroundColor: "#CFAB4B22",
-    borderWidth: 1,
-    borderColor: "#CFAB4B66",
-  },
-  rewardText: { color: N.gold, fontSize: 13, fontWeight: "800" },
   explanation: { color: N.muted, fontSize: 15, lineHeight: 22 },
   boosters: { flexDirection: "row", gap: 8 },
   booster: {
@@ -808,3 +831,23 @@ const sN = StyleSheet.create({
     borderTopRightRadius: 26,
   },
 });
+
+/** Height of the on-screen keyboard, 0 while it is closed. */
+function useKeyboardHeight() {
+  const [height, setHeight] = useState(0);
+  useEffect(() => {
+    // iOS reports the change before the animation, Android only after it.
+    const ios = Platform.OS === "ios";
+    const show = Keyboard.addListener(ios ? "keyboardWillShow" : "keyboardDidShow", (e) =>
+      setHeight(e.endCoordinates.height),
+    );
+    const hide = Keyboard.addListener(ios ? "keyboardWillHide" : "keyboardDidHide", () =>
+      setHeight(0),
+    );
+    return () => {
+      show.remove();
+      hide.remove();
+    };
+  }, []);
+  return height;
+}

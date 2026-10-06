@@ -31,8 +31,11 @@ const manrope: Record<string, keyof typeof fontAssets> = {
 
 const Nested = createContext(false);
 
+// Text follows the phone's text-size setting up to 130%; beyond that fixed-size game pieces
+// (tiles, badges, buttons) would overflow. A Text can still pass its own limit.
+const MAX_FONT_SCALE = 1.3;
 // Custom fonts ignore fontWeight on Android, so each weight maps to its own font file.
-export function Text({ style, ...props }: TextProps) {
+export function Text({ style, maxFontSizeMultiplier = MAX_FONT_SCALE, ...props }: TextProps) {
   const nested = useContext(Nested);
   const flat: TextStyle = StyleSheet.flatten(style) ?? {};
   let fontStyle: TextStyle | undefined;
@@ -44,7 +47,11 @@ export function Text({ style, ...props }: TextProps) {
   }
   return (
     <Nested.Provider value>
-      <RNText {...props} style={fontStyle ? [style, fontStyle] : style} />
+      <RNText
+        {...props}
+        maxFontSizeMultiplier={maxFontSizeMultiplier}
+        style={fontStyle ? [style, fontStyle] : style}
+      />
     </Nested.Provider>
   );
 }

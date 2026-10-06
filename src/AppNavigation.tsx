@@ -1,5 +1,5 @@
 import LeagueScreen from "./screens/LeagueScreen";
-import React from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   View,
@@ -13,6 +13,7 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGame } from "./store";
+import { useDiscovery } from "./discovery/store";
 import { productOf } from "./product";
 import { Button, useS } from "./ui";
 import { Routes } from "./navigation";
@@ -39,16 +40,35 @@ const Stack = createNativeStackNavigator<Routes>();
 export default function AppNavigation() {
   const { C, light } = useTheme();
   const s = useS();
-  const { game, ready, error, retry } = useGame(),
+  const { game, ready, error, retry, reset } = useGame(),
+    discovery = useDiscovery(),
     p = productOf(game);
+  // A save that cannot be read is never overwritten silently; the player may choose to start over.
+  const [confirmReset, setConfirmReset] = useState(false);
+  const startOver = async () => {
+    await discovery.reset();
+    await reset();
+    setConfirmReset(false);
+  };
   if (!ready)
     return (
-      <SafeAreaView style={[s.safe, { justifyContent: "center", padding: 24 }]}>
+      <SafeAreaView style={[s.safe, { justifyContent: "center", padding: 24, gap: 14 }]}>
         {error ? (
-          <>
-            <Text style={s.error}>{error}</Text>
-            <Button title="TEKRAR DENE" onPress={retry} />
-          </>
+          confirmReset ? (
+            <>
+              <Text style={s.text}>
+                Kayıtlı ilerlemen silinecek ve oyun en baştan başlayacak. Bu işlem geri alınamaz.
+              </Text>
+              <Button title="EVET, BAŞTAN BAŞLA" onPress={() => void startOver()} />
+              <Button secondary title="VAZGEÇ" onPress={() => setConfirmReset(false)} />
+            </>
+          ) : (
+            <>
+              <Text style={s.error}>{error}</Text>
+              <Button title="TEKRAR DENE" onPress={retry} />
+              <Button secondary title="BAŞTAN BAŞLA" onPress={() => setConfirmReset(true)} />
+            </>
+          )
         ) : (
           <View style={{ alignItems: "center", gap: 24 }}>
             <Text

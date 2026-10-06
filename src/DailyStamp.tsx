@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useLayout } from "./layout";
 import Svg, { Path } from "react-native-svg";
 import * as Haptics from "expo-haptics";
 import { useAudioPlayer } from "expo-audio";
@@ -128,6 +129,7 @@ export function DailyStampModal({ onClose }: { onClose: () => void }) {
   const reduced = useReducedMotion();
   const insets = useSafeAreaInsets();
   const { width: screen } = useWindowDimensions();
+  const layout = useLayout();
   const p = productOf(g);
   const today = dayKey();
   const board = stampBoard(today);
@@ -178,8 +180,12 @@ export function DailyStampModal({ onClose }: { onClose: () => void }) {
 
   const inkText = light ? "#2A2418" : "#FFF5E3";
   const muted = light ? "#5E5444" : "#D9CDB8";
-  const gap = 12;
-  const grid = Math.min(screen - 48, 340);
+  const gap = layout.space(12);
+  // Wide enough to tap comfortably, but short phones keep room for the title and result line.
+  const grid = Math.max(
+    240,
+    Math.min(screen - 48, layout.fit(340, 300, 380), layout.usable - 300),
+  );
   const cell = (grid - gap * 2) / 3;
   const amount = pick?.amount ?? 0;
   return (

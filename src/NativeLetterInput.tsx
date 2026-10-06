@@ -37,6 +37,9 @@ export function NativeLetterInput({
   // What the native field currently holds. The field is left uncontrolled: forcing it back
   // to "" on every keystroke races with fast typing and drops or repeats letters.
   const buffer = useRef("");
+  // Set when the field was asked to clear: iOS sometimes ignores clear() on an uncontrolled
+  // field, and the old text then comes back with the next key.
+  const cleared = useRef(false);
   const setRef = (node: TextInput | null) => {
     input.current = node;
     if (typeof ref === "function") ref(node);
@@ -48,18 +51,25 @@ export function NativeLetterInput({
       defaultValue=""
       editable={editable}
       onChangeText={(text) => {
-        const added = text.length - buffer.current.length;
+        const before = buffer.current;
+        let fresh: string;
+        if (cleared.current) {
+          cleared.current = false;
+          // Clear worked: everything is new. Clear was ignored: only what follows the old text.
+          fresh = text.startsWith(before) ? text.slice(before.length) : text;
+        } else {
+          // Deletions arrive through onKeyPress, so only growth matters here.
+          fresh = text.length > before.length ? text.slice(before.length - text.length) : "";
+        }
         buffer.current = text;
         if (text.length > maxBuffer) {
           input.current?.clear();
-          buffer.current = "";
+          cleared.current = true;
         }
-        // Deletions arrive through onKeyPress, so only growth matters here.
-        if (added <= 0) return;
         // "tr" locale maps i→İ and ı→I, which the default toUpperCase gets wrong.
-        const letters = Array.from(
-          text.slice(-added).toLocaleUpperCase("tr"),
-        ).filter((c) => turkishLetter.test(c));
+        const letters = Array.from(fresh.toLocaleUpperCase("tr")).filter((c) =>
+          turkishLetter.test(c),
+        );
         if (letters.length) onLetters(letters);
       }}
       onKeyPress={({ nativeEvent }) => {

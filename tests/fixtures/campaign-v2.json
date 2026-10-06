@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "level": 1,
     "kind": "normal",
     "title": "İlk İz",
     "questions": [
@@ -40,6 +41,7 @@
   },
   {
     "id": 2,
+    "level": 1,
     "kind": "normal",
     "title": "Kapıdaki Dosya",
     "questions": [
@@ -79,6 +81,7 @@
   },
   {
     "id": 3,
+    "level": 1,
     "kind": "normal",
     "title": "Sessiz Tanık",
     "questions": [
@@ -118,6 +121,7 @@
   },
   {
     "id": 4,
+    "level": 1,
     "kind": "normal",
     "title": "Kayıp Anahtar",
     "questions": [
@@ -157,6 +161,7 @@
   },
   {
     "id": 5,
+    "level": 1,
     "kind": "reward",
     "title": "Mühür Noktası",
     "questions": [
@@ -196,6 +201,7 @@
   },
   {
     "id": 6,
+    "level": 1,
     "kind": "normal",
     "title": "Gece Nöbeti",
     "questions": [
@@ -235,6 +241,7 @@
   },
   {
     "id": 7,
+    "level": 1,
     "kind": "normal",
     "title": "Kırmızı Çizgi",
     "questions": [
@@ -274,6 +281,7 @@
   },
   {
     "id": 8,
+    "level": 1,
     "kind": "normal",
     "title": "Yeni Deliller",
     "questions": [
@@ -313,6 +321,7 @@
   },
   {
     "id": 9,
+    "level": 1,
     "kind": "normal",
     "title": "Terazi",
     "questions": [
@@ -352,6 +361,7 @@
   },
   {
     "id": 10,
+    "level": 1,
     "kind": "final",
     "title": "Final Bölümü 1",
     "questions": [
@@ -402,15 +412,15 @@
         "explanation": "Bir hukuki işlemin geçerliliğinin yetkili karar veya iradeyle kaldırılması.",
         "category": "Genel",
         "difficulty": 1
-      },
-      {
-        "id": "n25",
-        "term": "ÇEK",
-        "clue": "Bankadaki hesaptan, ibraz edildiğinde ödenmesi için verilen yazılı ödeme emri.",
-        "explanation": "Karşılıksız çıkması ciddi sonuç doğurur.",
-        "difficulty": 1,
-        "category": "Ticaret"
-      },
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "level": 1,
+    "kind": "normal",
+    "title": "Kişinin Hakları",
+    "questions": [
       {
         "id": "v1q12",
         "term": "YEMİN",
@@ -419,21 +429,6 @@
         "category": "Usul",
         "difficulty": 1
       },
-      {
-        "id": "n26",
-        "term": "DEVİR",
-        "clue": "Bir hakkın veya borcun bir kişiden başka bir kişiye geçirilmesi.",
-        "explanation": "Tapuda mülk el değiştirirken de yapılır.",
-        "difficulty": 1,
-        "category": "Borçlar"
-      }
-    ]
-  },
-  {
-    "id": 11,
-    "kind": "normal",
-    "title": "Kişinin Hakları",
-    "questions": [
       {
         "id": "n32",
         "term": "MEMUR",
@@ -457,7 +452,15 @@
         "explanation": "Dilekçede açıkça yazılması gerekir.",
         "difficulty": 1,
         "category": "Usul"
-      },
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "level": 1,
+    "kind": "normal",
+    "title": "Ortak Masa",
+    "questions": [
       {
         "id": "n35",
         "term": "BORÇ",
@@ -465,14 +468,7 @@
         "explanation": "Alacağın karşı yüzüdür.",
         "difficulty": 1,
         "category": "Borçlar"
-      }
-    ]
-  },
-  {
-    "id": 12,
-    "kind": "normal",
-    "title": "Ortak Masa",
-    "questions": [
+      },
       {
         "id": "n36",
         "term": "VERGİ",
@@ -496,7 +492,15 @@
         "explanation": "Yakalanan kişinin soruşturma için kanuni süre içinde tutulması.",
         "category": "Ceza",
         "difficulty": 1
-      },
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "level": 1,
+    "kind": "normal",
+    "title": "İkinci Celse",
+    "questions": [
       {
         "id": "v1q8",
         "term": "YETKİ",
@@ -504,14 +508,7 @@
         "explanation": "Bir davaya hangi yer mahkemesinin bakacağını belirleyen alan.",
         "category": "Usul",
         "difficulty": 1
-      }
-    ]
-  },
-  {
-    "id": 13,
-    "kind": "normal",
-    "title": "İkinci Celse",
-    "questions": [
+      },
       {
         "id": "n38",
         "term": "İSTİFA",
@@ -535,7 +532,15 @@
         "explanation": "Kendi algıladığı olayları aktarır; uzman görüşü vermekle görevli değildir.",
         "difficulty": 1,
         "category": "Usul"
-      },
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "level": 1,
+    "kind": "normal",
+    "title": "Koridordaki Fısıltı",
+    "questions": [
       {
         "id": "v1q70",
         "term": "SORUŞTURMA",
@@ -543,14 +548,7 @@
         "explanation": "Suç şüphesinin öğrenilmesinden iddianamenin kabulüne kadarki evre.",
         "category": "Ceza",
         "difficulty": 1
-      }
-    ]
-  },
-  {
-    "id": 14,
-    "kind": "normal",
-    "title": "Koridordaki Fısıltı",
-    "questions": [
+      },
       {
         "id": "n40",
         "term": "YARGI",
@@ -574,19 +572,12 @@
         "explanation": "Gizlice ve izinsiz alır.",
         "difficulty": 1,
         "category": "Ceza"
-      },
-      {
-        "id": "v1q69",
-        "term": "ŞİKAYET",
-        "clue": "Suçtan zarar görenin ilgili fiil için soruşturma yapılmasını istemesi.",
-        "explanation": "Suçtan zarar görenin ilgili fiil için soruşturma yapılmasını istemesi.",
-        "category": "Ceza",
-        "difficulty": 1
       }
     ]
   },
   {
     "id": 15,
+    "level": 2,
     "kind": "reward",
     "title": "Altın Kapı",
     "questions": [
@@ -642,6 +633,7 @@
   },
   {
     "id": 16,
+    "level": 2,
     "kind": "normal",
     "title": "Kâğıt İzleri",
     "questions": [
@@ -697,6 +689,7 @@
   },
   {
     "id": 17,
+    "level": 2,
     "kind": "normal",
     "title": "Ev Sahibi",
     "questions": [
@@ -752,6 +745,7 @@
   },
   {
     "id": 18,
+    "level": 3,
     "kind": "normal",
     "title": "Çarşı Pazar",
     "questions": [
@@ -807,6 +801,7 @@
   },
   {
     "id": 19,
+    "level": 3,
     "kind": "normal",
     "title": "Son Söz",
     "questions": [
@@ -862,6 +857,7 @@
   },
   {
     "id": 20,
+    "level": 3,
     "kind": "final",
     "title": "Final Bölümü 2",
     "questions": [
@@ -912,38 +908,23 @@
         "explanation": "Bu durumdaki çek için mahkemeden iptal kararı alınır.",
         "difficulty": 3,
         "category": "Ticaret"
-      },
-      {
-        "id": "n200",
-        "term": "TEFSİR",
-        "clue": "Bir hukuk kuralının anlamının ve kapsamının belirlenmesi; yorum.",
-        "explanation": "Lafzi ve amaçsal olarak yapılabilir.",
-        "difficulty": 3,
-        "category": "Genel"
-      },
-      {
-        "id": "n212",
-        "term": "İCAZET",
-        "clue": "Yetkisiz yapılmış bir işleme sonradan verilen onay.",
-        "explanation": "Vekâletsiz iş görmede sonradan verilebilir.",
-        "difficulty": 3,
-        "category": "Borçlar"
-      },
-      {
-        "id": "n206",
-        "term": "SAHİH",
-        "clue": "Hukuka uygun olarak kurulmuş, geçerli.",
-        "explanation": "Batılın karşıtıdır.",
-        "difficulty": 3,
-        "category": "Genel"
       }
     ]
   },
   {
     "id": 21,
+    "level": 1,
     "kind": "normal",
     "title": "Doğru Mahkeme",
     "questions": [
+      {
+        "id": "v1q69",
+        "term": "ŞİKAYET",
+        "clue": "Suçtan zarar görenin ilgili fiil için soruşturma yapılmasını istemesi.",
+        "explanation": "Suçtan zarar görenin ilgili fiil için soruşturma yapılmasını istemesi.",
+        "category": "Ceza",
+        "difficulty": 1
+      },
       {
         "id": "n42",
         "term": "SUÇLU",
@@ -967,7 +948,15 @@
         "explanation": "İddianameyi o hazırlar.",
         "difficulty": 1,
         "category": "Ceza"
-      },
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "level": 1,
+    "kind": "normal",
+    "title": "Tarafsız Bakış",
+    "questions": [
       {
         "id": "n44",
         "term": "PAY",
@@ -975,14 +964,7 @@
         "explanation": "Kesirle gösterilir: yarım, üçte bir gibi.",
         "difficulty": 1,
         "category": "Eşya"
-      }
-    ]
-  },
-  {
-    "id": 22,
-    "kind": "normal",
-    "title": "Tarafsız Bakış",
-    "questions": [
+      },
       {
         "id": "n45",
         "term": "MAHKUM",
@@ -1006,7 +988,15 @@
         "explanation": "Kusurlu olan bunu üstlenir.",
         "difficulty": 1,
         "category": "Borçlar"
-      },
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "level": 1,
+    "kind": "normal",
+    "title": "Kasadaki Belge",
+    "questions": [
       {
         "id": "v1q19",
         "term": "İTİRAZ",
@@ -1014,14 +1004,7 @@
         "explanation": "Bir işleme veya karara karşı çıkıldığını bildiren hukuki başvuru.",
         "category": "Usul",
         "difficulty": 1
-      }
-    ]
-  },
-  {
-    "id": 23,
-    "kind": "normal",
-    "title": "Kasadaki Belge",
-    "questions": [
+      },
       {
         "id": "v1q64",
         "term": "ŞÜPHELİ",
@@ -1045,7 +1028,15 @@
         "explanation": "Belge, tanık anlatımı veya bilirkişi incelemesi buna örnektir.",
         "difficulty": 1,
         "category": "Usul"
-      },
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "level": 1,
+    "kind": "normal",
+    "title": "Sınır Taşları",
+    "questions": [
       {
         "id": "n49",
         "term": "BAŞVURU",
@@ -1053,14 +1044,7 @@
         "explanation": "Anayasa Mahkemesine bireysel olarak da yapılabilir.",
         "difficulty": 1,
         "category": "Usul"
-      }
-    ]
-  },
-  {
-    "id": 24,
-    "kind": "normal",
-    "title": "Sınır Taşları",
-    "questions": [
+      },
       {
         "id": "q22",
         "term": "MİRAS",
@@ -1084,19 +1068,12 @@
         "explanation": "Halk arasında hapishane denir.",
         "difficulty": 1,
         "category": "Ceza"
-      },
-      {
-        "id": "n52",
-        "term": "HAZİNE",
-        "clue": "Devletin mallarını ve parasal varlığını temsil eden kamu tüzel kişiliği.",
-        "explanation": "Sahipsiz taşınmazlar ona kalır.",
-        "difficulty": 1,
-        "category": "İdare"
       }
     ]
   },
   {
     "id": 25,
+    "level": 2,
     "kind": "reward",
     "title": "Kırk Yıllık Defter",
     "questions": [
@@ -1152,6 +1129,7 @@
   },
   {
     "id": 26,
+    "level": 2,
     "kind": "normal",
     "title": "Aile Meclisi",
     "questions": [
@@ -1207,6 +1185,7 @@
   },
   {
     "id": 27,
+    "level": 2,
     "kind": "normal",
     "title": "Veraset Defteri",
     "questions": [
@@ -1262,9 +1241,18 @@
   },
   {
     "id": 28,
+    "level": 3,
     "kind": "normal",
     "title": "Akdin Kurulması",
     "questions": [
+      {
+        "id": "n212",
+        "term": "İCAZET",
+        "clue": "Yetkisiz yapılmış bir işleme sonradan verilen onay.",
+        "explanation": "Vekâletsiz iş görmede sonradan verilebilir.",
+        "difficulty": 3,
+        "category": "Borçlar"
+      },
       {
         "id": "v1q80",
         "term": "TEKERRÜR",
@@ -1304,7 +1292,15 @@
         "explanation": "Haksız yapılırsa iftira olur.",
         "difficulty": 3,
         "category": "Ceza"
-      },
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "level": 3,
+    "kind": "normal",
+    "title": "Gizli Kusur",
+    "questions": [
       {
         "id": "n217",
         "term": "AVAL",
@@ -1312,14 +1308,7 @@
         "explanation": "Senedin önüne 'için' yazılarak imza atılır.",
         "difficulty": 3,
         "category": "Ticaret"
-      }
-    ]
-  },
-  {
-    "id": 29,
-    "kind": "normal",
-    "title": "Gizli Kusur",
-    "questions": [
+      },
       {
         "id": "n218",
         "term": "HUSUMET",
@@ -1359,7 +1348,15 @@
         "explanation": "Kamulaştırma ile aynı anlama gelir.",
         "difficulty": 3,
         "category": "İdare"
-      },
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "level": 3,
+    "kind": "final",
+    "title": "Final Bölümü 3",
+    "questions": [
       {
         "id": "n222",
         "term": "İBRAZ",
@@ -1367,14 +1364,7 @@
         "explanation": "Çek bankaya bu şekilde sunulur.",
         "difficulty": 3,
         "category": "Ticaret"
-      }
-    ]
-  },
-  {
-    "id": 30,
-    "kind": "final",
-    "title": "Final Bölümü 3",
-    "questions": [
+      },
       {
         "id": "v1q5",
         "term": "İLAM",
@@ -1382,6 +1372,14 @@
         "explanation": "Mahkeme hükmünün taraflara verilen resmî yazılı örneği.",
         "category": "Usul",
         "difficulty": 3
+      },
+      {
+        "id": "n212",
+        "term": "İCAZET",
+        "clue": "Yetkisiz yapılmış bir işleme sonradan verilen onay.",
+        "explanation": "Vekâletsiz iş görmede sonradan verilebilir.",
+        "difficulty": 3,
+        "category": "Borçlar"
       },
       {
         "id": "n223",
@@ -1392,12 +1390,12 @@
         "category": "Eşya"
       },
       {
-        "id": "v1q80",
-        "term": "TEKERRÜR",
-        "clue": "Önceki mahkûmiyetten sonra kanuni şartlarda yeniden suç işlenmesi.",
-        "explanation": "Önceki mahkûmiyetten sonra kanuni şartlarda yeniden suç işlenmesi.",
-        "category": "Ceza",
-        "difficulty": 3
+        "id": "n218",
+        "term": "HUSUMET",
+        "clue": "Davada taraf olma sıfatı; düşmanlık.",
+        "explanation": "Davalının yanlış gösterilmesi bu sıfat yokluğu sayılır.",
+        "difficulty": 3,
+        "category": "Usul"
       },
       {
         "id": "v1q22",
@@ -1406,54 +1404,23 @@
         "explanation": "Bir eşya üzerinde başkası yararına sınırlı yararlanma sağlayan ayni hak.",
         "category": "Eşya",
         "difficulty": 3
-      },
-      {
-        "id": "v1q42",
-        "term": "EDİM",
-        "clue": "Borç ilişkisinde borçlunun yerine getirmesi gereken davranış.",
-        "explanation": "Borç ilişkisinde borçlunun yerine getirmesi gereken davranış.",
-        "category": "Borçlar",
-        "difficulty": 3
-      },
-      {
-        "id": "v1q58",
-        "term": "TEVDİ",
-        "clue": "Bir şeyin korunmak veya teslim edilmek üzere yetkili yere bırakılması.",
-        "explanation": "Bir şeyin korunmak veya teslim edilmek üzere yetkili yere bırakılması.",
-        "category": "Borçlar",
-        "difficulty": 3
-      },
-      {
-        "id": "n215",
-        "term": "MECUR",
-        "clue": "Kiraya verilen şey.",
-        "explanation": "Kira sözleşmesinin konusudur.",
-        "difficulty": 3,
-        "category": "Borçlar"
-      },
-      {
-        "id": "q14",
-        "term": "İNTİFA",
-        "clue": "Başkasına ait bir maldan yararlanma ve onu kullanma yetkisi veren sınırlı ayni hak.",
-        "explanation": "Mülkiyet başkasında kalırken malın getirilerinden yararlanılabilir.",
-        "difficulty": 3,
-        "category": "Eşya"
-      },
-      {
-        "id": "n221",
-        "term": "İSTİMLAK",
-        "clue": "Kamu yararı için özel mülkün bedeli ödenerek devletçe alınması.",
-        "explanation": "Kamulaştırma ile aynı anlama gelir.",
-        "difficulty": 3,
-        "category": "İdare"
       }
     ]
   },
   {
     "id": 31,
+    "level": 1,
     "kind": "normal",
     "title": "Meclis Kürsüsü",
     "questions": [
+      {
+        "id": "n52",
+        "term": "HAZİNE",
+        "clue": "Devletin mallarını ve parasal varlığını temsil eden kamu tüzel kişiliği.",
+        "explanation": "Sahipsiz taşınmazlar ona kalır.",
+        "difficulty": 1,
+        "category": "İdare"
+      },
       {
         "id": "q12",
         "term": "TAHLİYE",
@@ -1477,7 +1444,15 @@
         "explanation": "Tanık ile aynı anlama gelir.",
         "difficulty": 1,
         "category": "Usul"
-      },
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "level": 1,
+    "kind": "normal",
+    "title": "Liman Kenti",
+    "questions": [
       {
         "id": "v1q62",
         "term": "İCRA",
@@ -1485,14 +1460,7 @@
         "explanation": "Bir hakkın yetkili organlar aracılığıyla zorla yerine getirilmesi.",
         "category": "İcra",
         "difficulty": 1
-      }
-    ]
-  },
-  {
-    "id": 32,
-    "kind": "normal",
-    "title": "Liman Kenti",
-    "questions": [
+      },
       {
         "id": "v1q66",
         "term": "MAĞDUR",
@@ -1516,7 +1484,15 @@
         "explanation": "İdarenin işlemleri yargısal olarak da incelenir.",
         "difficulty": 1,
         "category": "İdare"
-      },
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "level": 1,
+    "kind": "normal",
+    "title": "Kalem Odası",
+    "questions": [
       {
         "id": "n57",
         "term": "FATURA",
@@ -1524,14 +1500,7 @@
         "explanation": "Vergi açısından düzenlenmesi zorunludur.",
         "difficulty": 1,
         "category": "Vergi"
-      }
-    ]
-  },
-  {
-    "id": 33,
-    "kind": "normal",
-    "title": "Kalem Odası",
-    "questions": [
+      },
       {
         "id": "n58",
         "term": "VELİ",
@@ -1555,7 +1524,15 @@
         "explanation": "Memura uyarma veya kınama cezası verilebilir.",
         "difficulty": 1,
         "category": "İdare"
-      },
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "level": 1,
+    "kind": "normal",
+    "title": "Belediye Sarayı",
+    "questions": [
       {
         "id": "v1q6",
         "term": "DURUŞMA",
@@ -1563,14 +1540,7 @@
         "explanation": "Yargılamada tarafların ve delillerin mahkeme önünde ele alındığı oturum.",
         "category": "Usul",
         "difficulty": 1
-      }
-    ]
-  },
-  {
-    "id": 34,
-    "kind": "normal",
-    "title": "Belediye Sarayı",
-    "questions": [
+      },
       {
         "id": "n61",
         "term": "ORTAKLIK",
@@ -1594,19 +1564,12 @@
         "explanation": "Bono da bunun bir türüdür.",
         "difficulty": 1,
         "category": "Borçlar"
-      },
-      {
-        "id": "v1q81",
-        "term": "İNFAZ",
-        "clue": "Kesinleşen cezanın kanuni usule uygun yerine getirilmesi.",
-        "explanation": "Kesinleşen cezanın kanuni usule uygun yerine getirilmesi.",
-        "category": "Ceza",
-        "difficulty": 1
       }
     ]
   },
   {
     "id": 35,
+    "level": 2,
     "kind": "reward",
     "title": "Mühür Yeri",
     "questions": [
@@ -1662,6 +1625,7 @@
   },
   {
     "id": 36,
+    "level": 2,
     "kind": "normal",
     "title": "Ticaret Yolu",
     "questions": [
@@ -1717,6 +1681,7 @@
   },
   {
     "id": 37,
+    "level": 2,
     "kind": "normal",
     "title": "Fırtınalı Gün",
     "questions": [
@@ -1772,9 +1737,26 @@
   },
   {
     "id": 38,
+    "level": 3,
     "kind": "normal",
     "title": "Uzun Koridor",
     "questions": [
+      {
+        "id": "v1q58",
+        "term": "TEVDİ",
+        "clue": "Bir şeyin korunmak veya teslim edilmek üzere yetkili yere bırakılması.",
+        "explanation": "Bir şeyin korunmak veya teslim edilmek üzere yetkili yere bırakılması.",
+        "category": "Borçlar",
+        "difficulty": 3
+      },
+      {
+        "id": "q14",
+        "term": "İNTİFA",
+        "clue": "Başkasına ait bir maldan yararlanma ve onu kullanma yetkisi veren sınırlı ayni hak.",
+        "explanation": "Mülkiyet başkasında kalırken malın getirilerinden yararlanılabilir.",
+        "difficulty": 3,
+        "category": "Eşya"
+      },
       {
         "id": "n224",
         "term": "DONATAN",
@@ -1806,7 +1788,15 @@
         "explanation": "Konşimentoda gösterilir.",
         "difficulty": 3,
         "category": "Ticaret"
-      },
+      }
+    ]
+  },
+  {
+    "id": 39,
+    "level": 3,
+    "kind": "normal",
+    "title": "Karar Odası",
+    "questions": [
       {
         "id": "n227",
         "term": "RESEN",
@@ -1822,14 +1812,7 @@
         "explanation": "Ödeme yapanın koşulları varsa ilgili kişiden bu tutarı geri istemesi.",
         "category": "Borçlar",
         "difficulty": 3
-      }
-    ]
-  },
-  {
-    "id": 39,
-    "kind": "normal",
-    "title": "Karar Odası",
-    "questions": [
+      },
       {
         "id": "v1q83",
         "term": "MÜDAFİ",
@@ -1861,7 +1844,15 @@
         "explanation": "Malik olmak zorunda değildir.",
         "difficulty": 3,
         "category": "Eşya"
-      },
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "level": 3,
+    "kind": "final",
+    "title": "Final Bölümü 4",
+    "questions": [
       {
         "id": "n230",
         "term": "MUACCEL",
@@ -1877,14 +1868,15 @@
         "explanation": "Tarhtan sonra gelen aşamadır.",
         "difficulty": 3,
         "category": "Vergi"
-      }
-    ]
-  },
-  {
-    "id": 40,
-    "kind": "final",
-    "title": "Final Bölümü 4",
-    "questions": [
+      },
+      {
+        "id": "v1q58",
+        "term": "TEVDİ",
+        "clue": "Bir şeyin korunmak veya teslim edilmek üzere yetkili yere bırakılması.",
+        "explanation": "Bir şeyin korunmak veya teslim edilmek üzere yetkili yere bırakılması.",
+        "category": "Borçlar",
+        "difficulty": 3
+      },
       {
         "id": "v1q26",
         "term": "TERKİN",
@@ -1894,76 +1886,37 @@
         "difficulty": 3
       },
       {
+        "id": "v1q59",
+        "term": "RÜCU",
+        "clue": "Ödeme yapanın koşulları varsa ilgili kişiden bu tutarı geri istemesi.",
+        "explanation": "Ödeme yapanın koşulları varsa ilgili kişiden bu tutarı geri istemesi.",
+        "category": "Borçlar",
+        "difficulty": 3
+      },
+      {
         "id": "n232",
         "term": "TARH",
         "clue": "Vergi alacağının vergi dairesince hesaplanarak belirlenmesi.",
         "explanation": "Vergilendirme sürecinin ilk aşamasıdır.",
         "difficulty": 3,
         "category": "Vergi"
-      },
-      {
-        "id": "n224",
-        "term": "DONATAN",
-        "clue": "Gemisini deniz ticaretinde kullanan gemi sahibi.",
-        "explanation": "Deniz ticareti hukukunun temel kişisidir.",
-        "difficulty": 3,
-        "category": "Ticaret"
-      },
-      {
-        "id": "n233",
-        "term": "MÜFLİS",
-        "clue": "Hakkında iflas kararı verilmiş kişi.",
-        "explanation": "Malları iflas masasına girer.",
-        "difficulty": 3,
-        "category": "İcra"
-      },
-      {
-        "id": "q5",
-        "term": "TEMERRÜT",
-        "clue": "İfası gereken borcun, gerekli şartlar oluşmasına rağmen zamanında yerine getirilmemesi.",
-        "explanation": "Sadece gecikme her durumda yeterli değildir; ihtar da gerekebilir.",
-        "difficulty": 3,
-        "category": "Borçlar"
-      },
-      {
-        "id": "n234",
-        "term": "MAHSUP",
-        "clue": "Bir alacağın başka bir borçtan düşülerek hesaplanması.",
-        "explanation": "Ödenen avans maaştan bu şekilde düşülür.",
-        "difficulty": 3,
-        "category": "Borçlar"
-      },
-      {
-        "id": "n226",
-        "term": "NAVLUN",
-        "clue": "Deniz yoluyla eşya taşımada ödenen taşıma ücreti.",
-        "explanation": "Konşimentoda gösterilir.",
-        "difficulty": 3,
-        "category": "Ticaret"
-      },
-      {
-        "id": "n235",
-        "term": "RİZİKO",
-        "clue": "Sigortanın güvence altına aldığı tehlike.",
-        "explanation": "Gerçekleşirse tazminat ödenir.",
-        "difficulty": 3,
-        "category": "Ticaret"
-      },
-      {
-        "id": "n230",
-        "term": "MUACCEL",
-        "clue": "Vadesi gelmiş, ödenmesi istenebilir.",
-        "explanation": "Bu duruma gelen borç için ihtar çekilebilir.",
-        "difficulty": 3,
-        "category": "Borçlar"
       }
     ]
   },
   {
     "id": 41,
+    "level": 1,
     "kind": "normal",
     "title": "Eski Arşiv",
     "questions": [
+      {
+        "id": "v1q81",
+        "term": "İNFAZ",
+        "clue": "Kesinleşen cezanın kanuni usule uygun yerine getirilmesi.",
+        "explanation": "Kesinleşen cezanın kanuni usule uygun yerine getirilmesi.",
+        "category": "Ceza",
+        "difficulty": 1
+      },
       {
         "id": "n64",
         "term": "MUHTAR",
@@ -1987,7 +1940,15 @@
         "explanation": "Tapuda adına kayıtlıdır.",
         "difficulty": 1,
         "category": "Eşya"
-      },
+      }
+    ]
+  },
+  {
+    "id": 42,
+    "level": 1,
+    "kind": "normal",
+    "title": "Kubbe Altı",
+    "questions": [
       {
         "id": "v1q60",
         "term": "İFLAS",
@@ -1995,14 +1956,7 @@
         "explanation": "Borçlunun malvarlığının alacaklıların topluca tatmini için tasfiyesine ilişkin süreç.",
         "category": "İcra",
         "difficulty": 1
-      }
-    ]
-  },
-  {
-    "id": 42,
-    "kind": "normal",
-    "title": "Kubbe Altı",
-    "questions": [
+      },
       {
         "id": "n66",
         "term": "SORGU",
@@ -2026,7 +1980,15 @@
         "explanation": "Suç duyurusu buraya yapılır.",
         "difficulty": 1,
         "category": "Ceza"
-      },
+      }
+    ]
+  },
+  {
+    "id": 43,
+    "level": 1,
+    "kind": "normal",
+    "title": "Zabıt Defteri",
+    "questions": [
       {
         "id": "n69",
         "term": "YARGIÇ",
@@ -2034,14 +1996,7 @@
         "explanation": "Öz Türkçe karşılığıdır; hâkim ile eş anlamlıdır.",
         "difficulty": 1,
         "category": "Usul"
-      }
-    ]
-  },
-  {
-    "id": 43,
-    "kind": "normal",
-    "title": "Zabıt Defteri",
-    "questions": [
+      },
       {
         "id": "v1q38",
         "term": "BOŞANMA",
@@ -2065,7 +2020,15 @@
         "explanation": "Kanuni koşullarla kişinin hâkim kararıyla özgürlüğünün geçici sınırlandırılması.",
         "category": "Ceza",
         "difficulty": 1
-      },
+      }
+    ]
+  },
+  {
+    "id": 44,
+    "level": 1,
+    "kind": "normal",
+    "title": "Kayıp Miras",
+    "questions": [
       {
         "id": "v1q45",
         "term": "BORÇLU",
@@ -2073,14 +2036,7 @@
         "explanation": "Bir borç ilişkisinde edimi yerine getirmekle yükümlü kişi.",
         "category": "Borçlar",
         "difficulty": 1
-      }
-    ]
-  },
-  {
-    "id": 44,
-    "kind": "normal",
-    "title": "Kayıp Miras",
-    "questions": [
+      },
       {
         "id": "n71",
         "term": "MÜHÜR",
@@ -2104,19 +2060,12 @@
         "explanation": "Kendisi de suçtur.",
         "difficulty": 1,
         "category": "Ceza"
-      },
-      {
-        "id": "n73",
-        "term": "ZANLI",
-        "clue": "Hakkında suç işlediği şüphesi bulunan kişi.",
-        "explanation": "Şüpheli veya sanık için halk arasında kullanılır.",
-        "difficulty": 1,
-        "category": "Ceza"
       }
     ]
   },
   {
     "id": 45,
+    "level": 2,
     "kind": "reward",
     "title": "Gölge Ortak",
     "questions": [
@@ -2172,6 +2121,7 @@
   },
   {
     "id": 46,
+    "level": 2,
     "kind": "normal",
     "title": "Ağır Dosya",
     "questions": [
@@ -2227,6 +2177,7 @@
   },
   {
     "id": 47,
+    "level": 2,
     "kind": "normal",
     "title": "Yüksek Kurul",
     "questions": [
@@ -2282,9 +2233,34 @@
   },
   {
     "id": 48,
+    "level": 3,
     "kind": "normal",
     "title": "Kıymetli Evrak",
     "questions": [
+      {
+        "id": "n233",
+        "term": "MÜFLİS",
+        "clue": "Hakkında iflas kararı verilmiş kişi.",
+        "explanation": "Malları iflas masasına girer.",
+        "difficulty": 3,
+        "category": "İcra"
+      },
+      {
+        "id": "n234",
+        "term": "MAHSUP",
+        "clue": "Bir alacağın başka bir borçtan düşülerek hesaplanması.",
+        "explanation": "Ödenen avans maaştan bu şekilde düşülür.",
+        "difficulty": 3,
+        "category": "Borçlar"
+      },
+      {
+        "id": "n235",
+        "term": "RİZİKO",
+        "clue": "Sigortanın güvence altına aldığı tehlike.",
+        "explanation": "Gerçekleşirse tazminat ödenir.",
+        "difficulty": 3,
+        "category": "Ticaret"
+      },
       {
         "id": "n236",
         "term": "LEHTAR",
@@ -2308,7 +2284,15 @@
         "explanation": "Velinin bu şekilde onayı gerekebilir.",
         "difficulty": 3,
         "category": "Genel"
-      },
+      }
+    ]
+  },
+  {
+    "id": 49,
+    "level": 3,
+    "kind": "normal",
+    "title": "Yeminli Söz",
+    "questions": [
       {
         "id": "q28",
         "term": "TAKSİR",
@@ -2332,14 +2316,7 @@
         "explanation": "Bilinen bir olgudan bilinmeyen bir olgu hakkında çıkarılan sonuç.",
         "category": "Usul",
         "difficulty": 3
-      }
-    ]
-  },
-  {
-    "id": 49,
-    "kind": "normal",
-    "title": "Yeminli Söz",
-    "questions": [
+      },
       {
         "id": "n239",
         "term": "VAKIA",
@@ -2363,7 +2340,15 @@
         "explanation": "Kefaletin ağır türü bu niteliktedir.",
         "difficulty": 3,
         "category": "Borçlar"
-      },
+      }
+    ]
+  },
+  {
+    "id": 50,
+    "level": 3,
+    "kind": "final",
+    "title": "Final Bölümü 5",
+    "questions": [
       {
         "id": "n242",
         "term": "RAYİÇ",
@@ -2381,20 +2366,29 @@
         "category": "Borçlar"
       },
       {
+        "id": "n233",
+        "term": "MÜFLİS",
+        "clue": "Hakkında iflas kararı verilmiş kişi.",
+        "explanation": "Malları iflas masasına girer.",
+        "difficulty": 3,
+        "category": "İcra"
+      },
+      {
         "id": "n244",
         "term": "NİSAP",
         "clue": "Bir kurulun toplanabilmesi veya karar alabilmesi için gereken en az sayı.",
         "explanation": "Mecliste karar yeter sayısı bunun örneğidir.",
         "difficulty": 3,
         "category": "Anayasa"
-      }
-    ]
-  },
-  {
-    "id": 50,
-    "kind": "final",
-    "title": "Final Bölümü 5",
-    "questions": [
+      },
+      {
+        "id": "n238",
+        "term": "İSTİHKAK",
+        "clue": "Bir malın üçüncü kişiye ait olduğunu ileri sürme hakkı.",
+        "explanation": "Haczedilen malın başkasına ait olduğu iddiasıyla dava açılır.",
+        "difficulty": 3,
+        "category": "İcra"
+      },
       {
         "id": "n245",
         "term": "KAMBİYO",
@@ -2402,78 +2396,23 @@
         "explanation": "Bu senetlere dayalı icra takibi daha hızlıdır.",
         "difficulty": 3,
         "category": "Ticaret"
-      },
-      {
-        "id": "n246",
-        "term": "MÜCBİR",
-        "clue": "Önlenemeyen ve kaçınılmaz olan; zorlayıcı.",
-        "explanation": "Deprem ve sel bu tür sebeplerdendir.",
-        "difficulty": 3,
-        "category": "Borçlar"
-      },
-      {
-        "id": "n236",
-        "term": "LEHTAR",
-        "clue": "Kıymetli evrakta ödemenin kendisine yapılacağı kişi.",
-        "explanation": "Bonoda adı yazılı alacaklıdır.",
-        "difficulty": 3,
-        "category": "Ticaret"
-      },
-      {
-        "id": "n247",
-        "term": "CİRANTA",
-        "clue": "Bir kıymetli evrakı ciro ederek devreden kişi.",
-        "explanation": "Senet ödenmezse o da sorumlu olur.",
-        "difficulty": 3,
-        "category": "Ticaret"
-      },
-      {
-        "id": "n240",
-        "term": "MATRAH",
-        "clue": "Vergi miktarının hesaplanmasında esas alınan değer.",
-        "explanation": "Vergi oranı bu değere uygulanır.",
-        "difficulty": 3,
-        "category": "Vergi"
-      },
-      {
-        "id": "v1q76",
-        "term": "MÜSADERE",
-        "clue": "Kanuni şartlarda bir eşyanın veya kazancın devlet mülkiyetine geçirilmesi.",
-        "explanation": "Kanuni şartlarda bir eşyanın veya kazancın devlet mülkiyetine geçirilmesi.",
-        "category": "Ceza",
-        "difficulty": 3
-      },
-      {
-        "id": "q28",
-        "term": "TAKSİR",
-        "clue": "Dikkat ve özen yükümlülüğüne aykırılıkla, istenmeyen suç sonucuna neden olma.",
-        "explanation": "Sonuç istenmez; yükümlülüğe aykırı davranış belirleyicidir.",
-        "difficulty": 3,
-        "category": "Ceza"
-      },
-      {
-        "id": "n248",
-        "term": "İSTİNABE",
-        "clue": "Başka yerdeki bir işlemin oradaki mahkemeden istenmesi.",
-        "explanation": "Uzaktaki tanık bu yolla dinlenir.",
-        "difficulty": 3,
-        "category": "Usul"
-      },
-      {
-        "id": "n243",
-        "term": "İTFA",
-        "clue": "Bir borcun ödenerek sona erdirilmesi.",
-        "explanation": "Tahvil borçları bu şekilde kapatılır.",
-        "difficulty": 3,
-        "category": "Borçlar"
       }
     ]
   },
   {
     "id": 51,
+    "level": 1,
     "kind": "normal",
     "title": "Mürekkep Lekesi",
     "questions": [
+      {
+        "id": "n73",
+        "term": "ZANLI",
+        "clue": "Hakkında suç işlediği şüphesi bulunan kişi.",
+        "explanation": "Şüpheli veya sanık için halk arasında kullanılır.",
+        "difficulty": 1,
+        "category": "Ceza"
+      },
       {
         "id": "v1q24",
         "term": "TAPU",
@@ -2497,7 +2436,15 @@
         "explanation": "Kat karşılığı müteahhide verilebilir.",
         "difficulty": 1,
         "category": "Eşya"
-      },
+      }
+    ]
+  },
+  {
+    "id": 52,
+    "level": 1,
+    "kind": "normal",
+    "title": "Kadim Kayıtlar",
+    "questions": [
       {
         "id": "n75",
         "term": "NOTER",
@@ -2505,14 +2452,7 @@
         "explanation": "Araç satışı ve vekâletname onun önünde yapılır.",
         "difficulty": 1,
         "category": "Genel"
-      }
-    ]
-  },
-  {
-    "id": 52,
-    "kind": "normal",
-    "title": "Kadim Kayıtlar",
-    "questions": [
+      },
       {
         "id": "n76",
         "term": "GARDİYAN",
@@ -2536,7 +2476,15 @@
         "explanation": "Sözleşme önerisine uygun olumlu irade açıklaması.",
         "category": "Borçlar",
         "difficulty": 2
-      },
+      }
+    ]
+  },
+  {
+    "id": 53,
+    "level": 1,
+    "kind": "normal",
+    "title": "Kapalı Oturum",
+    "questions": [
       {
         "id": "n78",
         "term": "HATA",
@@ -2544,14 +2492,7 @@
         "explanation": "Esaslı olanı sözleşmeyi iptal ettirebilir.",
         "difficulty": 2,
         "category": "Borçlar"
-      }
-    ]
-  },
-  {
-    "id": 53,
-    "kind": "normal",
-    "title": "Kapalı Oturum",
-    "questions": [
+      },
       {
         "id": "v1q43",
         "term": "İFA",
@@ -2575,7 +2516,15 @@
         "explanation": "Yaptığı işlemin sonucu temsil edilene bağlanır.",
         "difficulty": 2,
         "category": "Borçlar"
-      },
+      }
+    ]
+  },
+  {
+    "id": 54,
+    "level": 1,
+    "kind": "normal",
+    "title": "Liman Defteri",
+    "questions": [
       {
         "id": "n81",
         "term": "KATILAN",
@@ -2583,14 +2532,7 @@
         "explanation": "Ceza davasında savcının yanında yer alır.",
         "difficulty": 2,
         "category": "Ceza"
-      }
-    ]
-  },
-  {
-    "id": 54,
-    "kind": "normal",
-    "title": "Liman Defteri",
-    "questions": [
+      },
       {
         "id": "n82",
         "term": "İŞGAL",
@@ -2614,19 +2556,12 @@
         "explanation": "Esasın karşıtıdır; süre ve şekle ilişkindir.",
         "difficulty": 2,
         "category": "Usul"
-      },
-      {
-        "id": "n85",
-        "term": "HAMİL",
-        "clue": "Kıymetli bir evrakı elinde bulunduran ve ondan hak talep edebilen kişi.",
-        "explanation": "Çeki bankaya o ibraz eder.",
-        "difficulty": 2,
-        "category": "Ticaret"
       }
     ]
   },
   {
     "id": 55,
+    "level": 2,
     "kind": "reward",
     "title": "Altın Terazi",
     "questions": [
@@ -2682,6 +2617,7 @@
   },
   {
     "id": 56,
+    "level": 2,
     "kind": "normal",
     "title": "Eski Hukuk",
     "questions": [
@@ -2737,6 +2673,7 @@
   },
   {
     "id": 57,
+    "level": 2,
     "kind": "normal",
     "title": "Sararmış Sayfalar",
     "questions": [
@@ -2792,9 +2729,42 @@
   },
   {
     "id": 58,
+    "level": 3,
     "kind": "normal",
     "title": "Gizli Madde",
     "questions": [
+      {
+        "id": "n246",
+        "term": "MÜCBİR",
+        "clue": "Önlenemeyen ve kaçınılmaz olan; zorlayıcı.",
+        "explanation": "Deprem ve sel bu tür sebeplerdendir.",
+        "difficulty": 3,
+        "category": "Borçlar"
+      },
+      {
+        "id": "n247",
+        "term": "CİRANTA",
+        "clue": "Bir kıymetli evrakı ciro ederek devreden kişi.",
+        "explanation": "Senet ödenmezse o da sorumlu olur.",
+        "difficulty": 3,
+        "category": "Ticaret"
+      },
+      {
+        "id": "v1q76",
+        "term": "MÜSADERE",
+        "clue": "Kanuni şartlarda bir eşyanın veya kazancın devlet mülkiyetine geçirilmesi.",
+        "explanation": "Kanuni şartlarda bir eşyanın veya kazancın devlet mülkiyetine geçirilmesi.",
+        "category": "Ceza",
+        "difficulty": 3
+      },
+      {
+        "id": "n248",
+        "term": "İSTİNABE",
+        "clue": "Başka yerdeki bir işlemin oradaki mahkemeden istenmesi.",
+        "explanation": "Uzaktaki tanık bu yolla dinlenir.",
+        "difficulty": 3,
+        "category": "Usul"
+      },
       {
         "id": "n249",
         "term": "RÜÇHAN",
@@ -2810,7 +2780,15 @@
         "explanation": "Ticarette yerleşik olanı hukuk kuralı sayılabilir.",
         "difficulty": 3,
         "category": "Genel"
-      },
+      }
+    ]
+  },
+  {
+    "id": 59,
+    "level": 3,
+    "kind": "normal",
+    "title": "Son Duruşma",
+    "questions": [
       {
         "id": "q4",
         "term": "İKRAR",
@@ -2842,14 +2820,7 @@
         "explanation": "Ticari olanı işletmeyi yönetir.",
         "difficulty": 3,
         "category": "Ticaret"
-      }
-    ]
-  },
-  {
-    "id": 59,
-    "kind": "normal",
-    "title": "Son Duruşma",
-    "questions": [
+      },
       {
         "id": "n253",
         "term": "İSTİCVAP",
@@ -2865,7 +2836,15 @@
         "explanation": "Vergi giderleri faturayla bu şekilde kanıtlanır.",
         "difficulty": 3,
         "category": "Vergi"
-      },
+      }
+    ]
+  },
+  {
+    "id": 60,
+    "level": 3,
+    "kind": "final",
+    "title": "Final Bölümü 6",
+    "questions": [
       {
         "id": "n255",
         "term": "İFRAZ",
@@ -2875,12 +2854,20 @@
         "category": "Eşya"
       },
       {
-        "id": "v1q35",
-        "term": "HISIMLIK",
-        "clue": "Kişiler arasında soy, evlilik veya evlat edinmeyle oluşan yakınlık bağı.",
-        "explanation": "Kişiler arasında soy, evlilik veya evlat edinmeyle oluşan yakınlık bağı.",
-        "category": "Medeni",
-        "difficulty": 3
+        "id": "n256",
+        "term": "İMTİNA",
+        "clue": "Bir şeyi yapmaktan kaçınma.",
+        "explanation": "Tanıklıktan bu şekilde çekinilebilir.",
+        "difficulty": 3,
+        "category": "Usul"
+      },
+      {
+        "id": "n246",
+        "term": "MÜCBİR",
+        "clue": "Önlenemeyen ve kaçınılmaz olan; zorlayıcı.",
+        "explanation": "Deprem ve sel bu tür sebeplerdendir.",
+        "difficulty": 3,
+        "category": "Borçlar"
       },
       {
         "id": "v1q54",
@@ -2888,6 +2875,14 @@
         "clue": "Bir hukuki işlemin geçerlilik şartlarındaki eksiklik nedeniyle hükümsüz olması.",
         "explanation": "Bir hukuki işlemin geçerlilik şartlarındaki eksiklik nedeniyle hükümsüz olması.",
         "category": "Borçlar",
+        "difficulty": 3
+      },
+      {
+        "id": "v1q41",
+        "term": "TENKİS",
+        "clue": "Saklı payı aşan ölüme bağlı kazandırmaların kanuni sınıra indirilmesi.",
+        "explanation": "Saklı payı aşan ölüme bağlı kazandırmaların kanuni sınıra indirilmesi.",
+        "category": "Miras",
         "difficulty": 3
       },
       {
@@ -2901,89 +2896,19 @@
     ]
   },
   {
-    "id": 60,
-    "kind": "final",
-    "title": "Final Bölümü 6",
-    "questions": [
-      {
-        "id": "n258",
-        "term": "HISIM",
-        "clue": "Kan bağı veya evlilik yoluyla akraba olan kişi.",
-        "explanation": "Kayın ve kan türleri vardır.",
-        "difficulty": 3,
-        "category": "Aile"
-      },
-      {
-        "id": "n259",
-        "term": "MAHCUZ",
-        "clue": "Üzerine haciz konulmuş.",
-        "explanation": "Bu mal satılamaz ve devredilemez.",
-        "difficulty": 3,
-        "category": "İcra"
-      },
-      {
-        "id": "n249",
-        "term": "RÜÇHAN",
-        "clue": "Öncelik ve üstünlük hakkı.",
-        "explanation": "Ortaklara yeni payları önce alma hakkı tanınır.",
-        "difficulty": 3,
-        "category": "Ticaret"
-      },
-      {
-        "id": "v1q34",
-        "term": "GAİPLİK",
-        "clue": "Ölüm tehlikesi içinde kaybolan veya uzun süre haber alınamayan kişi hakkında verilen karar.",
-        "explanation": "Ölüm tehlikesi içinde kaybolan veya uzun süre haber alınamayan kişi hakkında verilen karar.",
-        "category": "Medeni",
-        "difficulty": 3
-      },
-      {
-        "id": "n254",
-        "term": "TEVSİK",
-        "clue": "Bir hususun belgeyle kanıtlanması.",
-        "explanation": "Vergi giderleri faturayla bu şekilde kanıtlanır.",
-        "difficulty": 3,
-        "category": "Vergi"
-      },
-      {
-        "id": "n256",
-        "term": "İMTİNA",
-        "clue": "Bir şeyi yapmaktan kaçınma.",
-        "explanation": "Tanıklıktan bu şekilde çekinilebilir.",
-        "difficulty": 3,
-        "category": "Usul"
-      },
-      {
-        "id": "v1q41",
-        "term": "TENKİS",
-        "clue": "Saklı payı aşan ölüme bağlı kazandırmaların kanuni sınıra indirilmesi.",
-        "explanation": "Saklı payı aşan ölüme bağlı kazandırmaların kanuni sınıra indirilmesi.",
-        "category": "Miras",
-        "difficulty": 3
-      },
-      {
-        "id": "v1q57",
-        "term": "TEMLİK",
-        "clue": "Bir hak veya alacağın başka bir kişiye devredilmesi.",
-        "explanation": "Bir hak veya alacağın başka bir kişiye devredilmesi.",
-        "category": "Borçlar",
-        "difficulty": 3
-      },
-      {
-        "id": "v1q54",
-        "term": "BUTLAN",
-        "clue": "Bir hukuki işlemin geçerlilik şartlarındaki eksiklik nedeniyle hükümsüz olması.",
-        "explanation": "Bir hukuki işlemin geçerlilik şartlarındaki eksiklik nedeniyle hükümsüz olması.",
-        "category": "Borçlar",
-        "difficulty": 3
-      }
-    ]
-  },
-  {
     "id": 61,
+    "level": 1,
     "kind": "normal",
     "title": "Ustanın İzi",
     "questions": [
+      {
+        "id": "n85",
+        "term": "HAMİL",
+        "clue": "Kıymetli bir evrakı elinde bulunduran ve ondan hak talep edebilen kişi.",
+        "explanation": "Çeki bankaya o ibraz eder.",
+        "difficulty": 2,
+        "category": "Ticaret"
+      },
       {
         "id": "n86",
         "term": "İRADE",
@@ -3007,7 +2932,15 @@
         "explanation": "En ağır disiplin cezalarındandır.",
         "difficulty": 2,
         "category": "İdare"
-      },
+      }
+    ]
+  },
+  {
+    "id": 62,
+    "level": 1,
+    "kind": "normal",
+    "title": "Derin Arşiv",
+    "questions": [
       {
         "id": "n89",
         "term": "REFERANDUM",
@@ -3015,14 +2948,7 @@
         "explanation": "Anayasa değişiklikleri için yapılabilir.",
         "difficulty": 2,
         "category": "Anayasa"
-      }
-    ]
-  },
-  {
-    "id": 62,
-    "kind": "normal",
-    "title": "Derin Arşiv",
-    "questions": [
+      },
       {
         "id": "v1q13",
         "term": "KEŞİF",
@@ -3046,7 +2972,15 @@
         "explanation": "Bir kişiyi hukuki işlem yapmaya yöneltmek için aldatma.",
         "category": "Borçlar",
         "difficulty": 2
-      },
+      }
+    ]
+  },
+  {
+    "id": 63,
+    "level": 1,
+    "kind": "normal",
+    "title": "Gümrük Kapısı",
+    "questions": [
       {
         "id": "n91",
         "term": "İHLAL",
@@ -3054,14 +2988,7 @@
         "explanation": "Sözleşmeye aykırılık da bunun bir örneğidir.",
         "difficulty": 2,
         "category": "Genel"
-      }
-    ]
-  },
-  {
-    "id": 63,
-    "kind": "normal",
-    "title": "Gümrük Kapısı",
-    "questions": [
+      },
       {
         "id": "v1q68",
         "term": "İHBAR",
@@ -3085,7 +3012,15 @@
         "explanation": "Bir hukuk kuralının uygulanabilir olarak geçerli bulunduğu durum.",
         "category": "Genel",
         "difficulty": 2
-      },
+      }
+    ]
+  },
+  {
+    "id": 64,
+    "level": 1,
+    "kind": "normal",
+    "title": "Emanet Sandığı",
+    "questions": [
       {
         "id": "n93",
         "term": "TAKSİM",
@@ -3093,14 +3028,7 @@
         "explanation": "Anlaşamazlarsa ortaklığın giderilmesi davası açılır.",
         "difficulty": 2,
         "category": "Eşya"
-      }
-    ]
-  },
-  {
-    "id": 64,
-    "kind": "normal",
-    "title": "Emanet Sandığı",
-    "questions": [
+      },
       {
         "id": "v1q63",
         "term": "İHALE",
@@ -3124,19 +3052,12 @@
         "explanation": "Ceza hukukunda aleyhe olanı yasaktır.",
         "difficulty": 2,
         "category": "Genel"
-      },
-      {
-        "id": "v1q23",
-        "term": "REHİN",
-        "clue": "Bir alacağı güvence altına almak için eşya veya hak üzerinde kurulan teminat.",
-        "explanation": "Bir alacağı güvence altına almak için eşya veya hak üzerinde kurulan teminat.",
-        "category": "Eşya",
-        "difficulty": 2
       }
     ]
   },
   {
     "id": 65,
+    "level": 2,
     "kind": "reward",
     "title": "Mühürlü Zarf",
     "questions": [
@@ -3192,6 +3113,7 @@
   },
   {
     "id": 66,
+    "level": 2,
     "kind": "normal",
     "title": "Kayıp Vakıf",
     "questions": [
@@ -3247,6 +3169,7 @@
   },
   {
     "id": 67,
+    "level": 2,
     "kind": "normal",
     "title": "Kâtibin Notu",
     "questions": [
@@ -3302,9 +3225,50 @@
   },
   {
     "id": 68,
+    "level": 3,
     "kind": "normal",
     "title": "Dördüncü Celse",
     "questions": [
+      {
+        "id": "n258",
+        "term": "HISIM",
+        "clue": "Kan bağı veya evlilik yoluyla akraba olan kişi.",
+        "explanation": "Kayın ve kan türleri vardır.",
+        "difficulty": 3,
+        "category": "Aile"
+      },
+      {
+        "id": "n259",
+        "term": "MAHCUZ",
+        "clue": "Üzerine haciz konulmuş.",
+        "explanation": "Bu mal satılamaz ve devredilemez.",
+        "difficulty": 3,
+        "category": "İcra"
+      },
+      {
+        "id": "v1q34",
+        "term": "GAİPLİK",
+        "clue": "Ölüm tehlikesi içinde kaybolan veya uzun süre haber alınamayan kişi hakkında verilen karar.",
+        "explanation": "Ölüm tehlikesi içinde kaybolan veya uzun süre haber alınamayan kişi hakkında verilen karar.",
+        "category": "Medeni",
+        "difficulty": 3
+      },
+      {
+        "id": "n263",
+        "term": "TEDAVÜL",
+        "clue": "Paranın veya kıymetli evrakın elden ele dolaşması.",
+        "explanation": "Banknotlar bu şekilde piyasada dolaşır.",
+        "difficulty": 3,
+        "category": "Ticaret"
+      },
+      {
+        "id": "v1q57",
+        "term": "TEMLİK",
+        "clue": "Bir hak veya alacağın başka bir kişiye devredilmesi.",
+        "explanation": "Bir hak veya alacağın başka bir kişiye devredilmesi.",
+        "category": "Borçlar",
+        "difficulty": 3
+      },
       {
         "id": "n260",
         "term": "TEVKİL",
@@ -3312,7 +3276,15 @@
         "explanation": "Avukat bu yetki varsa başka avukata devredebilir.",
         "difficulty": 3,
         "category": "Borçlar"
-      },
+      }
+    ]
+  },
+  {
+    "id": 69,
+    "level": 3,
+    "kind": "normal",
+    "title": "Büyük Gün",
+    "questions": [
       {
         "id": "n261",
         "term": "MAKTU",
@@ -3338,12 +3310,12 @@
         "category": "Borçlar"
       },
       {
-        "id": "n263",
-        "term": "TEDAVÜL",
-        "clue": "Paranın veya kıymetli evrakın elden ele dolaşması.",
-        "explanation": "Banknotlar bu şekilde piyasada dolaşır.",
-        "difficulty": 3,
-        "category": "Ticaret"
+        "id": "v1q35",
+        "term": "HISIMLIK",
+        "clue": "Kişiler arasında soy, evlilik veya evlat edinmeyle oluşan yakınlık bağı.",
+        "explanation": "Kişiler arasında soy, evlilik veya evlat edinmeyle oluşan yakınlık bağı.",
+        "category": "Medeni",
+        "difficulty": 3
       },
       {
         "id": "n264",
@@ -3352,14 +3324,7 @@
         "explanation": "Ceza davasında savcı esas hakkında bunu sunar.",
         "difficulty": 3,
         "category": "Ceza"
-      }
-    ]
-  },
-  {
-    "id": 69,
-    "kind": "normal",
-    "title": "Büyük Gün",
-    "questions": [
+      },
       {
         "id": "n265",
         "term": "YEDİEMİN",
@@ -3367,7 +3332,15 @@
         "explanation": "Çekilen araçlar bu otoparklarda tutulur.",
         "difficulty": 3,
         "category": "İcra"
-      },
+      }
+    ]
+  },
+  {
+    "id": 70,
+    "level": 3,
+    "kind": "final",
+    "title": "Final Bölümü 7",
+    "questions": [
       {
         "id": "n266",
         "term": "TADİL",
@@ -3385,6 +3358,14 @@
         "category": "Borçlar"
       },
       {
+        "id": "n258",
+        "term": "HISIM",
+        "clue": "Kan bağı veya evlilik yoluyla akraba olan kişi.",
+        "explanation": "Kayın ve kan türleri vardır.",
+        "difficulty": 3,
+        "category": "Aile"
+      },
+      {
         "id": "n268",
         "term": "İVAZ",
         "clue": "Bir edimin karşılığı olan bedel.",
@@ -3393,91 +3374,12 @@
         "category": "Borçlar"
       },
       {
-        "id": "n269",
-        "term": "TAVZİH",
-        "clue": "Belirsiz bir mahkeme kararının açıklanması.",
-        "explanation": "Tarafların talebiyle hükmü değiştirmeden yapılır.",
-        "difficulty": 3,
-        "category": "Usul"
-      },
-      {
-        "id": "n270",
-        "term": "İSTİRDAT",
-        "clue": "Haksız yere ödenen veya alınan şeyin geri istenmesi.",
-        "explanation": "Borç olmadığı hâlde ödenen para için bu dava açılır.",
-        "difficulty": 3,
-        "category": "İcra"
-      }
-    ]
-  },
-  {
-    "id": 70,
-    "kind": "final",
-    "title": "Final Bölümü 7",
-    "questions": [
-      {
-        "id": "n271",
-        "term": "MÜKERRİR",
-        "clue": "Önceki cezası kesinleştikten sonra yeniden suç işleyen kişi.",
-        "explanation": "Tekerrür hükümleri ona uygulanır.",
-        "difficulty": 3,
-        "category": "Ceza"
-      },
-      {
-        "id": "n272",
-        "term": "DERDEST",
-        "clue": "Henüz görülmekte olan, sonuçlanmamış.",
-        "explanation": "Aynı konuda böyle bir dava varken yenisi açılamaz.",
-        "difficulty": 3,
-        "category": "Usul"
-      },
-      {
-        "id": "n260",
-        "term": "TEVKİL",
-        "clue": "Vekilin yetkisini başka birine devretmesi.",
-        "explanation": "Avukat bu yetki varsa başka avukata devredebilir.",
-        "difficulty": 3,
-        "category": "Borçlar"
-      },
-      {
-        "id": "n273",
-        "term": "MÜELLİF",
-        "clue": "Bir eseri meydana getiren kişi; eser sahibi.",
-        "explanation": "Fikri hakların sahibidir.",
-        "difficulty": 3,
-        "category": "Ticaret"
-      },
-      {
-        "id": "n266",
-        "term": "TADİL",
-        "clue": "Bir metin veya işlemde değişiklik yapma.",
-        "explanation": "Kanunlar bu yolla güncellenir.",
-        "difficulty": 3,
-        "category": "Genel"
-      },
-      {
-        "id": "n274",
-        "term": "İLGA",
-        "clue": "Bir kuralın yeni bir düzenlemeyle yürürlükten kaldırılması.",
-        "explanation": "Kaldırılan kanun maddesi mülga olur.",
-        "difficulty": 3,
-        "category": "Genel"
-      },
-      {
-        "id": "n262",
-        "term": "TALİK",
-        "clue": "Bir işlemin hükmünün bir şarta veya zamana bağlanması.",
-        "explanation": "Şarta bağlı işlem bu şekilde ertelenir.",
-        "difficulty": 3,
-        "category": "Borçlar"
-      },
-      {
-        "id": "n275",
-        "term": "EMARE",
-        "clue": "Tek başına kanıt sayılmayan ama bir olgunun varlığına işaret eden durum.",
-        "explanation": "Delil başlangıcı olarak değerlendirilebilir.",
-        "difficulty": 3,
-        "category": "Usul"
+        "id": "v1q53",
+        "term": "MUVAZAA",
+        "clue": "Tarafların gerçek iradelerine uymayan görünüşte bir işlem yapmaları.",
+        "explanation": "Tarafların gerçek iradelerine uymayan görünüşte bir işlem yapmaları.",
+        "category": "Borçlar",
+        "difficulty": 3
       },
       {
         "id": "n269",
@@ -3491,9 +3393,18 @@
   },
   {
     "id": 71,
+    "level": 1,
     "kind": "normal",
     "title": "Usta Kalem",
     "questions": [
+      {
+        "id": "v1q23",
+        "term": "REHİN",
+        "clue": "Bir alacağı güvence altına almak için eşya veya hak üzerinde kurulan teminat.",
+        "explanation": "Bir alacağı güvence altına almak için eşya veya hak üzerinde kurulan teminat.",
+        "category": "Eşya",
+        "difficulty": 2
+      },
       {
         "id": "n96",
         "term": "BATIL",
@@ -3517,7 +3428,15 @@
         "explanation": "Görevi bu şekilde savsaklamak suç olabilir.",
         "difficulty": 2,
         "category": "Ceza"
-      },
+      }
+    ]
+  },
+  {
+    "id": 72,
+    "level": 1,
+    "kind": "normal",
+    "title": "Eski Fermanlar",
+    "questions": [
       {
         "id": "v1q10",
         "term": "İSPAT",
@@ -3525,14 +3444,7 @@
         "explanation": "Bir vakıanın doğruluğu konusunda mahkemede kanaat oluşturma faaliyeti.",
         "category": "Usul",
         "difficulty": 2
-      }
-    ]
-  },
-  {
-    "id": 72,
-    "kind": "normal",
-    "title": "Eski Fermanlar",
-    "questions": [
+      },
       {
         "id": "v1q75",
         "term": "YAKALAMA",
@@ -3556,7 +3468,15 @@
         "explanation": "Kıymetli olanları çek ve bonodur.",
         "difficulty": 2,
         "category": "Genel"
-      },
+      }
+    ]
+  },
+  {
+    "id": 73,
+    "level": 1,
+    "kind": "normal",
+    "title": "Son Arşiv",
+    "questions": [
       {
         "id": "n101",
         "term": "DEFİN",
@@ -3564,14 +3484,7 @@
         "explanation": "İzinsiz yapılması suçtur.",
         "difficulty": 2,
         "category": "İdare"
-      }
-    ]
-  },
-  {
-    "id": 73,
-    "kind": "normal",
-    "title": "Son Arşiv",
-    "questions": [
+      },
       {
         "id": "n102",
         "term": "TASFİYE",
@@ -3595,7 +3508,15 @@
         "explanation": "Karşılıklı ve aynı türden borçların kanuni şartlarla birbirini sona erdirmesi.",
         "category": "Borçlar",
         "difficulty": 2
-      },
+      }
+    ]
+  },
+  {
+    "id": 74,
+    "level": 1,
+    "kind": "normal",
+    "title": "Kıyı Ticareti",
+    "questions": [
       {
         "id": "v1q25",
         "term": "TESCİL",
@@ -3603,14 +3524,7 @@
         "explanation": "Bir hakkın veya hukuki durumun ilgili resmî sicile kaydedilmesi.",
         "category": "Eşya",
         "difficulty": 2
-      }
-    ]
-  },
-  {
-    "id": 74,
-    "kind": "normal",
-    "title": "Kıyı Ticareti",
-    "questions": [
+      },
       {
         "id": "n104",
         "term": "İMAR",
@@ -3634,19 +3548,12 @@
         "explanation": "Failin bilgisi ve iradesi, suçun unsurlarına yönelir.",
         "difficulty": 2,
         "category": "Ceza"
-      },
-      {
-        "id": "n105",
-        "term": "BEYAN",
-        "clue": "Bir kişinin bir hususu sözlü veya yazılı olarak açıkça bildirmesi.",
-        "explanation": "Vergide gelir bu şekilde bildirilir.",
-        "difficulty": 2,
-        "category": "Genel"
       }
     ]
   },
   {
     "id": 75,
+    "level": 2,
     "kind": "reward",
     "title": "Taç Mühür",
     "questions": [
@@ -3702,6 +3609,7 @@
   },
   {
     "id": 76,
+    "level": 2,
     "kind": "normal",
     "title": "Kanunun Ruhu",
     "questions": [
@@ -3757,6 +3665,7 @@
   },
   {
     "id": 77,
+    "level": 2,
     "kind": "normal",
     "title": "Altın Oran",
     "questions": [
@@ -3812,8 +3721,65 @@
   },
   {
     "id": 78,
+    "level": 3,
     "kind": "normal",
     "title": "Mühürdar",
+    "questions": [
+      {
+        "id": "n270",
+        "term": "İSTİRDAT",
+        "clue": "Haksız yere ödenen veya alınan şeyin geri istenmesi.",
+        "explanation": "Borç olmadığı hâlde ödenen para için bu dava açılır.",
+        "difficulty": 3,
+        "category": "İcra"
+      },
+      {
+        "id": "n271",
+        "term": "MÜKERRİR",
+        "clue": "Önceki cezası kesinleştikten sonra yeniden suç işleyen kişi.",
+        "explanation": "Tekerrür hükümleri ona uygulanır.",
+        "difficulty": 3,
+        "category": "Ceza"
+      },
+      {
+        "id": "n272",
+        "term": "DERDEST",
+        "clue": "Henüz görülmekte olan, sonuçlanmamış.",
+        "explanation": "Aynı konuda böyle bir dava varken yenisi açılamaz.",
+        "difficulty": 3,
+        "category": "Usul"
+      },
+      {
+        "id": "n273",
+        "term": "MÜELLİF",
+        "clue": "Bir eseri meydana getiren kişi; eser sahibi.",
+        "explanation": "Fikri hakların sahibidir.",
+        "difficulty": 3,
+        "category": "Ticaret"
+      },
+      {
+        "id": "n274",
+        "term": "İLGA",
+        "clue": "Bir kuralın yeni bir düzenlemeyle yürürlükten kaldırılması.",
+        "explanation": "Kaldırılan kanun maddesi mülga olur.",
+        "difficulty": 3,
+        "category": "Genel"
+      },
+      {
+        "id": "n275",
+        "term": "EMARE",
+        "clue": "Tek başına kanıt sayılmayan ama bir olgunun varlığına işaret eden durum.",
+        "explanation": "Delil başlangıcı olarak değerlendirilebilir.",
+        "difficulty": 3,
+        "category": "Usul"
+      }
+    ]
+  },
+  {
+    "id": 79,
+    "level": 3,
+    "kind": "normal",
+    "title": "Son Perde",
     "questions": [
       {
         "id": "n276",
@@ -3866,9 +3832,10 @@
     ]
   },
   {
-    "id": 79,
-    "kind": "normal",
-    "title": "Son Perde",
+    "id": 80,
+    "level": 3,
+    "kind": "final",
+    "title": "Final Bölümü 8",
     "questions": [
       {
         "id": "n282",
@@ -3887,10 +3854,26 @@
         "category": "Ticaret"
       },
       {
+        "id": "n270",
+        "term": "İSTİRDAT",
+        "clue": "Haksız yere ödenen veya alınan şeyin geri istenmesi.",
+        "explanation": "Borç olmadığı hâlde ödenen para için bu dava açılır.",
+        "difficulty": 3,
+        "category": "İcra"
+      },
+      {
         "id": "n284",
         "term": "ÖNEL",
         "clue": "Bir işin yapılması için verilen süre.",
         "explanation": "Mehil sözcüğünün öz Türkçe karşılığıdır.",
+        "difficulty": 3,
+        "category": "Usul"
+      },
+      {
+        "id": "n277",
+        "term": "TEBELLÜĞ",
+        "clue": "Tebliğ edilen bir belgenin alınması.",
+        "explanation": "Belgeyi alan kişi imzasıyla bunu gösterir.",
         "difficulty": 3,
         "category": "Usul"
       },
@@ -3901,101 +3884,6 @@
         "explanation": "Kanun yoluna başvurunca icranın geri bırakılması istenebilir.",
         "difficulty": 3,
         "category": "İcra"
-      },
-      {
-        "id": "n286",
-        "term": "MERHUN",
-        "clue": "Rehin olarak verilmiş mal.",
-        "explanation": "Borç ödenmezse satılır.",
-        "difficulty": 3,
-        "category": "Eşya"
-      },
-      {
-        "id": "n287",
-        "term": "MÜEYYİDE",
-        "clue": "Bir hukuk kuralına uyulmamasının sonucu olan yaptırım.",
-        "explanation": "Ceza, tazminat ve iptal bunun türleridir.",
-        "difficulty": 3,
-        "category": "Genel"
-      }
-    ]
-  },
-  {
-    "id": 80,
-    "kind": "final",
-    "title": "Final Bölümü 8",
-    "questions": [
-      {
-        "id": "n288",
-        "term": "MÜTEMERRİT",
-        "clue": "Borcunu vadesinde ödemeyip temerrüde düşen.",
-        "explanation": "Bu borçlu gecikme faizi öder.",
-        "difficulty": 3,
-        "category": "Borçlar"
-      },
-      {
-        "id": "n289",
-        "term": "İNFİSAH",
-        "clue": "Bir sözleşmenin kendiliğinden sona ermesi.",
-        "explanation": "İfa imkânsızlaşınca sözleşme bu şekilde ortadan kalkar.",
-        "difficulty": 3,
-        "category": "Borçlar"
-      },
-      {
-        "id": "n276",
-        "term": "İRTİKAP",
-        "clue": "Kamu görevlisinin görevini kötüye kullanarak haksız çıkar sağlaması.",
-        "explanation": "Rüşvete yakın bir memur suçudur.",
-        "difficulty": 3,
-        "category": "Ceza"
-      },
-      {
-        "id": "n290",
-        "term": "İMHAL",
-        "clue": "Borçluya ödeme için süre verilmesi.",
-        "explanation": "Mahkeme hakkaniyete göre tanıyabilir.",
-        "difficulty": 3,
-        "category": "Borçlar"
-      },
-      {
-        "id": "n283",
-        "term": "SİMSARLIK",
-        "clue": "Sözleşme yapılmasına aracılık edip ücret alma.",
-        "explanation": "Tellallık da denir; emlakçılık buna örnektir.",
-        "difficulty": 3,
-        "category": "Ticaret"
-      },
-      {
-        "id": "n291",
-        "term": "İZALE",
-        "clue": "Bir durumun giderilmesi, ortadan kaldırılması.",
-        "explanation": "Ortaklığın giderilmesi davasının eski adı bununla kurulur.",
-        "difficulty": 3,
-        "category": "Eşya"
-      },
-      {
-        "id": "n279",
-        "term": "HALEFİYET",
-        "clue": "Bir kişinin başkasının hukuki durumuna onun yerine geçerek girmesi.",
-        "explanation": "Borcu ödeyen kefil alacaklının yerine bu şekilde geçer.",
-        "difficulty": 3,
-        "category": "Borçlar"
-      },
-      {
-        "id": "n292",
-        "term": "TASHİH",
-        "clue": "Bir kayıttaki yanlışlığın düzeltilmesi.",
-        "explanation": "Nüfus kaydındaki yaş bu davayla düzeltilir.",
-        "difficulty": 3,
-        "category": "Medeni"
-      },
-      {
-        "id": "n286",
-        "term": "MERHUN",
-        "clue": "Rehin olarak verilmiş mal.",
-        "explanation": "Borç ödenmezse satılır.",
-        "difficulty": 3,
-        "category": "Eşya"
       }
     ]
   }

@@ -250,11 +250,17 @@ export const questions: Question[] = [...legacy, ...added]
   .filter((q) => planned.has(q.term))
   .map((q) => ({ ...q, difficulty: termDifficulty[q.term] ?? q.difficulty }));
 const byTerm = new Map(questions.map((q) => [q.term, q]));
+export type Level = 1 | 2 | 3;
+export const levelNames: Record<Level, string> = { 1: "KOLAY", 2: "ORTA", 3: "ZOR" };
 export const files = campaignPlan.map((plan, i) => {
   const id = i + 1,
     final = id % 10 === 0;
+  // Volume 1 is easy throughout; later volumes climb: bölüm 1-4 easy, 5-7 medium, 8-10 hard.
+  const step = i % 10;
+  const level: Level = i < 10 || step < 4 ? 1 : step < 7 ? 2 : 3;
   return {
     id,
+    level,
     kind: final
       ? ("final" as const)
       : id % 5 === 0

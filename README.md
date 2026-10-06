@@ -1,6 +1,6 @@
 # MÜHÜR — offline V1
 
-Expo managed / React Native / TypeScript ile iOS ve Android için hukuk kelime oyunu. 80 bölüm (onar bölümlük 8 cilt, kolaydan zora), 474 kavram; sekiz final bölümü, günlük bulmaca/görevler, karakterler, koleksiyon ve başarımlar.
+Expo managed / React Native / TypeScript ile iOS ve Android için hukuk kelime oyunu. 80 bölüm (onar bölümlük 8 cilt, kolaydan zora), 390 kavram; sekiz final bölümü, günlük bulmaca/görevler, karakterler, koleksiyon ve başarımlar.
 
 **[V1 ekranları, navigation, ekonomi ve kayıt modeli](V1-NOTES.md)**
 
@@ -29,7 +29,7 @@ Kilitli bağımlılıklarla kurulum için pnpm kullanılabilir: `pnpm install --
 
 İlk açılışta üç kısa tanıtımdan geç ve kurgusal karakterini seç. Ana sayfada **Devam Et** ile mevcut bölümü aç. İstediğin satıra dokun, tanımdan kavramı bul ve Türkçe klavyeyle yaz. Son harfte cevap otomatik kontrol edilir. Açılmış ipucu harfleri korunur; yanlışta doğru cevap gösterilmez.
 
-Bölüm bitince **Sonraki Bölüm**, **Haritaya Dön** veya **Tekrar Oyna**. Her beşinci bölümde sabit kilometre taşı ödülü; 10, 20 ve 30'da dokuz kavramlık final vardır. Tekrar oyunları ana ilerlemeyi değiştirmez ve yeniden ödül vermez.
+Bölüm bitince **Sonraki Bölüm**, **Haritaya Dön** veya **Tekrar Oyna**. Her beşinci bölümde sabit kilometre taşı ödülü; her onuncu bölümde altı kavramlık final vardır. Tekrar oyunları ana ilerlemeyi değiştirmez ve yeniden ödül vermez.
 
 Alt sekmeler: **Ana Sayfa, Harita, Kavramlar, Profil**. Günlük üç kavramlık bulmaca ve görevler ana sayfadan; karakter, başarımlar ve ayarlar profilden açılır. Ayarlardaki sıfırlama ayrı bir onay ister.
 

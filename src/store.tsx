@@ -87,6 +87,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
           await AsyncStorage.setItem(SAVE_KEY, JSON.stringify(fresh));
           current.current = fresh;
           setGame(fresh);
+          // Also leaves the "save unreadable" screen when the reset starts over from there.
+          setReady(true);
           setError("");
         },
         retry: () => {

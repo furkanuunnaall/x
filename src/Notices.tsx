@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import {
+  Keyboard,
   Modal,
   Pressable,
   View,
@@ -23,6 +24,11 @@ export default function Notices() {
       3500,
     );
     return () => clearTimeout(timer);
+  }, [n?.id]);
+  // The level-up window opens mid-bölüm while the keyboard is up; on iOS the keyboard would
+  // stay above it, hide DEVAM and keep typing into the board behind.
+  useEffect(() => {
+    if (n?.kind === "level") Keyboard.dismiss();
   }, [n?.id]);
   if (!n || !p.selectedCharacter) return null;
   const dismiss = () => dispatch({ type: "notice-dismiss", id: n.id });

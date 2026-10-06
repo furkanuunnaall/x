@@ -2,6 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Text } from "../AppText";
 import { useGame } from "../store";
+import { files } from "../content";
 import { Button, GameCard, Label, Shell, TopBar, useS } from "../ui";
 import { SealCoin } from "../art";
 import { Props } from "../navigation";
@@ -23,7 +24,9 @@ export default function FinalIntroScreen({ navigation }: Props<"FinalIntro">) {
         <Text style={s.gold}>Bütün izler burada birleşiyor.</Text>
         <Text style={s.text}>Bu bölümde öğrendiklerini bir araya getir.</Text>
         <GameCard style={{ gap: 6, padding: 16, borderColor: "#A37832" }}>
-          <Text style={s.text}>9 kavram · Zorlu inceleme</Text>
+          <Text style={s.text}>
+            {files[game.file - 1].questions.length} kavram · Zorlu inceleme
+          </Text>
           <Text style={s.gold}>Cevap XP’sine ek +250 XP</Text>
           <Text style={s.gold}>Tamamlama: +150 Mühür</Text>
           <Text style={s.muted}>

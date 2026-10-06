@@ -21,7 +21,8 @@ import { Text } from "../AppText";
 import { files } from "../content";
 import { useGame } from "../store";
 import { useReducedMotion } from "../motion";
-import { Button, CurrencyBadge, Label, Shell, Stars, TopBar } from "../ui";
+import { Button, CurrencyBadge, Label, LevelBadge, Shell, Stars, TopBar } from "../ui";
+import { levelNames, type Level } from "../content";
 import { useTheme } from "../themeMode";
 import { colors as N } from "../theme";
 
@@ -129,7 +130,8 @@ export default function LevelMapScreen({
               <Text numberOfLines={1} style={m.footTitle}>
                 BÖLÜM {String(selected.id).padStart(2, "0")} ·{" "}
                 <Text style={m.footMuted}>
-                  {selected.title} · {selected.questions.length} kavram
+                  {selected.title} · {levelNames[selected.level].toLocaleLowerCase("tr-TR")} ·{" "}
+                  {selected.questions.length} kavram
                 </Text>
               </Text>
             </View>
@@ -247,6 +249,7 @@ export default function LevelMapScreen({
             id={file.id}
             title={file.title}
             kind={file.kind}
+            level={file.level}
             count={file.questions.length}
             state={state}
             stars={g.results.find((r) => r.file === file.id)?.stars ?? 0}
@@ -335,6 +338,7 @@ function MapNode({
   id,
   title,
   kind,
+  level,
   count,
   state,
   stars,
@@ -348,6 +352,7 @@ function MapNode({
   id: number;
   title: string;
   kind: "normal" | "reward" | "final";
+  level: Level;
   count: number;
   state: State;
   stars: number;
@@ -364,7 +369,7 @@ function MapNode({
   const muted = tc("#5F6B85", "text");
   const tag =
     kind === "final" ? "◆ FİNAL BÖLÜMÜ" : kind === "reward" ? "▣ ÖDÜL BÖLÜMÜ" : null;
-  const label = `Bölüm ${id}, ${title}, ${
+  const label = `Bölüm ${id}, ${title}, ${levelNames[level].toLocaleLowerCase("tr-TR")}, ${
     state === "done" ? `tamamlandı, ${stars} yıldız` : state === "current" ? "buradasınız" : "kilitli"
   }`;
 
@@ -451,6 +456,7 @@ function MapNode({
       <Text style={[m.tag, { fontSize: 11, textAlign }, state === "locked" && { opacity: 0.7 }]}>
         {tag}
       </Text>
+      <LevelBadge level={level} small />
       {state === "done" ? <Stars count={stars} size={13} /> : null}
     </>
   ) : state === "current" ? (
@@ -462,16 +468,21 @@ function MapNode({
       <Text style={[m.subline, { textAlign }]}>
         {count} kavram{tag ? ` · ${tag}` : ""}
       </Text>
+      <LevelBadge level={level} small />
     </>
   ) : state === "done" ? (
     <>
       <Text style={[m.doneTitle, { textAlign }]}>{title}</Text>
+      <LevelBadge level={level} small />
       <Stars count={stars} size={13} />
       {tag ? <Text style={[m.tag, { textAlign }]}>{tag}</Text> : null}
     </>
   ) : (
     <>
       <Text style={[m.lockedText, { textAlign }]}>KİLİTLİ</Text>
+      <View style={{ opacity: 0.7 }}>
+        <LevelBadge level={level} small />
+      </View>
       {tag ? <Text style={[m.tag, { opacity: 0.7, textAlign }]}>{tag}</Text> : null}
     </>
   );

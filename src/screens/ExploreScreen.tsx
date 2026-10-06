@@ -39,6 +39,7 @@ export default function ExploreScreen({ navigation, route }: Props<"Explore">) {
   );
   return (
     <Shell
+      fixed
       header={
         <TopBar
           title="Kavram koleksiyonu"

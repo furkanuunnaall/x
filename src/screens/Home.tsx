@@ -9,8 +9,8 @@ import {
 import { logoFont, Text } from "../AppText";
 import {
   SafeAreaView,
-  useSafeAreaInsets,
 } from "react-native-safe-area-context";
+import { useLayout } from "../layout";
 import { LinearGradient } from "expo-linear-gradient";
 import {
   BookOpenTextIcon,
@@ -26,7 +26,8 @@ import { dailyNow, dayKey, entry } from "../game";
 import { StreakModal } from "../StreakModal";
 import { DailyStampModal, StampButton } from "../DailyStamp";
 import { useReducedMotion } from "../motion";
-import { files } from "../content";
+import { files, levelNames } from "../content";
+import { LevelBadge } from "../ui";
 import { Props } from "../navigation";
 import { C as Palette, CurrencyBadge, ProgressBar } from "../homeUi";
 import { LivingBackground } from "../LivingBackground";
@@ -56,7 +57,7 @@ export default function Home({ navigation }: Props<"Home">) {
   const h = sx(hN);
   const { game: g, error, retry, dispatch } = useGame();
   const { day } = useDiscovery();
-  const { height, width, fontScale } = useWindowDimensions();
+  const { fontScale } = useWindowDimensions();
   const p = productOf(g),
     tasks = p.dailyTasks[day] ?? newTaskDay();
   const current = files[g.file - 1];
@@ -65,11 +66,9 @@ export default function Home({ navigation }: Props<"Home">) {
   // "BAŞLA" until the first word of the bölüm is solved, then "DEVAM ET".
   const caption = result ? "SONUCU GÖR" : count > 0 ? "DEVAM ET" : "BAŞLA";
   const dailyDone = p.dailyPuzzleClaims.includes(day);
-  const insets = useSafeAreaInsets();
-  // The home screen does not scroll, so it scales down to the height left after notches.
-  const usable = height - insets.top - insets.bottom;
-  const compact = usable < 860 || width < 360;
-  const tight = usable < 690;
+  // The home screen does not scroll: every block blends from its iPhone SE size to its full
+  // size with the height left after the notch, so it fills short and tall phones alike.
+  const { between, compact: tight } = useLayout();
   const go = () =>
     navigation.navigate(
       result ? "Result" : g.file % 10 === 0 ? "FinalIntro" : "Game",
@@ -109,7 +108,7 @@ export default function Home({ navigation }: Props<"Home">) {
         <View
           style={[
             h.content,
-            compact && { gap: 8, paddingBottom: 8 },
+            { gap: between(8, 14), paddingBottom: between(8, 16) },
             fontScale > 1.3 && { gap: 24 },
           ]}
         >
@@ -130,8 +129,7 @@ export default function Home({ navigation }: Props<"Home">) {
           <View
             style={[
               h.brandArea,
-              compact && { paddingTop: 10, paddingBottom: 8 },
-              tight && { paddingTop: 0, paddingBottom: 0, gap: 2 },
+              { paddingTop: between(0, 28), paddingBottom: between(0, 20), gap: between(2, 5) },
             ]}
           >
             {tight ? null : (
@@ -140,8 +138,7 @@ export default function Home({ navigation }: Props<"Home">) {
             <Text
               style={[
                 h.brand,
-                compact && { fontSize: 52 },
-                tight && { fontSize: 42 },
+                { fontSize: between(42, 66) },
               ]}
             >
               MÜHÜR
@@ -152,11 +149,10 @@ export default function Home({ navigation }: Props<"Home">) {
           <View
             style={[
               h.stage,
-              compact && { minHeight: 214 },
-              tight && { minHeight: 180 },
+              { minHeight: between(180, 250) },
             ]}
           >
-            <View style={[h.rail, tight && { gap: 8 }]}>
+            <View style={[h.rail, { gap: between(8, 26) }]}>
               <Shortcut
                 title="GÜNLÜK GÖREVLER"
                 icon={<TargetIcon size={32} weight="regular" color={tc("#FFE09A", "text")} />}
@@ -173,30 +169,31 @@ export default function Home({ navigation }: Props<"Home">) {
             </View>
             <View
               accessible
-              accessibilityLabel={`Bölüm ${g.file}, ${current.title}`}
+              accessibilityLabel={`Bölüm ${g.file}, ${current.title}, ${levelNames[
+                current.level
+              ].toLocaleLowerCase("tr-TR")}`}
               style={h.journey}
             >
               <LinearGradient
                 colors={tg(["#D2B77233", "#102448CC", "#142445DD"])}
                 style={[
                   h.orbit,
-                  compact && { minHeight: 176, paddingVertical: 14 },
-                  tight && { minHeight: 150, paddingVertical: 10 },
+                  { minHeight: between(150, 210), paddingVertical: between(10, 20) },
                 ]}
               >
                 <Text
                   style={[
                     h.number,
-                    compact && { fontSize: 56, lineHeight: 62 },
-                    tight && { fontSize: 44, lineHeight: 50 },
+                    { fontSize: between(44, 72), lineHeight: between(50, 80) },
                   ]}
                 >
                   {g.file}
                 </Text>
                 <Text style={h.fileTitle}>{current.title}</Text>
+                <LevelBadge level={current.level} />
               </LinearGradient>
             </View>
-            <View style={[h.rail, tight && { gap: 8 }]}>
+            <View style={[h.rail, { gap: between(8, 26) }]}>
               <Shortcut
                 title="KAVRAMLAR"
                 icon={<BookOpenTextIcon size={32} weight="regular" color={tc("#FFE09A", "text")} />}
@@ -220,7 +217,12 @@ export default function Home({ navigation }: Props<"Home">) {
                   ? "BÖLÜM TAMAMLANDI"
                   : `${count} / ${current.questions.length} KAVRAM ÇÖZÜLDÜ`}
               </Text>
-              <ProgressBar value={count} total={current.questions.length} />
+              <ProgressBar
+                value={count}
+                total={current.questions.length}
+                trackStyle={light ? dayTrack : undefined}
+                fillStyle={light ? dayFill : nightFill}
+              />
             </View>
             <Pressable
               accessibilityRole="button"
@@ -242,11 +244,11 @@ export default function Home({ navigation }: Props<"Home">) {
                   >
                     <LinearGradient
                       colors={["#14A874", "#08805A", "#05593F"]}
-                      style={[h.playGradient, tight && { paddingVertical: 8 }]}
+                      style={[h.playGradient, { paddingVertical: between(8, 13) }]}
                     >
                       {/* The emerald button looks the same in both themes, so its text keeps night colours. */}
                       <Text style={hN.playCaption}>{caption}</Text>
-                      <Text style={[hN.playText, tight && { fontSize: 23 }]}>
+                      <Text style={[hN.playText, { fontSize: between(23, 28) }]}>
                         BÖLÜM {g.file} ›
                       </Text>
                     </LinearGradient>
@@ -260,7 +262,8 @@ export default function Home({ navigation }: Props<"Home">) {
               onPress={() => navigation.navigate("Daily")}
               style={({ pressed }) => [
                 h.daily,
-                tight && { minHeight: 62, paddingVertical: 8 },
+                { minHeight: between(62, 78) },
+                tight && { paddingVertical: 8 },
                 pressed && { opacity: 0.8 },
               ]}
             >
@@ -281,7 +284,7 @@ export default function Home({ navigation }: Props<"Home">) {
             </Pressable>
           </View>
           <View
-            style={[h.profile, compact && { marginTop: 0, paddingVertical: 4 }]}
+            style={[h.profile, { paddingVertical: between(4, 8), marginTop: between(0, 6) }]}
           >
             <Pressable
               accessibilityRole="button"
@@ -441,6 +444,12 @@ const dayProgress = {
   shadowOffset: { width: 0, height: 3 },
   elevation: 3,
 };
+// By day the gold bar vanished into the cream pill: an emerald fill (the play button's green)
+// on a deeper sand track.
+const dayTrack = { height: 8, backgroundColor: "#E2D3B8", borderWidth: 1, borderColor: "#C9A04A" };
+const dayFill = { height: 6, backgroundColor: "#0E8F62" };
+// The same emerald at night, so the bar reads the same in both themes.
+const nightFill = { backgroundColor: "#0E8F62" };
 const dayProgressText = { fontSize: 11, fontWeight: "800" as const };
 const hN = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#0B1830" },

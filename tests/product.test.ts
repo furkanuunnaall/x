@@ -75,12 +75,12 @@ test("onboarding, character and settings roundtrip without changing economy", ()
   assert.equal(g.seals, 100);
   assert.equal(g.xp, 0);
 });
-test("80 bölüm in ten-bölüm volumes, four to six terms, nine-term finals, no answer in its own title", () => {
+test("80 bölüm in ten-bölüm volumes, four to six terms, six-term finals, no answer in its own title", () => {
   assert.equal(files.length, 80);
   assert.equal(new Set(questions.map((q) => q.term)).size, questions.length);
   assert.equal(new Set(questions.map((q) => q.id)).size, questions.length);
   for (const f of files) {
-    if (f.id % 10 === 0) assert.equal(f.questions.length, 9);
+    if (f.id % 10 === 0) assert.equal(f.questions.length, 6);
     else assert.ok(f.questions.length >= 4 && f.questions.length <= 6, `bölüm ${f.id}`);
     assert.equal(new Set(f.questions.map((q) => q.id)).size, f.questions.length);
     for (const q of f.questions) {
@@ -109,6 +109,12 @@ test("80 bölüm in ten-bölüm volumes, four to six terms, nine-term finals, no
     const vol = files.slice(v * 10, v * 10 + 10).map(level);
     for (let i = 1; i < 10; i++) assert.ok(vol[i] >= vol[i - 1] - 1e-9, `bölüm ${v * 10 + i + 1}`);
     assert.ok(Math.abs(vol[9] - 3) < 1e-9, `final ${v * 10 + 10}`);
+  }
+  // The KOLAY / ORTA / ZOR tag matches what each bölüm asks.
+  for (const f of files) {
+    if (f.level === 1) assert.ok(f.questions.every((q) => q.difficulty <= 2), `bölüm ${f.id}`);
+    if (f.level === 2) assert.ok(f.questions.every((q) => q.difficulty === 2), `bölüm ${f.id}`);
+    if (f.level === 3) assert.ok(f.questions.every((q) => q.difficulty === 3), `bölüm ${f.id}`);
   }
   const uses = new Map<string, number>();
   for (const q of files.flatMap((f) => f.questions)) uses.set(q.id, (uses.get(q.id) ?? 0) + 1);
@@ -204,7 +210,7 @@ test("final awards and final achievement persist once; replay never changes earn
   }
   const final = g.results.at(-1)!;
   assert.equal(final.file, 10);
-  assert.equal(final.count, 9);
+  assert.equal(final.count, 6);
   assert.equal(final.seals, 150);
   assert.equal(final.xp, g.run.xp + 250);
   assert.ok(productOf(g).unlockedAchievements.includes("final"));
