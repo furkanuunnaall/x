@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import {
+  Linking,
   Modal,
+  Platform,
   Pressable,
   Switch,
   View,
 } from "react-native";
-import { CaretRightIcon, CircleHalfIcon, InfoIcon, MoonIcon, SunIcon } from "phosphor-react-native";
+import { CaretRightIcon } from "phosphor-react-native/src/icons/CaretRight";
+import { CircleHalfIcon } from "phosphor-react-native/src/icons/CircleHalf";
+import { InfoIcon } from "phosphor-react-native/src/icons/Info";
+import { MoonIcon } from "phosphor-react-native/src/icons/Moon";
+import { SunIcon } from "phosphor-react-native/src/icons/Sun";
 import { Text } from "../AppText";
 import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
@@ -14,6 +20,7 @@ import { Button, GameCard, Label, Shell, TopBar, useS } from "../ui";
 import { Props } from "../navigation";
 import { useFeedback } from "../feedback";
 import { useTheme } from "../themeMode";
+import { askPermission } from "../notifications";
 export default function SettingsScreen({ navigation }: Props<"Settings">) {
   const { C, tc } = useTheme();
   const s = useS();
@@ -23,7 +30,13 @@ export default function SettingsScreen({ navigation }: Props<"Settings">) {
     test = useFeedback();
   const [confirm, setConfirm] = useState(false),
     [busy, setBusy] = useState(false),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [denied, setDenied] = useState(false);
+  async function toggleReminder(value: boolean) {
+    setDenied(false);
+    if (value && !(await askPermission())) return setDenied(true);
+    dispatch({ type: "setting", key: "notifications", value });
+  }
   async function resetAll() {
     setBusy(true);
     try {
@@ -112,6 +125,37 @@ export default function SettingsScreen({ navigation }: Props<"Settings">) {
           </View>
         ))}
       </GameCard>
+      {Platform.OS !== "web" ? (
+        <GameCard style={{ gap: 10, padding: 16 }}>
+          <Label>BİLDİRİMLER</Label>
+          <View style={s.between}>
+            <Text style={[s.text, { flex: 1 }]}>Günlük hatırlatma</Text>
+            <Switch
+              accessibilityLabel="Günlük hatırlatma"
+              value={p.settings.notifications}
+              trackColor={{ false: C.raised, true: tc("#79692F") }}
+              thumbColor={p.settings.notifications ? C.gold : C.muted}
+              onValueChange={(value) => void toggleReminder(value)}
+            />
+          </View>
+          <Text style={s.small}>
+            Her gün 13:00'te: günlük bulmaca ve istikrar serin için tek bir hatırlatma.
+          </Text>
+          {denied ? (
+            <>
+              <Text style={[s.small, { color: C.red }]}>
+                Bildirim izni kapalı. Telefonun ayarlarından MÜHÜR için bildirimlere izin ver.
+              </Text>
+              <Button
+                small
+                secondary
+                title="TELEFON AYARLARINI AÇ"
+                onPress={() => void Linking.openSettings()}
+              />
+            </>
+          ) : null}
+        </GameCard>
+      ) : null}
       <Button
         secondary
         title="SES VE TİTREŞİMİ DENE"

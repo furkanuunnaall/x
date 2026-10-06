@@ -1,47 +1,85 @@
-# MÜHÜR — offline V1
+# MÜHÜR — Hukuk Kelime Oyunu
 
-Expo managed / React Native / TypeScript ile iOS ve Android için hukuk kelime oyunu. 80 bölüm (onar bölümlük 8 cilt, kolaydan zora), 390 kavram; sekiz final bölümü, günlük bulmaca/görevler, karakterler, koleksiyon ve başarımlar.
+Expo (SDK 57) / React Native / TypeScript ile iOS ve Android için hukuk kelime oyunu. Tanımı verilen hukuk kavramını bulup yazarsın. İnternet, hesap veya sunucu gerekmez; ilerleme cihazda saklanır.
 
-**[V1 ekranları, navigation, ekonomi ve kayıt modeli](V1-NOTES.md)**
+- **80 bölüm**, onar bölümlük **8 cilt**; **390 kavram** (Adalet Bakanlığı Hukuk Sözlüğü'nden, en fazla 10 harfli terimler).
+- 1. cilt tamamen kolay. Diğer ciltler kendi içinde ilerler: 4 kolay bölüm (4 kelime), 3 orta bölüm (6 kelime), 2 zor bölüm (6 kelime) ve bir final (6 kelime: 4 yeni, 2 tekrar).
+- Her beşinci bölümde kilometre taşı ödülü, her onuncu bölümde final.
+- Günlük bulmaca (kolay, orta, zor birer kavram), günlük görevler, İSTİKRAR serisi, kavram koleksiyonu, başarımlar, karakter ve profil.
+- Zor kelimelerim: yanlış yapılan ve jokerle açılan kavramlar Kavramlar ekranında listelenir; ödülsüz, jokersiz 5 kavramlık tekrar turları (ilk denemede doğru bilinen kavram listeden yavaş yavaş çıkar).
+- Gündüz/gece teması telefonun ayarını izler; ayarlardan elle de seçilebilir.
+- Günlük hatırlatma: her gün 13:00'te tek bir yerel bildirim (günlük bulmaca çözülmediyse ve/veya İSTİKRAR serisi o gün bitecekse). İzin ilk bölüm bitince sorulur; ayarlardan açılıp kapatılır. İnternet gerekmez.
 
-## Bu Mac’te açma
+## Çalıştırma
 
-1. Telefonuna **Expo Go** yükle. Proje SDK 57 kullanıyor; uyumlu sürümü https://expo.dev/go adresinden kontrol edebilirsin.
-2. Bilgisayar ve telefon aynı Wi-Fi ağına bağlı olsun.
-3. Bu klasördeki **Baslat.command** dosyasına çift tıkla. iPhone için `i`, Android için `a` yazıp Enter'a bas. Terminal penceresini açık bırak.
-4. iPhone seçersen bilgisayarda Expo hesabına giriş yapman istenir. Telefonda Expo Go içinde de aynı hesaba giriş yap. Hesabın yoksa https://expo.dev/signup adresinden ücretsiz oluştur. Şifreni yalnız Terminaldeki Expo giriş ekranına yaz.
-5. `HAZIR` yazısını bekle. Terminaldeki yeni QR kodunu iPhone kamerasıyla veya Android’de Expo Go ile okut. Yerel ağ erişimi sorulursa izin ver.
-
-Başlatıcı dolu bağlantı noktalarını atlar ve yeni sunucunun QR kodunu üretir. Önceki mesajdaki QR yerine yeni Terminal QR kodunu kullan. Bağlantı olmazsa telefonun yerel ağ iznini ve bilgisayarın güvenlik duvarını kontrol et. `Baslat.command` bu Mac’teki dosya izleme limitini aşmak için otomatik kod yenilemeyi kapatır. Kod değişince Control+C ile sunucuyu kapatıp tekrar açabilirsin.
-
-## Başka bilgisayarda
-
-Node.js LTS kur. Terminalde proje klasörüne gir ve sırayla çalıştır:
+Node.js LTS gerekir. Bağımlılıklar pnpm kilit dosyasıyla kurulur:
 
 ```sh
-npm install
-npm start
+pnpm install --frozen-lockfile
+npx expo start
 ```
 
-Kilitli bağımlılıklarla kurulum için pnpm kullanılabilir: `pnpm install --frozen-lockfile`. Mac’te izleme sınırına takılırsan `CI=1 npm start` kullan. Standart `npm start` otomatik kod yenilemeyi destekler. Xcode, Android Studio, Swift veya Kotlin gerekmez.
+- **Telefonda (Expo Go):** Telefona Expo Go'yu yükle, bilgisayarla aynı Wi-Fi'ye bağlan ve terminaldeki QR kodu okut (iPhone'da kamerayla, Android'de Expo Go içinden). Adres `exp://<bilgisayarın-yerel-IP'si>:8081` biçimindedir.
+- **Tarayıcıda:** `npx expo start --web` ve `http://localhost:8081`.
 
-## Nasıl oynanır?
+## Android APK (EAS)
 
-İlk açılışta üç kısa tanıtımdan geç ve kurgusal karakterini seç. Ana sayfada **Devam Et** ile mevcut bölümü aç. İstediğin satıra dokun, tanımdan kavramı bul ve Türkçe klavyeyle yaz. Son harfte cevap otomatik kontrol edilir. Açılmış ipucu harfleri korunur; yanlışta doğru cevap gösterilmez.
+Proje EAS'e bağlı (hesap `furkanunal`, proje `muhur`). `eas.json` iki profil tanımlar:
 
-Bölüm bitince **Sonraki Bölüm**, **Haritaya Dön** veya **Tekrar Oyna**. Her beşinci bölümde sabit kilometre taşı ödülü; her onuncu bölümde altı kavramlık final vardır. Tekrar oyunları ana ilerlemeyi değiştirmez ve yeniden ödül vermez.
+| Profil | Çıktı | Kullanım |
+| --- | --- | --- |
+| `preview` | APK | Telefona doğrudan kurup test etmek |
+| `production` | AAB | Google Play'e yüklemek |
 
-Alt sekmeler: **Ana Sayfa, Harita, Kavramlar, Profil**. Günlük üç kavramlık bulmaca ve görevler ana sayfadan; karakter, başarımlar ve ayarlar profilden açılır. Ayarlardaki sıfırlama ayrı bir onay ister.
+```sh
+npx eas-cli build -p android --profile preview
+```
 
-## Geliştirici doğrulaması
+Build, EAS sunucularında yapılır. Bitince Expo sayfasında APK indirme linki çıkar; link 14 gün geçerlidir. Build, o anki çalışma klasörünü kullanır; içermesi gereken değişiklikleri önce commit etmek iyi olur. Android imzalama anahtarı EAS'te saklanır.
+
+## Oynanış
+
+- Ana ekrandan bölümü aç. Bir satıra dokun, tanımdan kavramı bul ve telefon klavyesiyle yaz. Son harf girilince cevap kendiliğinden kontrol edilir; doğruysa sonraki kelimeye geçilir. Boş bir yere dokununca klavye kapanır.
+- Jokerler kullanılmadan önce onay ister:
+  - **İpucu (40 Mühür):** Kelimenin harflerini karışık sırayla ve ek bir açıklamayı soru kartında gösterir.
+  - **Harf Aç (20 Mühür):** Rastgele bir harfi açar.
+  - **Kelime Aç (60 Mühür):** Kelimenin tamamını açar.
+- Günlük bulmaca harf taşlarıyla oynanır; İpucu (40 Mühür) havuzdaki 3 fazla harfi kaldırır, Harf Aç (20 Mühür) sıradaki harfi sabitler (son harf açılmaz). Kelime Aç yoktur.
+- Bölüm sonunda XP ve Mühür verilir. Tekrar oyunları ilerlemeyi değiştirmez ve yeniden ödül vermez.
+- Ekranlar telefonun kullanılabilir yüksekliğine göre boyutlanır (`src/layout.ts`); sığmayan ekranlar kaydırılır.
+
+## Kod yapısı
+
+| Yer | İçerik |
+| --- | --- |
+| `App.tsx`, `src/AppNavigation.tsx` | Uygulama kökü ve ekran yönlendirmesi |
+| `src/screens/` | Ekranlar (ana ekran, harita, bölüm, sonuç, günlük, profil, ayarlar…) |
+| `src/game.ts`, `src/store.tsx` | Bölüm ilerlemesi, jokerler, ödüller ve kayıt |
+| `src/product.ts` | Günlük bulmaca, görevler, seri, seviye, kilometre taşları |
+| `src/discovery/` | Koleksiyon ve başarımlar (ayrı kayıt) |
+| `src/content.ts` | Bütün soruların ve bölümlerin birleştirildiği yer |
+| `src/campaignPlan.ts` | 80 bölümün hangi terimlerden oluştuğu ve terim zorlukları |
+| `src/campaignWords.ts`, `src/campaignWordsHard.ts` | Kampanya terimleri: soru, ipucu, kategori |
+| `src/additionalContent.ts` | İlk sürümden kalan terimler ve ipuçları |
+| `src/NativeLetterInput.tsx` | Telefon klavyesinden harf okuyan gizli alan |
+| `src/reminders.ts`, `src/notifications.ts` | Günlük hatırlatmanın metni/planı ve telefona planlanması |
+| `src/ui.tsx`, `src/themeMode.tsx`, `src/layout.ts` | Ortak bileşenler, tema ve ekran boyutlandırma |
+| `assets/` | Arka planlar, karakterler, simge, açılış ekranı ve sesler |
+
+### İçerik değiştirmek
+
+- Bir terimin sorusunu veya ipucunu değiştirmek için ilgili `campaignWords*.ts` ya da `additionalContent.ts` satırını düzenle.
+- Bölümlerin kelimeleri `campaignPlan.ts` içindedir.
+- İçerik değişince testteki kayıt da güncellenmeli: `tests/fixtures/campaign-v2.json` `files` çıktısının birebir kopyasıdır.
+- Günlük bulmacanın kelimeleri soru listesinden hesaplanır. Liste değişirse eski günlerin kayıtlı oturumları geçersiz olabilir.
+
+## Kayıt
+
+İlerleme AsyncStorage'da iki anahtarda tutulur: `@muhur/progress-v1` (oyun) ve `@muhur/discovery-v1` (koleksiyon ve başarımlar). Kayıt okunamazsa uygulama verileri silmez; **Tekrar dene** veya onaylı **Baştan başla** seçenekleri sunar.
+
+## Doğrulama
 
 ```sh
 npm run typecheck
 npm test
-npx expo install --check
-npx expo export --platform all
 ```
-
-İlerleme AsyncStorage ile bu cihazda saklanır. Backend veya hesap yoktur. Eski kayıtlar migration ile korunur. Mevcut ekonomiyle yeni ödüllerin ayrıntıları V1 notlarında açıklanır.
-
-Gerçek cihaz/görsel kontroller tamamlanmadı; otomatik testler ve paket üretimi fiziksel cihaz testinin yerine geçmez.

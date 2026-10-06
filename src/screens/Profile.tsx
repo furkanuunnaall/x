@@ -11,7 +11,7 @@ import { Text } from "../AppText";
 import { useGame } from "../store";
 import { dailyNow } from "../game";
 import { Props } from "../navigation";
-import { Button, GameCard, Label, Shell, TopBar, XPTrack, StatCard, CurrencyBadge, Stars, useS } from "../ui";
+import { Button, GameCard, Label, Shell, TopBar, XPTrack, StatCard, CurrencyBadge, useS } from "../ui";
 import { useTheme } from "../themeMode";
 import { colors as N } from "../theme";
 export default function Profile({ navigation }: Props<"Profile">) {
@@ -22,7 +22,7 @@ export default function Profile({ navigation }: Props<"Profile">) {
   const p = productOf(g);
   const [ranking, setRanking] = useState(false);
   const ranked = [...g.results].sort(
-    (a, b) => b.stars - a.stars || b.xp - a.xp || a.file - b.file,
+    (a, b) => b.xp - a.xp || a.file - b.file,
   );
   return (
     <Shell scroll>
@@ -51,7 +51,7 @@ export default function Profile({ navigation }: Props<"Profile">) {
             <Label>✦ KİŞİSEL BÖLÜM SIRALAMAN</Label>
             <Text style={s.text}>En güçlü sonuçların, aynı kürsüde.</Text>
             <Text style={s.small}>
-              Yıldız, ardından XP’ye göre sıralanır. Yalnızca bu cihazdaki
+              XP’ye göre sıralanır. Yalnızca bu cihazdaki
               sonuçların.
             </Text>
           </GameCard>
@@ -103,7 +103,6 @@ export default function Profile({ navigation }: Props<"Profile">) {
                         >
                           Bölüm {ranked[i].file}
                         </Text>
-                        <Stars count={ranked[i].stars} size={17} />
                         <Text style={[s.gold, { fontSize: 17 }]}>
                           {ranked[i].xp} XP
                         </Text>
@@ -141,7 +140,6 @@ export default function Profile({ navigation }: Props<"Profile">) {
                   </View>
                   <View style={{ gap: 6, alignItems: "flex-end" }}>
                     <Text style={s.gold}>{r.xp} XP</Text>
-                    <Stars count={r.stars} size={14} />
                   </View>
                 </GameCard>
               ))}
@@ -202,10 +200,6 @@ export default function Profile({ navigation }: Props<"Profile">) {
           <GameCard style={{ gap: 19 }}>
             {[
               ["Mevcut bölüm", g.file],
-              [
-                "Üç yıldızlı bölüm",
-                g.results.filter((r) => r.stars === 3).length,
-              ],
               ["En uzun doğru serisi", g.best],
             ].map(([label, value]) => (
               <View key={label} style={s.between}>

@@ -12,7 +12,8 @@ import {
 import { Text } from "./AppText";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGame } from "./store";
-import { colors, spacing, radius, typography, shadows } from "./theme";
+import { spoken } from "./a11y";
+import { spacing, radius, typography, shadows } from "./theme";
 import { useTheme } from "./themeMode";
 import { colors as N } from "./theme";
 import { levelNames, type Level } from "./content";
@@ -66,6 +67,7 @@ export function Button({
   return (
     <Pressable
       accessibilityRole="button"
+      accessibilityLabel={spoken(title)}
       accessibilityState={{ disabled }}
       disabled={disabled}
       onPress={onPress}
@@ -97,10 +99,6 @@ export function Button({
       </Text>
     </Pressable>
   );
-}
-export const PrimaryButton = Button;
-export function SecondaryButton(props: React.ComponentProps<typeof Button>) {
-  return <Button {...props} secondary />;
 }
 // Green, gold and red, readable on both the night and the day backgrounds.
 const levelColors: Record<Level, string> = { 1: "#2FB39A", 2: "#D9A23A", 3: "#E0604E" };
@@ -167,30 +165,16 @@ export function TopBar({
           <Text style={{ color: C.ink, fontSize: 27 }}>‹</Text>
         </Pressable>
       ) : null}
-      <Text numberOfLines={1} adjustsFontSizeToFit style={s.brand}>
+      <Text
+        accessibilityRole="header"
+        numberOfLines={1}
+        adjustsFontSizeToFit
+        style={s.brand}
+      >
         {title}
       </Text>
       {right}
     </View>
-  );
-}
-export function Top({
-  title,
-  back,
-  right,
-}: {
-  title: string;
-  back?: () => void;
-  right?: string;
-}) {
-  const { sx } = useTheme();
-  const s = sx(sN);
-  return (
-    <TopBar
-      title={title}
-      back={back}
-      right={right ? <Text style={s.gold}>{right}</Text> : undefined}
-    />
   );
 }
 export function ProgressBar({
@@ -230,27 +214,6 @@ export function XPTrack({ xp }: { xp: number }) {
     </View>
   );
 }
-export function Stars({
-  count = 0,
-  size = 23,
-  color,
-}: {
-  color?: string;
-  count?: number;
-  size?: number;
-}) {
-  const { C, tc } = useTheme();
-  color ??= C.gold;
-  return (
-    <Text
-      accessibilityLabel={`${count} yıldız`}
-      style={{ color, fontSize: size, letterSpacing: 4 }}
-    >
-      {"★".repeat(count)}
-      <Text style={{ color: tc("#6B7693", "text") }}>{"☆".repeat(3 - count)}</Text>
-    </Text>
-  );
-}
 export function StatCard({
   label,
   value,
@@ -270,118 +233,6 @@ export function StatCard({
       <Text style={s.value}>{value}</Text>
       <Text style={s.muted}>{label}</Text>
     </GameCard>
-  );
-}
-export function LevelNode({
-  kind = "normal",
-  number,
-  current,
-  done,
-  stars = 0,
-  onPress,
-}: {
-  kind?: "normal" | "reward" | "final";
-  number: number;
-  current: boolean;
-  done: boolean;
-  stars?: number;
-  onPress?: () => void;
-}) {
-  const { C, sx } = useTheme();
-  const s = sx(sN);
-  return (
-    <View style={{ alignItems: "center", gap: 7 }}>
-      <Pressable
-        accessibilityRole="button"
-        accessibilityLabel={`Bölüm ${number}, ${current ? "mevcut" : done ? "tamamlandı" : "kilitli"}`}
-        accessibilityState={{ disabled: !onPress }}
-        disabled={!onPress}
-        onPress={onPress}
-        style={[
-          s.node,
-          current && s.currentNode,
-          done && !current && s.doneNode,
-          kind === "final" && {
-            width: 82,
-            height: 82,
-            borderRadius: 26,
-            borderWidth: 2,
-          },
-        ]}
-      >
-        <LinearGradient
-          pointerEvents="none"
-          colors={
-            current
-              ? ["#FFECA6", "#F5C843", "#CF9A26"]
-              : done
-                ? ["#A4FFDF", "#54DDA7", "#259273"]
-                : ["#2C3A51", "#152038"]
-          }
-          style={[StyleSheet.absoluteFill, { borderRadius: current ? 40 : 32 }]}
-        />
-        <Text
-          style={{
-            color: current ? C.bg : done ? "#09372A" : C.muted,
-            fontSize: current ? 30 : 24,
-            fontWeight: "800",
-          }}
-        >
-          {done && !current ? "✓" : number}
-        </Text>
-      </Pressable>
-      {done ? (
-        <Stars count={stars} size={16} />
-      ) : (
-        <Text style={s.small}>{current ? "ŞİMDİ OYNA" : "KİLİTLİ"}</Text>
-      )}
-    </View>
-  );
-}
-export function AnswerSlot({
-  letter,
-  locked,
-  active,
-  failed,
-  width,
-  onPress,
-  label,
-}: {
-  letter: string;
-  locked: boolean;
-  active: boolean;
-  failed: boolean;
-  width: number;
-  onPress: () => void;
-  label: string;
-}) {
-  const { C, sx, tc } = useTheme();
-  const s = sx(sN);
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ disabled: locked, selected: active }}
-      disabled={locked}
-      onPress={onPress}
-      style={[
-        s.slot,
-        { width },
-        active && { borderColor: C.gold },
-        locked && { backgroundColor: tc("#393322"), borderColor: C.gold },
-        failed && { borderColor: C.red },
-      ]}
-    >
-      <Text
-        style={{
-          color: locked ? C.gold : C.ink,
-          fontSize: 20,
-          fontWeight: "800",
-        }}
-      >
-        {letter}
-      </Text>
-    </Pressable>
   );
 }
 export function Shell({
@@ -410,7 +261,7 @@ export function Shell({
   const s = sx(sN);
   const { error, retry } = useGame();
   const errorBanner = error ? (
-    <Pressable accessibilityRole="button" onPress={retry}>
+    <Pressable accessibilityRole="button" accessibilityHint="Tekrar dener" onPress={retry}>
       <Text style={s.error}>{error}</Text>
     </Pressable>
   ) : null;
@@ -455,6 +306,7 @@ export function Shell({
         <ScrollView
           ref={scrollRef}
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
           bounces={scroll}
           alwaysBounceVertical={scroll}
           overScrollMode={scroll ? "auto" : "never"}
@@ -595,33 +447,4 @@ export const sN = StyleSheet.create({
   fill: { height: 7, backgroundColor: N.gold, borderRadius: 9 },
   note: { fontSize: 13, color: N.muted, lineHeight: 21, textAlign: "center" },
   error: { color: N.red, fontSize: 14, padding: 12 },
-  node: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: N.panel,
-    borderWidth: 3,
-    borderColor: N.line,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  currentNode: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: N.gold,
-    borderColor: "#FFEBA0",
-    ...shadows.gold,
-  },
-  doneNode: { backgroundColor: N.green, borderColor: "#A2F7D6" },
-  slot: {
-    minHeight: 48,
-    borderRadius: radius.sm,
-    borderWidth: 1,
-    borderBottomWidth: 3,
-    borderColor: N.line,
-    backgroundColor: N.panel,
-    alignItems: "center",
-    justifyContent: "center",
-  },
 });

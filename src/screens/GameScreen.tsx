@@ -1,3 +1,4 @@
+import { announce, announceOnIOS } from "../a11y";
 import { NativeLetterInput, showKeyboard } from "../NativeLetterInput";
 import { productOf } from "../product";
 import { useFeedback } from "../feedback";
@@ -16,20 +17,20 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { Text } from "../AppText";
-import {
-  CaretLeftIcon,
-  CaretRightIcon,
-  GavelIcon,
-  KeyIcon,
-  Icon,
-  MagnifyingGlassIcon,
-} from "phosphor-react-native";
+import { CaretLeftIcon } from "phosphor-react-native/src/icons/CaretLeft";
+import { CaretRightIcon } from "phosphor-react-native/src/icons/CaretRight";
+import { GavelIcon } from "phosphor-react-native/src/icons/Gavel";
+import { KeyIcon } from "phosphor-react-native/src/icons/Key";
+import type { Icon } from "phosphor-react-native";
+import { MagnifyingGlassIcon } from "phosphor-react-native/src/icons/MagnifyingGlass";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import { useGame } from "../store";
 import { costs, entry, Hint, normalize } from "../game";
+import { useDiscovery } from "../discovery/store";
+import { strugglePoints } from "../discovery/model";
 import { files } from "../content";
 import { Props } from "../navigation";
 import { Button, GameCard, CurrencyBadge } from "../ui";
@@ -42,6 +43,10 @@ export default function GameScreen({ navigation }: Props<"Game">) {
   const { C, sx, tc, light } = useTheme();
   const s = sx(sN);
   const { game: g, dispatch, error, retry } = useGame();
+  const discovery = useDiscovery();
+  /** Feeds "Zor kelimelerim": wrong answers and jokers raise a term's struggle score. */
+  const struggle = (id: string, points: number) =>
+    discovery.dispatch({ type: "struggle", id, points });
   const qs = files[g.file - 1].questions;
   const selected = Math.max(
     0,
@@ -144,7 +149,10 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     setFailed(!correct);
     setCursor(null);
     setFeedback(correct ? "" : "Henüz değil. Bir kez daha dene.");
+    if (correct) announce(`Doğru: ${q.term}`);
+    else announceOnIOS("Henüz değil. Bir kez daha dene.");
     dispatch({ type: "submit", id: q.id });
+    if (!correct) struggle(q.id, strugglePoints.wrong);
     setAttempts((n) => n + 1);
     if (!reduced) {
       shake.stopAnimation();
@@ -177,6 +185,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     }
   }
   function buy(hint: Hint) {
+    struggle(q.id, strugglePoints[hint === "first" ? "letter" : hint]);
     const candidates = draft.map((_, i) => i).filter((i) => !e.letters[i]);
     dispatch({
       type: "hint",
@@ -340,7 +349,15 @@ export default function GameScreen({ navigation }: Props<"Game">) {
             >
               <Pressable
                 accessibilityRole="button"
-                accessibilityLabel={`${row + 1}. soruyu seç${cell.solved ? ", çözüldü" : ""}`}
+                accessibilityLabel={
+                  cell.solved
+                    ? `${row + 1}. soru, çözüldü: ${item.term}`
+                    : `${row + 1}. soru, ${item.term.length} harf${
+                        letters.some(Boolean)
+                          ? `, yazılan: ${letters.map((l) => l || "boş").join(" ")}`
+                          : ""
+                      }`
+                }
                 accessibilityState={{
                   selected: current,
                   disabled: cell.solved,
@@ -432,7 +449,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
       </View>
       <View style={s.content}>
         {error ? (
-          <Pressable onPress={retry}>
+          <Pressable accessibilityRole="button" accessibilityHint="Tekrar dener" onPress={retry}>
             <Text style={s.error}>{error}</Text>
           </Pressable>
         ) : null}
@@ -447,6 +464,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
             <View style={s.questionHeader}>
               <Text
                 numberOfLines={1}
+                adjustsFontSizeToFit
                 style={[s.eyebrow, e.solved && { color: C.green }]}
               >
                 {e.solved
@@ -534,7 +552,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                 <Pressable
                   key={b.title}
                   accessibilityRole="button"
-                  accessibilityLabel={b.title}
+                  accessibilityLabel={`${b.title}, ${b.detail}`}
                   accessibilityState={{ disabled: b.disabled }}
                   disabled={b.disabled}
                   onPress={b.onPress}
@@ -544,7 +562,9 @@ export default function GameScreen({ navigation }: Props<"Game">) {
                     <b.icon size={24} weight="bold" color={C.gold} />
                   </View>
                   <View style={s.boosterCopy}>
-                    <Text style={s.boosterTitle}>{b.title}</Text>
+                    <Text numberOfLines={1} adjustsFontSizeToFit style={s.boosterTitle}>
+                      {b.title}
+                    </Text>
                     <View style={s.boosterCost}>
                       {b.detail === "Ücretsiz" ? null : <SealCoin size={17} />}
                       <Text style={s.boosterPrice}>

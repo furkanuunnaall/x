@@ -137,7 +137,7 @@ export default function DailyCalendarScreen({ navigation }: Props<"Daily">) {
                 {n !== null && (
                   <Pressable
                     accessibilityRole="button"
-                    accessibilityLabel={`${key}${done ? ", tamamlandı" : current ? ", bugün" : locked ? ", henüz açılmadı" : ""}`}
+                    accessibilityLabel={`${n} ${months[m - 1].toLocaleLowerCase("tr-TR")}${current ? ", bugün" : ""}${done ? ", çözüldü" : locked ? ", henüz açılmadı" : ""}`}
                     accessibilityState={{ selected: active, disabled: locked }}
                     disabled={locked}
                     onPress={() => setSelected(key)}

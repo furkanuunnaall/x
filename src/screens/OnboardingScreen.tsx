@@ -10,7 +10,7 @@ const slides = [
     "Hukuk kelimelerini çöz.",
     "Tanımları oku, kavramları bul, bölümleri tamamla.",
   ],
-  ["Bölümleri ilerlet.", "Yıldız kazan, XP topla ve yeni bölümleri aç."],
+  ["Bölümleri ilerlet.", "XP topla, Mühür kazan ve yeni bölümleri aç."],
   ["Kendini geliştir.", "Günlük görevler, seriler ve başarımlarla ilerle."],
 ];
 export default function OnboardingScreen() {

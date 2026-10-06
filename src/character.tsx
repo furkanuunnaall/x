@@ -3,8 +3,8 @@ import { Image, ImageSourcePropType, View } from "react-native";
 import { Gender, Role } from "./product";
 import { useTheme } from "./themeMode";
 const portraits = {
-  Kadın: require("../assets/characters/woman.png"),
-  Erkek: require("../assets/characters/man.png"),
+  Kadın: require("../assets/characters/woman.jpg"),
+  Erkek: require("../assets/characters/man.jpg"),
 };
 export function Avatar({
   gender,

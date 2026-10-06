@@ -8,13 +8,28 @@ export type Discovery = {
   version: 1;
   days: Record<string, DailyRound>;
   favorites: string[];
+  /** Struggle score per question id: wrong answers and jokers add up, review rounds lower it. */
+  struggles: Record<string, number>;
 };
 export const DISCOVERY_KEY = "@muhur/discovery-v1";
 export const emptyDiscovery = (): Discovery => ({
   version: 1,
   days: {},
   favorites: [],
+  struggles: {},
 });
+/** What each struggle adds to a term's score. */
+export const strugglePoints = { wrong: 1, letter: 1, extra: 1, word: 3, reveal: 1, reviewed: -2 };
+/** A term joins "Zor kelimelerim" at this score. */
+export const HARD_SCORE = 2;
+/** Terms per review round. */
+export const REVIEW_SIZE = 5;
+/** The player's hardest known terms, hardest first. Unsolved terms stay out so the list never gives away an answer. */
+export function hardWords(g: Game, d: Discovery) {
+  return unlockedQuestions(g)
+    .filter((q) => (d.struggles[q.id] ?? 0) >= HARD_SCORE)
+    .sort((a, b) => d.struggles[b.id] - d.struggles[a.id] || a.term.localeCompare(b.term, "tr"));
+}
 const dailyPool = questions
   .slice(0, 30)
   .filter((q) => q.term.length >= 5 && q.term.length <= 8);
@@ -46,6 +61,7 @@ export const dailySolved = (d: Discovery, day: string) =>
   roundFor(d, day).guesses.includes(dailyQuestion(day).term);
 export type DiscoveryAction =
   | { type: "favorite"; id: string }
+  | { type: "struggle"; id: string; points: number }
   | { type: "draft"; day: string; value: string }
   | { type: "guess"; day: string };
 export function discoveryReducer(d: Discovery, a: DiscoveryAction): Discovery {
@@ -57,6 +73,14 @@ export function discoveryReducer(d: Discovery, a: DiscoveryAction): Discovery {
         ? d.favorites.filter((id) => id !== a.id)
         : [...d.favorites, a.id],
     };
+  }
+  if (a.type === "struggle") {
+    if (!questions.some((q) => q.id === a.id) || !Number.isInteger(a.points)) return d;
+    const score = Math.max(0, (d.struggles[a.id] ?? 0) + a.points);
+    if (score === (d.struggles[a.id] ?? 0)) return d;
+    const struggles = { ...d.struggles, [a.id]: score };
+    if (!score) delete struggles[a.id];
+    return { ...d, struggles };
   }
   if (dailySolved(d, a.day)) return d;
   const round = roundFor(d, a.day);
@@ -77,6 +101,8 @@ export function discoveryReducer(d: Discovery, a: DiscoveryAction): Discovery {
 }
 export function parseDiscovery(raw: string): Discovery {
   const d = JSON.parse(raw) as Discovery;
+  // Saves from before the review list have no scores yet.
+  if (d && d.struggles === undefined) d.struggles = {};
   if (
     !d ||
     d.version !== 1 ||
@@ -84,7 +110,13 @@ export function parseDiscovery(raw: string): Discovery {
     typeof d.days !== "object" ||
     Array.isArray(d.days) ||
     !Array.isArray(d.favorites) ||
-    d.favorites.some((id) => !questions.some((q) => q.id === id))
+    d.favorites.some((id) => !questions.some((q) => q.id === id)) ||
+    !d.struggles ||
+    typeof d.struggles !== "object" ||
+    Array.isArray(d.struggles) ||
+    Object.entries(d.struggles).some(
+      ([id, n]) => !questions.some((q) => q.id === id) || !Number.isSafeInteger(n) || n < 1,
+    )
   )
     throw Error("Geçersiz keşif kaydı");
   for (const [day, r] of Object.entries(d.days)) {
@@ -144,14 +176,6 @@ export function achievements(g: Game, d: Discovery) {
       detail: "Peş peşe 5 doğru cevap ver.",
       value: g.best,
       total: 5,
-    },
-    {
-      id: "star",
-      icon: "★",
-      title: "Kusursuz bölüm",
-      detail: "Bir bölümde 3 yıldız kazan.",
-      value: g.results.filter((r) => r.stars === 3).length,
-      total: 1,
     },
     {
       id: "archive",

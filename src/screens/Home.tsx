@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
   Pressable,
+  ScrollView,
   StyleSheet,
   View,
   useWindowDimensions,
@@ -12,15 +13,13 @@ import {
 } from "react-native-safe-area-context";
 import { useLayout } from "../layout";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  BookOpenTextIcon,
-  FlameIcon,
-  GearSixIcon,
-  HourglassMediumIcon,
-  MapTrifoldIcon,
-  MedalIcon,
-  TargetIcon,
-} from "phosphor-react-native";
+import { BookOpenTextIcon } from "phosphor-react-native/src/icons/BookOpenText";
+import { FlameIcon } from "phosphor-react-native/src/icons/Flame";
+import { GearSixIcon } from "phosphor-react-native/src/icons/GearSix";
+import { HourglassMediumIcon } from "phosphor-react-native/src/icons/HourglassMedium";
+import { MapTrifoldIcon } from "phosphor-react-native/src/icons/MapTrifold";
+import { MedalIcon } from "phosphor-react-native/src/icons/Medal";
+import { TargetIcon } from "phosphor-react-native/src/icons/Target";
 import { useGame } from "../store";
 import { dailyNow, dayKey, entry } from "../game";
 import { StreakModal } from "../StreakModal";
@@ -105,8 +104,11 @@ export default function Home({ navigation }: Props<"Home">) {
         style={StyleSheet.absoluteFill}
       />
       <SafeAreaView style={{ flex: 1 }}>
-        <View
-          style={[
+        {/* Fits the phone as designed; scrolls only when larger text pushes it past the screen. */}
+        <ScrollView
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[
             h.content,
             { gap: between(8, 14), paddingBottom: between(8, 16) },
             fontScale > 1.3 && { gap: 24 },
@@ -122,7 +124,7 @@ export default function Home({ navigation }: Props<"Home">) {
             />
           </View>
           {error ? (
-            <Pressable accessibilityRole="button" onPress={retry}>
+            <Pressable accessibilityRole="button" accessibilityHint="Tekrar dener" onPress={retry}>
               <Text style={h.error}>{error} · Tekrar dene</Text>
             </Pressable>
           ) : null}
@@ -320,7 +322,7 @@ export default function Home({ navigation }: Props<"Home">) {
               <GearSixIcon size={24} weight="regular" color={tc(C.ink, "text")} />
             </Pressable>
           </View>
-        </View>
+        </ScrollView>
       </SafeAreaView>
     </View>
   );
@@ -454,7 +456,7 @@ const dayProgressText = { fontSize: 11, fontWeight: "800" as const };
 const hN = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#0B1830" },
   content: {
-    flex: 1,
+    flexGrow: 1,
     width: "100%",
     maxWidth: 560,
     alignSelf: "center",

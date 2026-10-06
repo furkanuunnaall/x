@@ -13,6 +13,7 @@ import {
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useGame } from "./store";
+import { useReminderSync } from "./notifications";
 import { useDiscovery } from "./discovery/store";
 import { productOf } from "./product";
 import { Button, useS } from "./ui";
@@ -28,6 +29,7 @@ import CharacterSelectionScreen from "./screens/CharacterSelectionScreen";
 import MapScreen from "./screens/MapScreen";
 import DailyCalendarScreen from "./screens/DailyCalendarScreen";
 import SessionScreen from "./screens/SessionScreen";
+import ReviewScreen from "./screens/ReviewScreen";
 import TasksScreen from "./screens/TasksScreen";
 import AchievementsScreen from "./screens/AchievementsScreen";
 import FinalIntroScreen from "./screens/FinalIntroScreen";
@@ -38,6 +40,7 @@ import Notices from "./Notices";
 import { useTheme } from "./themeMode";
 const Stack = createNativeStackNavigator<Routes>();
 export default function AppNavigation() {
+  useReminderSync();
   const { C, light } = useTheme();
   const s = useS();
   const { game, ready, error, retry, reset } = useGame(),
@@ -140,6 +143,7 @@ export default function AppNavigation() {
               <Stack.Screen name="Daily" component={DailyCalendarScreen} />
               <Stack.Screen name="DailyPlay" component={SessionScreen} />
               <Stack.Screen name="Practice" component={SessionScreen} />
+              <Stack.Screen name="Review" component={ReviewScreen} />
               <Stack.Screen name="Tasks" component={TasksScreen} />
               <Stack.Screen
                 name="Achievements"

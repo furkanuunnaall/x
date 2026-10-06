@@ -1,6 +1,6 @@
 import { SealCoin } from "../art";
-import React, { useRef, useEffect } from "react";
-import { Animated, StyleSheet, View } from "react-native";
+import React from "react";
+import { Platform, StyleSheet, View } from "react-native";
 import { Text } from "../AppText";
 import { useGame } from "../store";
 import { productOf } from "../product";
@@ -8,29 +8,17 @@ import { dayKey } from "../game";
 import { StreakModal } from "../StreakModal";
 import { files } from "../content";
 import { Props } from "../navigation";
-import { Button, GameCard, Label, Shell, Stars, TopBar, useS } from "../ui";
-import { Reveal, useReducedMotion } from "../motion";
+import { Button, GameCard, Label, Shell, TopBar, useS } from "../ui";
+import { Reveal } from "../motion";
 import { useTheme } from "../themeMode";
 import { colors as N } from "../theme";
+import { askPermission } from "../notifications";
 export default function ResultScreen({ navigation }: Props<"Result">) {
   const { C, sx } = useTheme();
   const s = useS();
   const v = sx(vN);
   const { game: g, dispatch } = useGame();
-  const stamp = useRef(new Animated.Value(1)).current;
-  const reduced = useReducedMotion();
   const r = g.results.find((r) => r.file === g.file);
-  useEffect(() => {
-    if (r?.stars !== 3 || reduced) return;
-    stamp.setValue(0.7);
-    const animation = Animated.spring(stamp, {
-      toValue: 1,
-      friction: 4,
-      useNativeDriver: true,
-    });
-    animation.start();
-    return () => animation.stop();
-  }, [r?.file, reduced]);
   function nextFile() {
     if (g.file % 5 === 0 && !productOf(g).claimedMilestones.includes(g.file)) {
       navigation.navigate("Milestone", { file: g.file });
@@ -74,22 +62,19 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
         />
         <Reveal>
           <View style={v.hero}>
-            <Animated.View style={[v.stamp, { transform: [{ scale: stamp }] }]}>
+            <View style={v.stamp}>
               <SealCoin size={62} value={final ? "◆" : r.sealed ? "✓" : "M"} />
-            </Animated.View>
+            </View>
             <Label>
               {r.sealed ? "MÜHRÜNÜ BIRAKTIN" : "BÜTÜN KAVRAMLAR ÇÖZÜLDÜ"}
             </Label>
             <Text style={v.title}>
               {final ? "FİNAL BÖLÜMÜ ÇÖZÜLDÜ" : "BÖLÜM TAMAMLANDI"}
             </Text>
-            <Stars count={r.stars} size={34} />
             <Text style={final ? s.gold : s.muted}>
               {final
                 ? "◆ Final ustası · +250 XP ve +100 Mühür dahil"
-                : r.stars === 3
-                  ? "Kusursuz takip. Üç yıldız senin."
-                  : "Bir bölüm daha çözüldü."}
+                : "Bir bölüm daha çözüldü."}
             </Text>
           </View>
         </Reveal>
@@ -103,6 +88,37 @@ export default function ResultScreen({ navigation }: Props<"Result">) {
             </View>
           ))}
         </GameCard>
+        {/* Asked once, after the first finished bölüm, never on first launch. */}
+        {Platform.OS !== "web" && !productOf(g).notificationAsked ? (
+          <GameCard style={{ gap: 10, padding: 16 }}>
+            <Label>GÜNLÜK HATIRLATMA</Label>
+            <Text style={s.text}>
+              Her gün 13:00'te günlük bulmacayı ve istikrar serini hatırlatalım mı?
+            </Text>
+            <View style={v.row}>
+              <View style={{ flex: 1 }}>
+                <Button
+                  small
+                  secondary
+                  title="ŞİMDİ DEĞİL"
+                  onPress={() => dispatch({ type: "notification-asked" })}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Button
+                  small
+                  title="EVET, HATIRLAT"
+                  onPress={async () => {
+                    const granted = await askPermission();
+                    if (granted)
+                      dispatch({ type: "setting", key: "notifications", value: true });
+                    dispatch({ type: "notification-asked" });
+                  }}
+                />
+              </View>
+            </View>
+          </GameCard>
+        ) : null}
         {r.file < files.length ? (
           <Button title="SONRAKİ BÖLÜM →" onPress={nextFile} />
         ) : (

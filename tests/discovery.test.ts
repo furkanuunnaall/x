@@ -6,9 +6,11 @@ import {
   dailySolved,
   discoveryReducer,
   emptyDiscovery,
+  hardWords,
   parseDiscovery,
   roundFor,
   scoreGuess,
+  strugglePoints,
   unlockedQuestions,
 } from "../src/discovery/model";
 import { initialGame, reducer } from "../src/game";
@@ -150,4 +152,31 @@ test("discovery storage preserves campaign saves, serializes writes and recovers
   records.set(DISCOVERY_KEY, "broken");
   await assert.rejects(loadDiscovery(storage));
   assert.equal(records.get(DISCOVERY_KEY), "broken");
+});
+test("struggle scores build the hard-word list, never go below zero and stay off unsolved terms", () => {
+  const [a, b, c] = files[0].questions;
+  let g = initialGame();
+  for (const q of [a, b]) {
+    for (const key of q.term) g = reducer(g, { type: "key", id: q.id, key });
+    g = reducer(g, { type: "submit", id: q.id });
+  }
+  let d = emptyDiscovery();
+  const add = (id: string, points: number) =>
+    (d = discoveryReducer(d, { type: "struggle", id, points }));
+  add(a.id, strugglePoints.wrong);
+  assert.deepEqual(hardWords(g, d), []);
+  add(a.id, strugglePoints.letter);
+  add(b.id, strugglePoints.word);
+  add(c.id, strugglePoints.word);
+  // Hardest first; c is not solved yet, so it never shows (no spoilers).
+  assert.deepEqual(hardWords(g, d).map((q) => q.id), [b.id, a.id]);
+  add(a.id, strugglePoints.reviewed);
+  add(a.id, strugglePoints.reviewed);
+  assert.equal(d.struggles[a.id], undefined);
+  assert.equal(discoveryReducer(d, { type: "struggle", id: "nope", points: 1 }), d);
+  assert.deepEqual(parseDiscovery(JSON.stringify(d)), d);
+  // A save from before the list loads with no scores.
+  const old = { version: 1, days: {}, favorites: [] };
+  assert.deepEqual(parseDiscovery(JSON.stringify(old)).struggles, {});
+  assert.throws(() => parseDiscovery(JSON.stringify({ ...d, struggles: { [a.id]: -1 } })));
 });

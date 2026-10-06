@@ -7,7 +7,6 @@ import {
   reducer,
   entry,
   reward,
-  stars,
   parseSave,
   dailyNow,
   normalize,
@@ -66,7 +65,6 @@ test("hints charge once, preserve revealed letters and reject insufficient funds
 test("completion, sealing and next file cannot duplicate rewards", () => {
   let g = finish(initialGame());
   const n = files[0].questions.length;
-  assert.equal(g.results[0].stars, 3);
   assert.equal(g.xp, Array.from({ length: n }, (_, i) => reward(i + 1)).reduce((a, b) => a + b));
   assert.equal(g.seals, 150);
   assert.equal(reducer(g, { type: "next" }), g);
@@ -90,12 +88,6 @@ test("daily streak same day, next day, missed day and expired display", () => {
   g = reducer(reducer(g, { type: "seal" }), { type: "next" });
   g = finish(g, new Date(2026, 8, 24));
   assert.equal(g.daily, 1);
-});
-test("star boundaries", () => {
-  assert.equal(stars(0, 2), 3);
-  assert.equal(stars(0, 3), 2);
-  assert.equal(stars(2, 0), 2);
-  assert.equal(stars(3, 0), 1);
 });
 test("save roundtrip preserves draft, hint, rewards and pending completion", () => {
   let g = reducer(initialGame(), { type: "hint", id: A.id, hint: "first" });

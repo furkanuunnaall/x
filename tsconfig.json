@@ -2,6 +2,13 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "types": ["react", "react-native", "node"]
+    "types": ["react", "react-native", "node"],
+    // Icons are imported one by one so the bundle carries only the ones in use. Type-check
+    // them against the package's published declarations instead of its raw source.
+    "paths": {
+      "phosphor-react-native/src/icons/*": [
+        "./node_modules/phosphor-react-native/lib/typescript/icons/*.d.ts"
+      ]
+    }
   }
 }

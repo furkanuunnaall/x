@@ -19,5 +19,6 @@ export type Routes = {
   Explore: { tab?: "collection" | "goals" } | undefined;
   Daily: undefined;
   DailyPlay: { day: string };
+  Review: undefined;
 };
 export type Props<K extends keyof Routes> = NativeStackScreenProps<Routes, K>;

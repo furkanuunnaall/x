@@ -333,3 +333,31 @@ test("daily envelopes: one pick per day, fixed board, jackpot always present", (
   g.product!.dailyStamp = { day: "2026-10-02", index: 4, amount: 999 };
   assert.throws(() => parseSave(JSON.stringify(g)));
 });
+
+test("daily jokers: İpucu drops the decoys once, Harf Aç fixes leading letters and never the whole word", () => {
+  const day = "2026-09-21";
+  let g: Game = { ...reducer(initialGame(), { type: "daily-start", date }), seals: 200 };
+  const q = dailyQuestions(day)[0];
+  const hint = (h: "extra" | "letter") =>
+    reducer(g, { type: "session-hint", mode: "daily", hint: h, puzzleDate: day, date });
+  const session = () => productOf(g).dailyPuzzles[day];
+  g = hint("extra");
+  assert.equal(g.seals, 160);
+  assert.deepEqual(session().pooled, [q.id]);
+  assert.equal(hint("extra"), g);
+  g = hint("letter");
+  assert.equal(g.seals, 140);
+  assert.equal(session().drafts[q.id], q.term[0]);
+  // The fixed letter cannot be deleted or replaced.
+  const key = (value: string) =>
+    reducer(g, { type: "session-key", mode: "daily", puzzleDate: day, value, date });
+  assert.equal(key(""), g);
+  assert.equal(key("Z"), g);
+  g = key(q.term[0] + "Z".repeat(q.term.length - 1));
+  g = reducer(g, { type: "session-submit", mode: "daily", puzzleDate: day, date });
+  assert.equal(session().drafts[q.id], q.term[0]);
+  for (let i = 1; i < q.term.length - 1; i++) g = hint("letter");
+  assert.equal(session().locked?.[q.id], q.term.length - 1);
+  assert.equal(hint("letter"), g);
+  assert.deepEqual(parseSave(JSON.stringify(g)), g);
+});

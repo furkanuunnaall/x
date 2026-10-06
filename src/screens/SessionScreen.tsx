@@ -1,15 +1,24 @@
+import { announce, announceOnIOS } from "../a11y";
 import React, { useEffect, useRef, useState } from "react";
 import {
   Animated,
+  Modal,
   Pressable,
+  StyleSheet,
   TextInput,
   View,
   useWindowDimensions,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { KeyIcon } from "phosphor-react-native/src/icons/Key";
+import { MagnifyingGlassIcon } from "phosphor-react-native/src/icons/MagnifyingGlass";
+import { SealCoin } from "../art";
+import { costs } from "../game";
 import { Text } from "../AppText";
 import { files } from "../content";
 import { useGame } from "../store";
 import { useDiscovery } from "../discovery/store";
+import { strugglePoints } from "../discovery/model";
 import { dailyQuestions, newSession, productOf } from "../product";
 import { Button, GameCard, Label, Shell, TopBar, useS } from "../ui";
 import { NativeLetterInput, showKeyboard } from "../NativeLetterInput";
@@ -26,7 +35,7 @@ export default function SessionScreen({
   const s = useS();
   const { game, dispatch } = useGame(),
     p = productOf(game);
-  const { day: today } = useDiscovery();
+  const { day: today, dispatch: discover } = useDiscovery();
   const day = route.name === "DailyPlay" ? route.params.day : today;
   const daily = route.name === "DailyPlay",
     mode = daily ? ("daily" as const) : ("replay" as const);
@@ -53,6 +62,12 @@ export default function SessionScreen({
   // The daily puzzle is typed by tapping a shuffled letter pool (7 tiles per row); replay uses the keyboard.
   const tileSize = Math.min(46, Math.floor((available - 6 * 8) / 7));
   const [failed, setFailed] = useState(false);
+  const [sheet, setSheet] = useState<"extra" | "letter" | null>(null);
+  // Daily jokers: İpucu removes the pool's decoy letters, Harf Aç fixes the next letter.
+  const fixed = session.locked?.[q.id] ?? 0;
+  const pooled = session.pooled?.includes(q.id) ?? false;
+  const letterPrice = p.freeLetters > 0 ? 0 : costs.letter;
+  const canOpenLetter = fixed < q.term.length - 1;
   // Latest draft between renders, so fast typing never builds on a stale value.
   const live = useRef(draft);
   live.current = draft;
@@ -72,7 +87,11 @@ export default function SessionScreen({
     const correct = answer === q.term;
     feedback(correct);
     setFailed(!correct);
+    if (correct) announce(`Doğru: ${q.term}`);
+    else announceOnIOS("Henüz değil. Bir kez daha dene.");
     dispatch({ type: "session-submit", puzzleDate: day, mode });
+    if (!correct)
+      discover({ type: "struggle", id: q.id, points: strugglePoints.wrong });
     if (!correct && !reduced)
       Animated.sequence(
         [-6, 6, -3, 3, 0].map((toValue) =>
@@ -98,6 +117,39 @@ export default function SessionScreen({
   function next() {
     choose(qs.findIndex((item) => !session.solved.includes(item.id)));
   }
+  function buy(hint: "extra" | "letter") {
+    setSheet(null);
+    setFailed(false);
+    dispatch({ type: "session-hint", mode: "daily", puzzleDate: day, hint });
+    discover({ type: "struggle", id: q.id, points: strugglePoints[hint] });
+    announce(
+      hint === "extra"
+        ? "Fazla harfler havuzdan kaldırıldı."
+        : `Harf açıldı: ${q.term[fixed]}`,
+    );
+  }
+  const confirm =
+    sheet === "letter"
+      ? {
+          title: "Harf aç",
+          body:
+            letterPrice === 0
+              ? `Sıradaki harf ücretsiz açılır. ${p.freeLetters} ücretsiz hakkın var.`
+              : `Sıradaki harf ${letterPrice} Mühür karşılığında açılır.`,
+          action:
+            letterPrice === 0
+              ? "ÜCRETSİZ · HARF AÇ"
+              : `${letterPrice} MÜHÜR · HARF AÇ`,
+          disabled: !canOpenLetter || game.seals < letterPrice,
+          run: () => buy("letter"),
+        }
+      : {
+          title: "İpucu al",
+          body: `Harf havuzundaki fazla harfler kaldırılır; yalnızca kelimenin kendi harfleri kalır (${costs.extra} Mühür).`,
+          action: `${costs.extra} MÜHÜR · İPUCU AL`,
+          disabled: pooled || game.seals < costs.extra,
+          run: () => buy("extra"),
+        };
   function replay() {
     if (daily) dispatch({ type: "daily-start", puzzleDate: day, replay: true });
     else dispatch({ type: "replay-start", file });
@@ -134,7 +186,7 @@ export default function SessionScreen({
                 </>
               ) : (
                 <Text style={s.muted}>
-                  Bu alıştırma XP, Mühür veya bölüm yıldızlarını değiştirmez.
+                  Bu alıştırma XP veya Mühür kazandırmaz.
                 </Text>
               )}
             </GameCard>
@@ -157,7 +209,8 @@ export default function SessionScreen({
                 <Pressable
                   key={item.id}
                   accessibilityRole="button"
-                  accessibilityLabel={`${i + 1}. soru`}
+                  accessibilityLabel={`${i + 1}. soru, ${item.term.length} harf${session.solved.includes(item.id) ? ", çözüldü" : ""}`}
+                  accessibilityState={{ selected: i === session.selected }}
                   onPress={() => choose(i)}
                   style={{
                     minWidth: 40,
@@ -224,10 +277,10 @@ export default function SessionScreen({
                           borderWidth: 1,
                           borderColor: failed
                             ? C.red
-                            : i === draft.length
+                            : i < fixed || i === draft.length
                               ? C.gold
                               : C.line,
-                          backgroundColor: C.raised,
+                          backgroundColor: i < fixed ? C.panel : C.raised,
                           alignItems: "center",
                           justifyContent: "center",
                         }}
@@ -254,15 +307,76 @@ export default function SessionScreen({
                     draft={draft.split("")}
                     size={tileSize}
                     disabled={draft.length >= q.term.length}
+                    decoys={!pooled}
                     onLetter={(letter) => type(live.current + letter)}
                   />
+                ) : null}
+                {daily ? (
+                  <View style={st.boosters}>
+                    {[
+                      {
+                        key: "extra" as const,
+                        Icon: MagnifyingGlassIcon,
+                        title: "İpucu",
+                        price: costs.extra,
+                        disabled: pooled || game.seals < costs.extra,
+                      },
+                      {
+                        key: "letter" as const,
+                        Icon: KeyIcon,
+                        title: "Harf Aç",
+                        price: letterPrice,
+                        disabled: !canOpenLetter || game.seals < letterPrice,
+                      },
+                    ].map((b) => (
+                      <Pressable
+                        key={b.key}
+                        accessibilityRole="button"
+                        accessibilityLabel={`${b.title}, ${b.price === 0 ? "ücretsiz" : `${b.price} Mühür`}`}
+                        accessibilityState={{ disabled: b.disabled }}
+                        disabled={b.disabled}
+                        onPress={() => setSheet(b.key)}
+                        style={[st.booster, b.disabled && { opacity: 0.4 }]}
+                      >
+                        <View
+                          style={[
+                            st.boosterIcon,
+                            { borderColor: C.gold, backgroundColor: C.panel },
+                          ]}
+                        >
+                          <b.Icon size={22} weight="bold" color={C.gold} />
+                        </View>
+                        <View style={{ gap: 2 }}>
+                          <Text
+                            style={[
+                              s.small,
+                              { fontWeight: "800", color: C.ink },
+                            ]}
+                          >
+                            {b.title}
+                          </Text>
+                          <View style={st.cost}>
+                            {b.price === 0 ? null : <SealCoin size={16} />}
+                            <Text
+                              style={[
+                                s.small,
+                                { color: C.gold, fontWeight: "700" },
+                              ]}
+                            >
+                              {b.price === 0 ? "Ücretsiz" : b.price}
+                            </Text>
+                          </View>
+                        </View>
+                      </Pressable>
+                    ))}
+                  </View>
                 ) : null}
                 <View style={s.row}>
                   <View style={{ flex: 1 }}>
                     <Button
                       secondary
                       title="⌫ SİL"
-                      disabled={!draft}
+                      disabled={draft.length <= fixed}
                       onPress={() => type(draft.slice(0, -1))}
                     />
                   </View>
@@ -281,11 +395,43 @@ export default function SessionScreen({
           </>
         )}
       </View>
+      <Modal
+        visible={sheet !== null}
+        transparent
+        animationType={reduced ? "none" : "slide"}
+        onRequestClose={() => setSheet(null)}
+      >
+        <View style={st.overlay}>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Pencereyi kapat"
+            style={StyleSheet.absoluteFill}
+            onPress={() => setSheet(null)}
+          />
+          <SafeAreaView
+            edges={["bottom"]}
+            style={[st.sheet, { backgroundColor: C.panel }]}
+            accessibilityViewIsModal
+          >
+            <Text style={s.hero}>{confirm.title}</Text>
+            <Text style={s.text}>{confirm.body}</Text>
+            <Button
+              title={confirm.action}
+              disabled={confirm.disabled}
+              onPress={confirm.run}
+            />
+            <Button secondary title="VAZGEÇ" onPress={() => setSheet(null)} />
+          </SafeAreaView>
+        </View>
+      </Modal>
       {done || daily ? null : (
         <NativeLetterInput
           ref={input}
           onLetters={(letters) => {
-            const value = (live.current + letters.join("")).slice(0, q.term.length);
+            const value = (live.current + letters.join("")).slice(
+              0,
+              q.term.length,
+            );
             type(value);
             // A completed word is checked right away; Enter is no longer needed.
             if (value.length === q.term.length) check(value);
@@ -297,3 +443,33 @@ export default function SessionScreen({
     </Shell>
   );
 }
+const st = StyleSheet.create({
+  boosters: { flexDirection: "row", gap: 8, justifyContent: "center" },
+  booster: {
+    flex: 1,
+    minHeight: 60,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  boosterIcon: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    borderWidth: 2,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cost: { flexDirection: "row", alignItems: "center", gap: 3 },
+  overlay: { flex: 1, backgroundColor: "#0009", justifyContent: "flex-end" },
+  sheet: {
+    width: "100%",
+    maxWidth: 560,
+    alignSelf: "center",
+    padding: 24,
+    gap: 16,
+    borderTopLeftRadius: 26,
+    borderTopRightRadius: 26,
+  },
+});

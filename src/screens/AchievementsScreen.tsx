@@ -2,17 +2,15 @@ import React, { useState } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Text } from "../AppText";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  BooksIcon,
-  CrosshairIcon,
-  FlagIcon,
-  FlameIcon,
-  GavelIcon,
-  Icon,
-  LightningIcon,
-  LockSimpleIcon,
-  StarIcon,
-} from "phosphor-react-native";
+import { BooksIcon } from "phosphor-react-native/src/icons/Books";
+import { CrosshairIcon } from "phosphor-react-native/src/icons/Crosshair";
+import { FlagIcon } from "phosphor-react-native/src/icons/Flag";
+import { FlameIcon } from "phosphor-react-native/src/icons/Flame";
+import { GavelIcon } from "phosphor-react-native/src/icons/Gavel";
+import type { Icon } from "phosphor-react-native";
+import { LightningIcon } from "phosphor-react-native/src/icons/Lightning";
+import { LockSimpleIcon } from "phosphor-react-native/src/icons/LockSimple";
+import { StarIcon } from "phosphor-react-native/src/icons/Star";
 import { useGame } from "../store";
 import { badges, productOf } from "../product";
 import { GameCard, Label, ProgressBar, Shell, TopBar, useS } from "../ui";
@@ -22,7 +20,6 @@ import { colors as N } from "../theme";
 const icons: Record<string, Icon> = {
   first: FlagIcon,
   sharp: LightningIcon,
-  perfect: StarIcon,
   hunter: CrosshairIcon,
   hundred: BooksIcon,
   streak: FlameIcon,
@@ -78,7 +75,7 @@ export default function AchievementsScreen({
             <Pressable
               key={b.id}
               accessibilityRole="button"
-              accessibilityLabel={`${b.title}, ${unlocked ? "açıldı" : "kilitli"}`}
+              accessibilityLabel={`${b.title}, ${unlocked ? "açıldı" : `kilitli, ${Math.min(b.value, b.total)} / ${b.total}`}`}
               accessibilityState={{ selected: active }}
               onPress={() => setSelectedId(b.id)}
               style={({ pressed }) => [
@@ -88,7 +85,13 @@ export default function AchievementsScreen({
               ]}
             >
               <Emblem id={b.id} unlocked={unlocked} size={50} />
-              <Text numberOfLines={2} style={a.tileTitle}>
+              {/* Narrow tiles: a long word like "Mükemmel" would break mid-word at large text. */}
+              <Text
+                numberOfLines={2}
+                adjustsFontSizeToFit
+                maxFontSizeMultiplier={1.1}
+                style={a.tileTitle}
+              >
                 {b.title}
               </Text>
               <Text style={[a.tileState, unlocked && { color: C.gold }]}>

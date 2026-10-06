@@ -10,7 +10,7 @@ import {
 import Svg, { Defs, Ellipse, RadialGradient, Stop } from "react-native-svg";
 import { useReducedMotion } from "./motion";
 
-// Natural size of assets/courtyard.png; light positions below are in these pixels.
+// Natural size of assets/courtyard.jpg; light positions below are in these pixels.
 const IMAGE = { width: 941, height: 1672 };
 
 type Light = {

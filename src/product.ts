@@ -1,5 +1,5 @@
 import { files, questions } from "./content";
-import { dayKey, normalize, type Game } from "./game";
+import { costs, dayKey, normalize, type Game } from "./game";
 export type Gender = "Kadın" | "Erkek";
 export type Role = "Avukat" | "Hakim" | "Savcı";
 export type ThemeMode = "dark" | "light" | "auto";
@@ -9,6 +9,8 @@ export type Settings = {
   vibration: boolean;
   reduceMotion: boolean;
   theme: ThemeMode;
+  /** Daily 13:00 reminder for the daily puzzle and the İSTİKRAR streak. */
+  notifications: boolean;
 };
 export type Session = {
   selected: number;
@@ -17,6 +19,10 @@ export type Session = {
   mistakes: number;
   combo: number;
   best: number;
+  /** Daily puzzle only: questions whose letter pool lost its decoys through İpucu. */
+  pooled?: string[];
+  /** Daily puzzle only: how many leading letters Harf Aç has fixed, per question. */
+  locked?: Record<string, number>;
 };
 export type TaskDay = {
   solved: number;
@@ -59,6 +65,8 @@ export type Product = {
   streakLossSeen: string | null;
   /** Today's pick among the nine sealed envelopes: one per day. */
   dailyStamp: { day: string; index: number; amount: number } | null;
+  /** The "remind me daily?" question after the first bölüm was answered. */
+  notificationAsked: boolean;
 };
 export const playerLevel = (xp: number) => Math.floor(xp / 1000) + 1;
 export const newSession = (): Session => ({
@@ -84,7 +92,13 @@ export const initialProduct = (): Product => ({
   selectedGender: null,
   selectedRole: null,
   selectedCharacter: null,
-  settings: { sound: true, vibration: true, reduceMotion: false, theme: "dark" },
+  settings: {
+    sound: true,
+    vibration: true,
+    reduceMotion: false,
+    theme: "dark",
+    notifications: false,
+  },
   dailyTasksDate: "",
   dailyTasks: {},
   lastDailyPuzzleDate: null,
@@ -101,6 +115,7 @@ export const initialProduct = (): Product => ({
   streakSeen: null,
   streakLossSeen: null,
   dailyStamp: null,
+  notificationAsked: false,
 });
 export const characters = [
   {
@@ -189,13 +204,6 @@ export function badges(g: Game) {
       total: 5,
     },
     {
-      id: "perfect",
-      title: "Mükemmel Bölüm",
-      detail: "Bir bölümde üç yıldız kazan.",
-      value: g.results.filter((r) => r.stars === 3).length,
-      total: 1,
-    },
-    {
       id: "hunter",
       title: "Kavram Avcısı",
       detail: "50 farklı kavram çöz.",
@@ -249,9 +257,13 @@ export function migrateProduct(g: Game): Product {
     if (!Number.isSafeInteger(n) || n < 0) throw Error("Geçersiz V1 sayaç");
   if (
     typeof next.hasCompletedOnboarding !== "boolean" ||
-    [next.settings.sound, next.settings.vibration, next.settings.reduceMotion].some(
-      (v) => typeof v !== "boolean",
-    ) ||
+    [
+      next.settings.sound,
+      next.settings.vibration,
+      next.settings.reduceMotion,
+      next.settings.notifications,
+      next.notificationAsked,
+    ].some((v) => typeof v !== "boolean") ||
     !themeModes.includes(next.settings.theme)
   )
     throw Error("Geçersiz ayar");
@@ -376,7 +388,16 @@ function validateSession(s: Session, qs: typeof questions) {
     !s.drafts ||
     !Array.isArray(s.solved) ||
     s.solved.some((id) => !qs.some((q) => q.id === id)) ||
-    [s.mistakes, s.combo, s.best].some((n) => !Number.isSafeInteger(n) || n < 0)
+    [s.mistakes, s.combo, s.best].some((n) => !Number.isSafeInteger(n) || n < 0) ||
+    (s.pooled !== undefined &&
+      (!Array.isArray(s.pooled) || s.pooled.some((id) => !qs.some((q) => q.id === id)))) ||
+    (s.locked !== undefined &&
+      (!s.locked ||
+        typeof s.locked !== "object" ||
+        Object.entries(s.locked).some(([id, n]) => {
+          const q = qs.find((item) => item.id === id);
+          return !q || !Number.isInteger(n) || n < 0 || n >= q.term.length;
+        })))
   )
     throw Error("Geçersiz oturum");
   for (const [id, draft] of Object.entries(s.drafts))
@@ -425,9 +446,10 @@ export type ProductAction =
   | { type: "character"; gender: Gender; role: Role }
   | {
       type: "setting";
-      key: "sound" | "vibration" | "reduceMotion";
+      key: "sound" | "vibration" | "reduceMotion" | "notifications";
       value: boolean;
     }
+  | { type: "notification-asked" }
   | { type: "setting"; key: "theme"; value: ThemeMode }
   | { type: "notice-dismiss"; id: string }
   | { type: "streak-seen"; kind: "kept" | "lost"; day: string }
@@ -454,6 +476,13 @@ export type ProductAction =
   | {
       type: "session-submit";
       mode: "daily" | "replay";
+      puzzleDate?: string;
+      date?: Date;
+    }
+  | {
+      type: "session-hint";
+      mode: "daily";
+      hint: "extra" | "letter";
       puzzleDate?: string;
       date?: Date;
     };
@@ -488,6 +517,8 @@ export function applyProduct(g: Game, a: ProductAction): Game {
   }
   if (a.type === "setting")
     return update({ settings: { ...p.settings, [a.key]: a.value } });
+  if (a.type === "notification-asked")
+    return p.notificationAsked ? g : update({ notificationAsked: true });
   if (a.type === "daily-stamp") {
     if (p.dailyStamp?.day === day || !Number.isInteger(a.index) || a.index < 0 || a.index > 8)
       return g;
@@ -607,9 +638,36 @@ export function applyProduct(g: Game, a: ProductAction): Game {
         ? store({ ...session, selected: a.index })
         : g;
     if (session.solved.includes(q.id)) return g;
+    // Letters fixed by Harf Aç stay at the start of the answer: never deleted, never retyped.
+    const fixed = q.term.slice(0, session.locked?.[q.id] ?? 0);
+    if (a.type === "session-hint") {
+      if (!daily) return g;
+      if (a.hint === "extra") {
+        const pooled = session.pooled ?? [];
+        if (pooled.includes(q.id) || g.seals < costs.extra) return g;
+        return store({ ...session, pooled: [...pooled, q.id] }, {}, 0, -costs.extra);
+      }
+      if (fixed.length >= q.term.length - 1) return g;
+      const free = p.freeLetters > 0;
+      const price = free ? 0 : costs.letter;
+      if (g.seals < price) return g;
+      const count = fixed.length + 1;
+      return store(
+        {
+          ...session,
+          locked: { ...session.locked, [q.id]: count },
+          drafts: { ...session.drafts, [q.id]: q.term.slice(0, count) },
+        },
+        free ? { freeLetters: p.freeLetters - 1 } : {},
+        0,
+        -price,
+      );
+    }
     if (a.type === "session-key") {
       const value = normalize(a.value);
-      return value.length <= q.term.length && /^[A-ZÇĞİÖŞÜ]*$/.test(value)
+      return value.length <= q.term.length &&
+        /^[A-ZÇĞİÖŞÜ]*$/.test(value) &&
+        value.startsWith(fixed)
         ? store({ ...session, drafts: { ...session.drafts, [q.id]: value } })
         : g;
     }
@@ -618,7 +676,7 @@ export function applyProduct(g: Game, a: ProductAction): Game {
     const correct = normalize(answer) === q.term;
     const next = {
       ...session,
-      drafts: { ...session.drafts, [q.id]: correct ? answer : "" },
+      drafts: { ...session.drafts, [q.id]: correct ? answer : fixed },
       solved: correct ? [...session.solved, q.id] : session.solved,
       combo: correct ? session.combo + 1 : 0,
       best: Math.max(session.best, correct ? session.combo + 1 : 0),
@@ -730,16 +788,6 @@ export function enrichProgress(
     };
   return { ...next, product: p };
 }
-export function weeklySolved(g: Game, date = new Date()) {
-  const monday = new Date(date);
-  monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
-  const start = dayKey(monday),
-    end = dayKey(date);
-  return Object.entries(productOf(g).dailyTasks)
-    .filter(([day]) => day >= start && day <= end)
-    .reduce((total, [, task]) => total + task.solved, 0);
-}
-
 export const DAILY_ARCHIVE_COST = 3;
 export function isPlayableDailyDate(value: string, today: string) {
   try {

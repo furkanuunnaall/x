@@ -9,19 +9,17 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Svg, { Path } from "react-native-svg";
-import {
-  BankIcon,
-  CheckCircleIcon,
-  GiftIcon,
-  LockSimpleIcon,
-  MapPinIcon,
-  ScalesIcon,
-} from "phosphor-react-native";
+import { BankIcon } from "phosphor-react-native/src/icons/Bank";
+import { CheckCircleIcon } from "phosphor-react-native/src/icons/CheckCircle";
+import { GiftIcon } from "phosphor-react-native/src/icons/Gift";
+import { LockSimpleIcon } from "phosphor-react-native/src/icons/LockSimple";
+import { MapPinIcon } from "phosphor-react-native/src/icons/MapPin";
+import { ScalesIcon } from "phosphor-react-native/src/icons/Scales";
 import { Text } from "../AppText";
 import { files } from "../content";
 import { useGame } from "../store";
 import { useReducedMotion } from "../motion";
-import { Button, CurrencyBadge, Label, LevelBadge, Shell, Stars, TopBar } from "../ui";
+import { Button, CurrencyBadge, Label, LevelBadge, Shell, TopBar } from "../ui";
 import { levelNames, type Level } from "../content";
 import { useTheme } from "../themeMode";
 import { colors as N } from "../theme";
@@ -127,7 +125,7 @@ export default function LevelMapScreen({
               <Label>
                 {selectedCurrent ? "ŞU ANKİ BÖLÜMÜN" : "TAMAMLANAN BÖLÜM"}
               </Label>
-              <Text numberOfLines={1} style={m.footTitle}>
+              <Text numberOfLines={2} style={m.footTitle}>
                 BÖLÜM {String(selected.id).padStart(2, "0")} ·{" "}
                 <Text style={m.footMuted}>
                   {selected.title} · {levelNames[selected.level].toLocaleLowerCase("tr-TR")} ·{" "}
@@ -135,7 +133,6 @@ export default function LevelMapScreen({
                 </Text>
               </Text>
             </View>
-            <Stars count={selectedResult?.stars ?? 0} size={15} />
           </View>
           <Button
             title={selectedResult ? "TEKRAR OYNA" : "BAŞLA  →"}
@@ -252,7 +249,6 @@ export default function LevelMapScreen({
             level={file.level}
             count={file.questions.length}
             state={state}
-            stars={g.results.find((r) => r.file === file.id)?.stars ?? 0}
             selected={file.id === selectedFile}
             x={x}
             y={cy}
@@ -341,7 +337,6 @@ function MapNode({
   level,
   count,
   state,
-  stars,
   selected,
   x,
   y,
@@ -355,7 +350,6 @@ function MapNode({
   level: Level;
   count: number;
   state: State;
-  stars: number;
   selected: boolean;
   x: number;
   y: number;
@@ -370,7 +364,7 @@ function MapNode({
   const tag =
     kind === "final" ? "◆ FİNAL BÖLÜMÜ" : kind === "reward" ? "▣ ÖDÜL BÖLÜMÜ" : null;
   const label = `Bölüm ${id}, ${title}, ${levelNames[level].toLocaleLowerCase("tr-TR")}, ${
-    state === "done" ? `tamamlandı, ${stars} yıldız` : state === "current" ? "buradasınız" : "kilitli"
+    state === "done" ? "tamamlandı" : state === "current" ? "buradasınız" : "kilitli"
   }`;
 
   const badge = (
@@ -457,7 +451,6 @@ function MapNode({
         {tag}
       </Text>
       <LevelBadge level={level} small />
-      {state === "done" ? <Stars count={stars} size={13} /> : null}
     </>
   ) : state === "current" ? (
     <>
@@ -474,7 +467,6 @@ function MapNode({
     <>
       <Text style={[m.doneTitle, { textAlign }]}>{title}</Text>
       <LevelBadge level={level} small />
-      <Stars count={stars} size={13} />
       {tag ? <Text style={[m.tag, { textAlign }]}>{tag}</Text> : null}
     </>
   ) : (

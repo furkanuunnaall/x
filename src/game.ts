@@ -32,7 +32,6 @@ export type Run = {
 export type Result = {
   mistakes?: number;
   file: number;
-  stars: number;
   xp: number;
   seals: number;
   hints: number;
@@ -89,8 +88,6 @@ export const normalize = (s: string) =>
     .replace(/Û/g, "U");
 export const reward = (combo: number) =>
   combo >= 5 ? 150 : 100 + (Math.max(1, combo) - 1) * 10;
-export const stars = (mistakes: number, hints: number) =>
-  mistakes === 0 && hints <= 2 ? 3 : mistakes <= 2 ? 2 : 1;
 export const dayKey = (date = new Date()) =>
   `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 export const dailyNow = (g: Game, date = new Date()) => {
@@ -235,7 +232,6 @@ export function coreReducer(g: Game, a: CoreAction): Game {
         {
           file: g.file,
           mistakes: g.run.mistakes,
-          stars: stars(g.run.mistakes, g.run.hints),
           xp: next.run.xp,
           seals: 50,
           hints: g.run.hints,
@@ -324,7 +320,6 @@ export function parseSave(raw: string): Game {
       r.file < 1 ||
       r.file > g.file ||
       seen.has(r.file) ||
-      ![1, 2, 3].includes(r.stars) ||
       typeof r.sealed !== "boolean" ||
       r.count !== files[r.file - 1].questions.length
     )

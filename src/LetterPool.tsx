@@ -13,6 +13,7 @@ export function LetterPool({
   draft,
   size = 44,
   disabled = false,
+  decoys = true,
   onLetter,
 }: {
   term: string;
@@ -20,13 +21,14 @@ export function LetterPool({
   draft: string[];
   size?: number;
   disabled?: boolean;
+  decoys?: boolean;
   onLetter: (letter: string) => void;
 }) {
   const { C, sx } = useTheme();
   const styles = sx(stylesN);
   return (
     <View accessibilityLabel="Harf havuzu" style={styles.pool}>
-      {poolTiles(term, seed, draft).map((tile) => {
+      {poolTiles(term, seed, draft, {}, decoys).map((tile) => {
         const off = disabled || tile.used;
         return (
           <Pressable

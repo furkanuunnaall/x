@@ -8,7 +8,6 @@ import { logoFont, Text } from "./AppText";
 import { useTheme } from "./themeMode";
 import Svg, { Circle, Defs, LinearGradient as SvgGradient, Path, Stop } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
-import { colors as C } from "./theme";
 // Milled coin edge for SealCoin, drawn once in a 64-unit box.
 const coinRidges = Array.from({ length: 48 }, (_, i) => {
   const a = (i / 48) * Math.PI * 2,
@@ -74,75 +73,6 @@ export function SealCoin({
     </View>
   );
 }
-/** Original seal and document artwork, built from native shapes. The classic gold seal is
- * kept as the previous currency icon so it can be restored in CurrencyBadge at any time. */
-export function Seal({
-  size = 60,
-  value = "M",
-}: {
-  size?: number;
-  value?: string;
-}) {
-  return (
-    <View
-      accessibilityElementsHidden
-      importantForAccessibility="no-hide-descendants"
-      style={{
-        width: size,
-        height: size,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <View
-        style={{
-          position: "absolute",
-          width: size * 0.78,
-          height: size * 0.78,
-          borderRadius: size * 0.18,
-          transform: [{ rotate: "45deg" }],
-          backgroundColor: "#5D4B24",
-          borderWidth: 1,
-          borderColor: "#B79848",
-        }}
-      />
-      <LinearGradient
-        colors={["#FFE8A0", "#D5A535", "#8E6720"]}
-        style={{
-          width: size * 0.82,
-          height: size * 0.82,
-          borderRadius: size,
-          borderWidth: 2,
-          borderColor: "#F5D878",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <View
-          style={{
-            width: size * 0.65,
-            height: size * 0.65,
-            borderRadius: size,
-            borderWidth: 1,
-            borderColor: "#8E681D",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Text
-            style={{
-              color: "#372B13",
-              fontSize: size * 0.34,
-              fontWeight: "900",
-            }}
-          >
-            {value}
-          </Text>
-        </View>
-      </LinearGradient>
-    </View>
-  );
-}
 export function FileArt() {
   return (
     <View accessible={false} style={{ width: 100, height: 114 }}>
@@ -197,7 +127,7 @@ export function FileArt() {
   );
 }
 export const courtyard = {
-  night: require("../assets/courtyard.png"),
+  night: require("../assets/courtyard.jpg"),
   morning: require("../assets/courtyard-morning.jpg"),
 };
 export function Ambient() {
