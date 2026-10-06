@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Keyboard, Platform, StyleSheet, TextInput } from "react-native";
 
 const turkishLetter = /^[A-ZÇĞİÖŞÜ]$/;
@@ -26,12 +26,16 @@ export function NativeLetterInput({
   onDelete,
   onSubmit,
   editable = true,
+  resetKey,
 }: {
   ref: React.Ref<TextInput>;
   onLetters: (letters: string[]) => void;
   onDelete: () => void;
   onSubmit: () => void;
   editable?: boolean;
+  /** Changing this empties the field (a word was checked or another word opened), so old
+   * text never piles up towards the buffer limit. */
+  resetKey?: string;
 }) {
   const input = useRef<TextInput | null>(null);
   // What the native field currently holds. The field is left uncontrolled: forcing it back
@@ -40,6 +44,17 @@ export function NativeLetterInput({
   // Set when the field was asked to clear: iOS sometimes ignores clear() on an uncontrolled
   // field, and the old text then comes back with the next key.
   const cleared = useRef(false);
+  // onKeyPress fires before onChangeText: a Backspace marks the next shrink as a deletion.
+  const deleting = useRef(false);
+  const clear = () => {
+    input.current?.clear();
+    cleared.current = true;
+  };
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) first.current = false;
+    else clear();
+  }, [resetKey]);
   const setRef = (node: TextInput | null) => {
     input.current = node;
     if (typeof ref === "function") ref(node);
@@ -52,8 +67,14 @@ export function NativeLetterInput({
       editable={editable}
       onChangeText={(text) => {
         const before = buffer.current;
+        const deletion = deleting.current && text.length < before.length;
+        deleting.current = false;
         let fresh: string;
-        if (cleared.current) {
+        if (deletion) {
+          // A deletion never adds letters, even when an ignored clear() left old text behind.
+          cleared.current = false;
+          fresh = "";
+        } else if (cleared.current) {
           cleared.current = false;
           // Clear worked: everything is new. Clear was ignored: only what follows the old text.
           fresh = text.startsWith(before) ? text.slice(before.length) : text;
@@ -62,10 +83,7 @@ export function NativeLetterInput({
           fresh = text.length > before.length ? text.slice(before.length - text.length) : "";
         }
         buffer.current = text;
-        if (text.length > maxBuffer) {
-          input.current?.clear();
-          cleared.current = true;
-        }
+        if (text.length > maxBuffer) clear();
         // "tr" locale maps i→İ and ı→I, which the default toUpperCase gets wrong.
         const letters = Array.from(fresh.toLocaleUpperCase("tr")).filter((c) =>
           turkishLetter.test(c),
@@ -73,7 +91,9 @@ export function NativeLetterInput({
         if (letters.length) onLetters(letters);
       }}
       onKeyPress={({ nativeEvent }) => {
-        if (nativeEvent.key === "Backspace") onDelete();
+        if (nativeEvent.key !== "Backspace") return;
+        deleting.current = true;
+        onDelete();
       }}
       onSubmitEditing={onSubmit}
       submitBehavior="submit"

@@ -59,6 +59,8 @@ export default function GameScreen({ navigation }: Props<"Game">) {
   const [sheet, setSheet] = useState<"extra" | "letter" | "word" | null>(null);
   const [feedback, setFeedback] = useState("");
   const [failed, setFailed] = useState(false);
+  // Bumped on every check so the hidden input starts empty for the next try.
+  const [attempts, setAttempts] = useState(0);
   const shake = useRef(new Animated.Value(0)).current,
     pop = useRef(new Animated.Value(1)).current;
   const reduced = useReducedMotion();
@@ -143,6 +145,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
     setCursor(null);
     setFeedback(correct ? "" : "Henüz değil. Bir kez daha dene.");
     dispatch({ type: "submit", id: q.id });
+    setAttempts((n) => n + 1);
     if (!reduced) {
       shake.stopAnimation();
       shake.setValue(0);
@@ -568,6 +571,7 @@ export default function GameScreen({ navigation }: Props<"Game">) {
         onLetters={typeLetters}
         onDelete={remove}
         onSubmit={() => (e.solved ? next() : submit())}
+        resetKey={`${q.id}:${attempts}`}
       />
       <Modal
         visible={sheet !== null}
